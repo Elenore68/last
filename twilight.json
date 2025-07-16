@@ -1023,6 +1023,13 @@
                     "maxLength": 30
                 }
             ]
+        },
+        {
+            "key": "05fec15a-279b-4656-b318-5b9baa2ab3d1",
+            "title": "banner",
+            "icon": "sicon-store",
+            "path": "home.banner",
+            "fields": []
         }
     ],
     "support_url": "https://example.com",
