@@ -45,6 +45,10 @@
     .s-search-input{
       @apply text-white;
     }
+
+    .header-btn__icon {
+      @apply text-white border-gray-600;
+    }
   }
 
   .search-btn{
@@ -74,6 +78,19 @@
   // Custom text color
   .has-text-color & {
     @apply text-[color:var(--mainnav-text-color)];
+  }
+
+  // Dark nav styling
+  &.bg-black {
+    @apply text-white;
+    
+    .header-btn__icon {
+      @apply text-white border-gray-600;
+    }
+    
+    .navbar-brand {
+      @apply text-white;
+    }
   }
 }
 

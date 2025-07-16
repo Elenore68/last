@@ -4,6 +4,17 @@
   @apply text-red-800
 }
 
+// Dark nav menu styling
+.main-nav-container.bg-black {
+  .main-menu > li > a {
+    @apply text-white hover:text-gray-200;
+  }
+  
+  .main-menu > li > a[href*="offer"]{
+    @apply text-red-400;
+  }
+}
+
 @media only screen and (min-width: 1024px) {
   .main-menu {
     @apply hidden lg:flex flex-wrap items-center mx-6 pt-8 pb-0;
@@ -143,7 +154,7 @@
 
   .mm-spn.mm-spn--light {
     color: #000;
-    background: #ffffff;
+    background: #ac3434;
   }
 
   .mm-spn {
