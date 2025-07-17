@@ -41,13 +41,31 @@
           </a>
       </div>
        {# Right side - Language #}
-      <div class="flex items-center">
+      <div class="flex items-center relative">
           {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-              <button type="button" onclick="salla.event.dispatch('localization::open')" class="text-white text-sm hover:text-gray-300">
+              <button type="button" id="language-dropdown-btn" class="text-white text-sm hover:text-gray-300 flex items-center">
                   <span class="flag iti__flag iti__{{ user.language.country_code }} rounded-sm mr-1"></span>
                   {{ user.language.name }}
               </button>
-              <salla-localization-modal></salla-localization-modal>
+              
+              <div id="language-dropdown" class="absolute top-full right-0 mt-1 w-48 bg-gray-500 rounded-md shadow-lg border border-gray-400 z-50 hidden">
+                  <div class="py-1">
+                      <a href="#" onclick="changeLanguage('en')" class="flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-gray-600">
+                          <div class="flex items-center">
+                              <span class="flag iti__flag iti__us rounded-sm mr-2"></span>
+                              <span>English</span>
+                          </div>
+                          <span class="text-gray-300 text-xs">EN</span>
+                      </a>
+                      <a href="#" onclick="changeLanguage('ar')" class="flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-gray-600">
+                          <div class="flex items-center">
+                              <span class="flag iti__flag iti__sa rounded-sm mr-2"></span>
+                              <span>العربية</span>
+                          </div>
+                          <span class="text-gray-300 text-xs">AR</span>
+                      </a>
+                  </div>
+              </div>
           {% endif %}
       </div>
     </div>
@@ -74,3 +92,48 @@
 {% if store.scope %}
     <salla-scopes selection="{{ store.scope.display_as == 'popup' ? 'mandatory' : 'optional' }}"></salla-scopes>
 {% endif %}
+
+<script>
+// Language dropdown functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownBtn = document.getElementById('language-dropdown-btn');
+    const dropdown = document.getElementById('language-dropdown');
+    
+    if (dropdownBtn && dropdown) {
+        // Toggle dropdown on button click
+        dropdownBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            dropdown.classList.toggle('hidden');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!dropdownBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+        
+        // Close dropdown on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                dropdown.classList.add('hidden');
+            }
+        });
+    }
+});
+
+function changeLanguage(languageCode) {
+    // Use Salla's language change API
+    if (window.salla && window.salla.language) {
+        window.salla.language.change(languageCode);
+    } else {
+        // Fallback: redirect to the language-specific URL
+        const currentUrl = window.location.href;
+        const baseUrl = currentUrl.split('?')[0];
+        window.location.href = baseUrl + '?lang=' + languageCode;
+    }
+    
+    // Close dropdown
+    document.getElementById('language-dropdown').classList.add('hidden');
+}
+</script>
