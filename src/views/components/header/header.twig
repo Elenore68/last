@@ -41,29 +41,31 @@
           </a>
       </div>
        {# Right side - Language #}
-      <div class="flex items-center relative">
+      <div class="flex items-center">
           {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-              <button type="button" id="language-dropdown-btn" class="text-white text-sm hover:text-gray-300 flex items-center">
-                  <span class="flag iti__flag iti__{{ user.language.country_code }} rounded-sm mr-1"></span>
-                  {{ user.language.name }}
-              </button>
-              
-              <div id="language-dropdown" class="absolute top-full right-0 mt-1 w-48 bg-gray-500 rounded-md shadow-lg border border-gray-400 z-50 hidden">
-                  <div class="py-1">
-                      <a href="#" onclick="changeLanguage('en')" class="flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-gray-600">
-                          <div class="flex items-center">
-                              <span class="flag iti__flag iti__us rounded-sm mr-2"></span>
-                              <span>English</span>
-                          </div>
-                          <span class="text-gray-300 text-xs">EN</span>
-                      </a>
-                      <a href="#" onclick="changeLanguage('ar')" class="flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-gray-600">
-                          <div class="flex items-center">
-                              <span class="flag iti__flag iti__sa rounded-sm mr-2"></span>
-                              <span>العربية</span>
-                          </div>
-                          <span class="text-gray-300 text-xs">AR</span>
-                      </a>
+              <div class="relative">
+                  <button type="button" id="language-dropdown-btn" class="text-white text-sm hover:text-gray-300 flex items-center py-1 px-2 rounded">
+                      <span class="flag iti__flag iti__{{ user.language.country_code }} rounded-sm ltr:mr-1 rtl:ml-1"></span>
+                      {{ user.language.name }}
+                  </button>
+                  
+                  <div id="language-dropdown" class="absolute top-full ltr:right-0 rtl:left-0 mt-1 w-40 rounded-md shadow-xl border border-gray-400 z-[9999] hidden" style="background-color: #3c3c3c;">
+                      <div class="py-1">
+                          <a href="#" onclick="changeLanguage('en')" class="flex items-center justify-between px-3 py-2 text-sm text-white hover:bg-gray-600 transition-colors duration-150">
+                              <div class="flex items-center">
+                                  <span class="flag iti__flag iti__us rounded-sm ltr:mr-2 rtl:ml-2"></span>
+                                  <span>English</span>
+                              </div>
+                              <span class="text-gray-300 text-xs">EN</span>
+                          </a>
+                          <a href="#" onclick="changeLanguage('ar')" class="flex items-center justify-between px-3 py-2 text-sm text-white hover:bg-gray-600 transition-colors duration-150">
+                              <div class="flex items-center">
+                                  <span class="flag iti__flag iti__sa rounded-sm ltr:mr-2 rtl:ml-2"></span>
+                                  <span>العربية</span>
+                              </div>
+                              <span class="text-gray-300 text-xs">AR</span>
+                          </a>
+                      </div>
                   </div>
               </div>
           {% endif %}
