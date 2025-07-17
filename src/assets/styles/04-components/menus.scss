@@ -49,18 +49,27 @@
         @apply bg-gray-200/20;
       }
 
-      > a:after{
+      // Sub-menu styling for dark background
+      .sub-menu li a {
+        @apply text-white;
+        
+        &:hover {
+          @apply text-gray-200 bg-gray-600/30;
+        }
+      }
+
+      > a:before{
         font-family: 'sallaicons';
         content: "\e970";
-        @apply inline-block transition-transform duration-300 self-end mx-0.5 text-lg opacity-50 leading-4;
+        @apply inline-block transition-transform duration-300 self-start mx-0.5 text-lg opacity-50 leading-4 text-white;
       }
 
       &.root-level {
-        > a:after{
+        > a:before{
           content: "\e96e";
         }
 
-        &:hover > a:after{
+        &:hover > a:before{
           opacity: 1;
           transform: scaleY(-1);
         }
@@ -68,7 +77,8 @@
     }
 
     .sub-menu {
-      @apply z-20 transition opacity-0 invisible absolute bg-white -translate-y-3 shadow-default rounded-b-md border-t border-gray-300/30;
+      @apply z-20 transition opacity-0 invisible absolute -translate-y-3 shadow-default rounded-b-md border-t border-gray-300/30;
+      background-color: #3c3c3c;
 
       .sub-menu {
         top: -1px;

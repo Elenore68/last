@@ -47,3 +47,246 @@
 .copyright-text p{
   @apply text-gray-700;
 }
+
+// New Footer Styles
+.footer {
+  background: #1a1a1a;
+  color: #FFFFFF;
+  direction: ltr;
+  text-align: left;
+}
+
+// Newsletter Section
+.newsletter-section {
+  padding: 80px 0;
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    padding: 60px 0;
+  }
+  
+  @media (max-width: 640px) {
+    padding: 40px 0;
+  }
+}
+
+.newsletter-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  direction: ltr;
+}
+
+.newsletter-title {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 48px;
+  font-weight: 300;
+  color: #FFFFFF;
+  margin: 0 0 24px 0;
+  line-height: 1.2;
+  text-align: center;
+  direction: ltr;
+  
+  @media (max-width: 768px) {
+    font-size: 36px;
+  }
+  
+  @media (max-width: 640px) {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+}
+
+.newsletter-description {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: #CCCCCC;
+  margin: 0 0 40px 0;
+  line-height: 1.6;
+  text-align: center;
+  direction: ltr;
+  
+  @media (max-width: 640px) {
+    font-size: 14px;
+    margin-bottom: 32px;
+    
+    br {
+      display: none;
+    }
+  }
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: row;
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #2C2C2C;
+  direction: ltr;
+  
+  @media (max-width: 640px) {
+    flex-direction: column;
+    max-width: 100%;
+  }
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: 16px 20px;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 16px;
+  background: transparent;
+  border: none;
+  color: #FFFFFF;
+  outline: none;
+  order: 1;
+  
+  &::placeholder {
+    color: #888888;
+  }
+  
+  @media (max-width: 640px) {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+}
+
+.newsletter-button {
+  padding: 16px 32px;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  background: linear-gradient(135deg, #666666 0%, #999999 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  order: 2;
+  
+  &:hover {
+    background: linear-gradient(135deg, #777777 0%, #aaaaaa 100%);
+    transform: translateY(-1px);
+  }
+  
+  @media (max-width: 640px) {
+    padding: 14px 24px;
+    font-size: 14px;
+    border-radius: 0 0 8px 8px;
+  }
+}
+
+// Footer Bottom
+.footer-bottom {
+  background: #0F0F0F;
+  padding: 24px 0;
+  border-top: 1px solid #2C2C2C;
+  
+  @media (max-width: 640px) {
+    padding: 20px 0;
+  }
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  direction: ltr;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+}
+
+.footer-left {
+  .footer-copyright {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: #888888;
+    margin: 0;
+    
+    @media (max-width: 640px) {
+      font-size: 12px;
+    }
+  }
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  @media (max-width: 640px) {
+    gap: 12px;
+  }
+}
+
+.footer-info {
+  .footer-text {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: #888888;
+    
+    @media (max-width: 640px) {
+      font-size: 12px;
+    }
+  }
+}
+
+.payment-methods {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  @media (max-width: 640px) {
+    gap: 6px;
+  }
+}
+
+.payment-icon {
+  width: 60px;
+  height: 30px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  
+  img {
+    width: 46px;
+    height: auto;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+  }
+  
+  @media (max-width: 640px) {
+    width: 50px;
+    height: 25px;
+    padding: 3px;
+    
+    img {
+      width: 40px;
+      height: auto;
+    }
+  }
+}
+
+// Ensure proper font loading
+@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@100;200;300;400;500;600;700;800;900&display=swap');
