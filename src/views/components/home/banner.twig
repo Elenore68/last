@@ -1,20 +1,12 @@
-<section class="s-block s-block--default-home-slider s-block--full-bg">
-  <salla-slider auto-play pagination type="fullwidth">
-    <div slot="items">
-      {% for banner in component.banner_last %}
-        <div class="bg-no-repeat bg-cover swiper-slide swiper-lazy-wrap" style="background-color: black; background-image: url('{{ banner_last.image }}')">
-          <div class="container flex text-center items-center justify-center sm:justify-start ltr:sm:justify-end px-8 py-16 lg:px-12 lg:py-20 home-slider__content relative h-full">
-            <div class="text-white w-full">
-              <h3 class="" data-swiper-parallax="-300">
-                {{ banner.title }}
-              </h3>
-              <p data-swiper-parallax="-700">
-                {{ banner.subtitle }}
-              </p>
+<section class="s-block s-block--full-bg">
+    {% for banner in component.banner_last %}
+        <div style="background-color: black; background-image: url('{{ banner.image }}'); background-size: cover; background-position: center; background-repeat: no-repeat; min-height: 400px;">
+            <div class="container flex text-center items-center justify-center relative h-full">
+                <div class="text-white w-full py-20">
+                    <h3 class="text-4xl font-bold mb-4">{{ banner.title }}</h3>
+                    <p class="text-lg">{{ banner.subtitle }}</p>
+                </div>
             </div>
-          </div>
         </div>
-      {% endfor %}
-    </div>
-  </salla-slider>
+    {% endfor %}
 </section>
