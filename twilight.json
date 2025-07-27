@@ -1196,6 +1196,13 @@
                     "maxLength": "2"
                 }
             ]
+        },
+        {
+            "key": "014ca552-f0f7-4cce-a9b1-e4c2929d07a2",
+            "title": "Product",
+            "icon": "sicon-android-phone",
+            "path": "product",
+            "fields": []
         }
     ],
     "support_url": "https://example.com",
