@@ -1106,7 +1106,7 @@
                     "icon": "sicon-list-add",
                     "fields": [
                         {
-                            "id": "Products-collection.main-title.main-title",
+                            "id": "Products-collection.main-title.Products-collection.main-title.main-title",
                             "type": "static",
                             "format": "title",
                             "label": "Title",
@@ -1131,21 +1131,35 @@
                     "fields": [
                         {
                             "id": "product-collection-select.product-title",
-                            "type": "static",
-                            "format": "title",
-                            "label": "Product-title",
+                            "type": "string",
+                            "format": "text",
+                            "label": "product-title",
+                            "description": null,
+                            "labelHTML": null,
+                            "placeholder": "Placeholder text ..",
+                            "icon": "sicon-format-text-alt",
                             "value": null,
-                            "variant": "h1",
-                            "icon": "sicon-format-text"
+                            "multilanguage": false,
+                            "required": true,
+                            "minLength": 6,
+                            "maxLength": 30,
+                            "public": true
                         },
                         {
-                            "id": "product-collection-select.description",
-                            "type": "static",
-                            "format": "description",
-                            "label": "Description",
+                            "id": "product-collection-select.string_1product-collection-select.description",
+                            "type": "string",
+                            "format": "text",
+                            "label": "description",
+                            "description": null,
+                            "labelHTML": null,
+                            "placeholder": "Placeholder text ..",
+                            "icon": "sicon-format-text-alt",
                             "value": null,
-                            "variant": "h1",
-                            "icon": "sicon-format-size"
+                            "multilanguage": false,
+                            "required": true,
+                            "minLength": 6,
+                            "maxLength": 30,
+                            "public": true
                         },
                         {
                             "id": "product-collection-select.url",
