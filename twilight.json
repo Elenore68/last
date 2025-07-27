@@ -1088,6 +1088,13 @@
                     "maxLength": 5
                 }
             ]
+        },
+        {
+            "key": "7cca7f13-cd43-4e81-b811-12239a523ee0",
+            "title": "Products-collection",
+            "icon": "sicon-cart2",
+            "path": "home.Products-collection",
+            "fields": []
         }
     ],
     "support_url": "https://example.com",
