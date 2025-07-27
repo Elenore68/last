@@ -1106,7 +1106,7 @@
                     "icon": "sicon-list-add",
                     "fields": [
                         {
-                            "id": "Products-collection.main-title.Products-collection.main-title.main-title",
+                            "id": "Products-collection.main-title.Products-collection.main-title.Products-collection.main-title.main-title",
                             "type": "static",
                             "format": "title",
                             "label": "Title",
@@ -1139,14 +1139,14 @@
                             "placeholder": "Placeholder text ..",
                             "icon": "sicon-format-text-alt",
                             "value": null,
-                            "multilanguage": false,
-                            "required": true,
+                            "multilanguage": true,
+                            "required": false,
                             "minLength": 6,
                             "maxLength": 30,
                             "public": true
                         },
                         {
-                            "id": "product-collection-select.string_1product-collection-select.description",
+                            "id": "product-collection-select.description",
                             "type": "string",
                             "format": "text",
                             "label": "description",
@@ -1155,8 +1155,8 @@
                             "placeholder": "Placeholder text ..",
                             "icon": "sicon-format-text-alt",
                             "value": null,
-                            "multilanguage": false,
-                            "required": true,
+                            "multilanguage": true,
+                            "required": false,
                             "minLength": 6,
                             "maxLength": 30,
                             "public": true
@@ -1172,7 +1172,7 @@
                             "placeholder": "e.g. https://salla.sa",
                             "icon": "sicon-link",
                             "value": null,
-                            "required": true,
+                            "required": false,
                             "minLength": 6,
                             "maxLength": 30,
                             "public": true
@@ -1187,7 +1187,7 @@
                             "placeholder": "e.g. https://hostname.com/image.png",
                             "icon": "sicon-image",
                             "value": null,
-                            "required": true,
+                            "required": false,
                             "public": true
                         }
                     ],
