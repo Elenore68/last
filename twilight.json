@@ -1106,12 +1106,12 @@
                     "icon": "sicon-list-add",
                     "fields": [
                         {
-                            "id": "Products-collection.main-title.Products-collection.main-title.Products-collection.main-title.main-title",
+                            "id": "Products-collection.main-title.title",
                             "type": "static",
                             "format": "title",
                             "label": "Title",
                             "value": null,
-                            "variant": "h2",
+                            "variant": "h1",
                             "icon": "sicon-format-text"
                         }
                     ],
