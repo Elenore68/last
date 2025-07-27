@@ -13,10 +13,10 @@ class App extends AppHelpers {
   loadTheApp() {
     this.commonThings();
     this.initiateNotifier();
-    this.initiateMobileMenu();
-    if (header_is_sticky) {
-      this.initiateStickyMenu();
-    }
+    // this.initiateMobileMenu();
+    // if (header_is_sticky) {
+    //   this.initiateStickyMenu();
+    // }
     this.initAddToCart();
     this.initiateDropdowns();
     this.initiateModals();
@@ -136,30 +136,30 @@ isElementLoaded(selector){
   }
 
 
-  initiateMobileMenu() {
+  // initiateMobileMenu() {
 
-  this.isElementLoaded('#mobile-menu').then((menu) => {
+  // this.isElementLoaded('#mobile-menu').then((menu) => {
 
  
-  const mobileMenu = new MobileMenu(menu, "(max-width: 1024px)", "( slidingSubmenus: false)");
+  // const mobileMenu = new MobileMenu(menu, "(max-width: 1024px)", "( slidingSubmenus: false)");
 
-  salla.lang.onLoaded(() => {
-    mobileMenu.navigation({ title: salla.lang.get('blocks.header.main_menu') });
-  });
-  const drawer = mobileMenu.offcanvas({ position: salla.config.get('theme.is_rtl') ? "right" : 'left' });
+  // salla.lang.onLoaded(() => {
+  //   mobileMenu.navigation({ title: salla.lang.get('blocks.header.main_menu') });
+  // });
+  // const drawer = mobileMenu.offcanvas({ position: salla.config.get('theme.is_rtl') ? "right" : 'left' });
 
-  this.onClick("a[href='#mobile-menu']", event => {
-    document.body.classList.add('menu-opened');
-    event.preventDefault() || drawer.close() || drawer.open()
+  // this.onClick("a[href='#mobile-menu']", event => {
+  //   document.body.classList.add('menu-opened');
+  //   event.preventDefault() || drawer.close() || drawer.open()
     
-  });
-  this.onClick(".close-mobile-menu", event => {
-    document.body.classList.remove('menu-opened');
-    event.preventDefault() || drawer.close()
-  });
-  });
+  // });
+  // this.onClick(".close-mobile-menu", event => {
+  //   document.body.classList.remove('menu-opened');
+  //   event.preventDefault() || drawer.close()
+  // });
+  // });
 
-  }
+  // }
  initAttachWishlistListeners() {
     let isListenerAttached = false;
   
@@ -177,28 +177,28 @@ isElementLoaded(selector){
     }
   }
 
-  initiateStickyMenu() {
-    let header = this.element('#mainnav'),
-      height = this.element('#mainnav .inner')?.clientHeight;
-    //when it's landing page, there is no header
-    if (!header) {
-      return;
-    }
+  // initiateStickyMenu() {
+  //   let header = this.element('#mainnav'),
+  //     height = this.element('#mainnav .inner')?.clientHeight;
+  //   //when it's landing page, there is no header
+  //   if (!header) {
+  //     return;
+  //   }
 
-    window.addEventListener('load', () => setTimeout(() => this.setHeaderHeight(), 500))
-    window.addEventListener('resize', () => this.setHeaderHeight())
+  //   window.addEventListener('load', () => setTimeout(() => this.setHeaderHeight(), 500))
+  //   window.addEventListener('resize', () => this.setHeaderHeight())
 
-    window.addEventListener('scroll', () => {
-      window.scrollY >= header.offsetTop + height ? header.classList.add('fixed-pinned', 'animated') : header.classList.remove('fixed-pinned');
-      window.scrollY >= 200 ? header.classList.add('fixed-header') : header.classList.remove('fixed-header', 'animated');
-    }, { passive: true });
-  }
+  //   window.addEventListener('scroll', () => {
+  //     window.scrollY >= header.offsetTop + height ? header.classList.add('fixed-pinned', 'animated') : header.classList.remove('fixed-pinned');
+  //     window.scrollY >= 200 ? header.classList.add('fixed-header') : header.classList.remove('fixed-header', 'animated');
+  //   }, { passive: true });
+  // }
 
-  setHeaderHeight() {
-    let height = this.element('#mainnav .inner').clientHeight,
-      header = this.element('#mainnav');
-    header.style.height = height + 'px';
-  }
+  // setHeaderHeight() {
+  //   let height = this.element('#mainnav .inner').clientHeight,
+  //     header = this.element('#mainnav');
+  //   header.style.height = height + 'px';
+  // }
 
   initiateDropdowns() {
     this.onClick('.dropdown__trigger', ({ target: btn }) => {

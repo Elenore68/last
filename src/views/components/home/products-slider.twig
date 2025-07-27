@@ -10,172 +10,182 @@
 | limit                 | int       | Number of products to be shown                                   |
 #}
 
-<section class="product-section">
-  <div class="container">
-    <!-- Section Header -->
-    <div class="section-header">
-      {% if display_all_url %}
-        <a href="{{ display_all_url }}" class="view-all-link">View All Products</a>
-      {% endif %}
-      <h2 class="section-title">{{ title|default('Browse Samsung') }}</h2>
-    </div>
+<section class="alcantara-picker-section py-16 bg-white">
+  <div class="max-w-[1200px] mx-auto px-4 md:px-[200px] lg:px-[400px]">
+    <!-- Main Heading -->
+    <h2 class="text-center mb-12">
+      <div class="text-center">
+        <span class="arabic-heading">
+          اختار الجوال اللي<br />تستخدمه
+        </span>
+      </div>
+    </h2>
 
-    <!-- Product Grid -->
-    <div class="product-grid">
-      <!-- Static Product Card 1 -->
-      <div class="product-card">
-        <div class="product-image">
-          <img src="{{ 'images/productimage.png'|asset }}" alt="Galaxy S23 Alcantara Case" loading="lazy">
+    <!-- Product Picker Grid -->
+    <div class="flex flex-row gap-4 justify-center">
+      <!-- iPhone Section -->
+      <div class="text-center">
+        <div class="mb-2">
+          <span class="product-name">
+            آيفون
+          </span>
         </div>
-        <div class="hover-icon">
-          <button class="add-to-cart-btn" onclick="addToCart('Galaxy S23 Alcantara Case', 279.00)">
-            <img src="{{ 'images/uim_lock.png'|asset }}" alt="Add to Cart">
+        <div class="mb-2">
+          <span class="compatibility-text">
+            متوافق مع ماغسيف
+          </span>
+        </div>
+        <div class="mb-4 flex justify-center">
+          <button 
+            onclick="handleViewCollection('iphone')"
+            class="view-collection-btn"
+          >
+            <span class="arrow-icon"></span>
+            عرض المجموعة
           </button>
         </div>
-        <div class="product-info">
-          <h3 class="product-title">Galaxy S23 Alcantara Case</h3>
-          <p class="product-description">Premium Alcantara Case for Galaxy S23</p>
-          <p class="product-compatibility">Wireless Charging Compatible</p>
-          <div class="product-price">279.00 SAR</div>
-        </div>
+        <img 
+          src="{{ 'images/iphone-case.png.png'|asset }}" 
+          alt="iPhone Case" 
+          class="product-image"
+        />
       </div>
 
-      <!-- Static Product Card 2 -->
-      <div class="product-card">
-        <div class="product-image">
-          <img src="{{ 'images/productimage.png'|asset }}" alt="Galaxy S23 Ultra Alcantara Case" loading="lazy">
+      <!-- Samsung Section -->
+      <div class="text-center">
+        <div class="mb-2">
+          <span class="product-name">
+            سامسونج
+          </span>
         </div>
-        <div class="hover-icon">
-          <button class="add-to-cart-btn" onclick="addToCart('Galaxy S23 Ultra Alcantara Case', 289.00)">
-            <img src="{{ 'images/uim_lock.png'|asset }}" alt="Add to Cart">
+        <div class="mb-2">
+          <span class="compatibility-text">
+            متوافق مع ماغسيف
+          </span>
+        </div>
+        <div class="mb-4 flex justify-center">
+          <button 
+            onclick="handleViewCollection('samsung')"
+            class="view-collection-btn"
+          >
+            <span class="arrow-icon"></span>
+            عرض المجموعة
           </button>
         </div>
-        <div class="product-info">
-          <h3 class="product-title">Galaxy S23 Ultra Alcantara Case</h3>
-          <p class="product-description">Premium Alcantara Case for Galaxy S23 Ultra</p>
-          <p class="product-compatibility">Wireless Charging Compatible</p>
-          <div class="product-price">289.00 SAR</div>
-        </div>
-      </div>
-
-      <!-- Static Product Card 3 -->
-      <div class="product-card">
-        <div class="product-image">
-          <img src="{{ 'images/productimage.png'|asset }}" alt="Galaxy S24 Alcantara Case" loading="lazy">
-        </div>
-        <div class="hover-icon">
-          <button class="add-to-cart-btn" onclick="addToCart('Galaxy S24 Alcantara Case', 299.00)">
-            <img src="{{ 'images/uim_lock.png'|asset }}" alt="Add to Cart">
-          </button>
-        </div>
-        <div class="product-info">
-          <h3 class="product-title">Galaxy S24 Alcantara Case</h3>
-          <p class="product-description">Premium Alcantara Case for Galaxy S24</p>
-          <p class="product-compatibility">Wireless Charging Compatible</p>
-          <div class="product-price">299.00 SAR</div>
-        </div>
-      </div>
-
-      <!-- Static Product Card 4 -->
-      <div class="product-card">
-        <div class="product-image">
-          <img src="{{ 'images/productimage.png'|asset }}" alt="Galaxy S24 Ultra Alcantara Case" loading="lazy">
-        </div>
-        <div class="hover-icon">
-          <button class="add-to-cart-btn" onclick="addToCart('Galaxy S24 Ultra Alcantara Case', 339.00)">
-            <img src="{{ 'images/uim_lock.png'|asset }}" alt="Add to Cart">
-          </button>
-        </div>
-        <div class="product-info">
-          <h3 class="product-title">Galaxy S24 Ultra Alcantara Case</h3>
-          <p class="product-description">Premium Alcantara Case for Galaxy S24 Ultra</p>
-          <p class="product-compatibility">Wireless Charging Compatible</p>
-          <div class="product-price">339.00 SAR</div>
-        </div>
+        <img 
+          src="{{ 'images/samsung-case.png.png'|asset }}" 
+          alt="Samsung Case" 
+          class="product-image"
+        />
       </div>
     </div>
   </div>
 </section>
 
 <script>
-function addToCart(productName, price) {
-  // Create a notification to show the product was added
-  const notification = document.createElement('div');
-  notification.className = 'cart-notification';
-  notification.innerHTML = `
-    <div class="notification-content">
-      <span>✓ ${productName} added to cart</span>
-      <span class="price">${price} SAR</span>
-    </div>
-  `;
-  
-  // Add notification to page
-  document.body.appendChild(notification);
-  
-  // Remove notification after 3 seconds
-  setTimeout(() => {
-    notification.remove();
-  }, 3000);
-  
-  // Here you can integrate with your actual cart system
-  // For example: salla.cart.add(productId, quantity);
-  console.log(`Added to cart: ${productName} - ${price} SAR`);
+function handleViewCollection(productType) {
+  // Navigate to the appropriate product collection
+  if (productType === 'iphone') {
+    // Navigate to iPhone collection
+    window.location.href = '/products?brand=iphone';
+  } else if (productType === 'samsung') {
+    // Navigate to Samsung collection
+    window.location.href = '/products?brand=samsung';
+  }
 }
 </script>
 
 <style>
-.add-to-cart-btn {
+.alcantara-picker-section {
+  font-family: 'DIN Next LT W23', Arial, sans-serif;
+}
+
+.arabic-heading {
+  font-family: 'DIN Next LT W23', Arial, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 40px;
+  line-height: 42px;
+  letter-spacing: 0px;
+  text-align: center;
+  color: #161616;
+}
+
+.product-name {
+  text-align: center;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: #3C3C3C;
+  display: inline-block;
+}
+
+.compatibility-text {
+  font-family: 'SF Pro', Arial, sans-serif;
+  font-size: 10px;
+  font-weight: normal;
+  line-height: 12px;
+  color: rgba(45, 73, 158, 0.61);
+}
+
+.view-collection-btn {
+  color: black;
+  font-family: 'Comfortaa', Arial, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 130%;
+  vertical-align: bottom;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
   margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
-.add-to-cart-btn:hover {
-  transform: scale(1.1);
+.view-collection-btn:hover {
+  opacity: 0.8;
+  text-decoration: underline;
 }
 
-.add-to-cart-btn:active {
-  transform: scale(0.95);
+.arrow-icon {
+  width: 8.5px;
+  height: 10.625px;
+  display: inline-block;
+  position: relative;
 }
 
-.cart-notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: #10B981;
-  color: white;
-  padding: 16px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  animation: slideIn 0.3s ease;
+.arrow-icon::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 8.5px solid black;
+  transform: translateY(-50%);
 }
 
-.notification-content {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.product-image {
+  width: 160px;
+  height: auto;
+  object-fit: contain;
 }
 
-.notification-content .price {
-  font-weight: 600;
-  font-size: 14px;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
+@media (min-width: 768px) {
+  .product-image {
+    width: 256px;
   }
-  to {
-    transform: translateX(0);
-    opacity: 1;
+}
+
+@media (min-width: 1024px) {
+  .product-image {
+    width: 320px;
   }
 }
 </style>

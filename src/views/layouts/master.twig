@@ -61,7 +61,7 @@
     {% include 'pages.partials.loading-screen-assets' %}
 
     <script defer data-cfasync="false" src="{{ 'product-card.js'|asset }}"></script>
-    <script defer src="{{ 'main-menu.js'|asset }}"></script>
+    {# <script defer src="{{ 'main-menu.js'|asset }}"></script> #}
 
     {% block head_scripts %}{% endblock %}
 
@@ -104,7 +104,7 @@
 </noscript>
 <div class="app-inner flex flex-col min-h-full">
     {% hook 'body:start' %}
-    {% component 'header.header' %}
+    {# {% component 'header.header' %} #}
     {% block content %}{% endblock %}
     {% component 'footer.footer' %}
 </div>

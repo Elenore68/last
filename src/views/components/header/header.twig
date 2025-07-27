@@ -42,7 +42,7 @@
       </div>
        {# Right side - Language #}
       <div class="flex items-center">
-          {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+              {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
               <div class="relative">
                   <button type="button" id="language-dropdown-btn" class="text-white text-sm hover:text-gray-300 flex items-center py-1 px-2 rounded">
                       <span class="flag iti__flag iti__{{ user.language.country_code }} rounded-sm ltr:mr-1 rtl:ml-1"></span>
@@ -67,7 +67,7 @@
                           </a>
                       </div>
                   </div>
-              </div>
+          </div>
           {% endif %}
       </div>
     </div>
