@@ -1,47 +1,111 @@
-<footer class="footer" dir="ltr">
+<footer class="footer bg-[#1a1a1a] text-white" dir="rtl">
   <!-- Newsletter Section -->
-  <section class="newsletter-section">
-    <div class="newsletter-container">
-      <h2 class="newsletter-title">Join Our Exclusive Club at Alcanta.</h2>
-      <p class="newsletter-description">
-        As a subscriber, you'll receive early access to limited releases, private<br>
-        offers reserved only for insiders, and curated content designed to<br>
-        elevate your experience.
-      </p>
-      <form class="newsletter-form">
-        <input type="email" class="newsletter-input" placeholder="Enter Email Address" required>
-        <button type="submit" class="newsletter-button">Register</button>
-      </form>
+  <section 
+    class="py-24 md:py-20 sm:py-16 bg-cover bg-center bg-no-repeat relative min-h-screen"
+    style="
+      background-image: url('{{ 'images/footerar.png'|asset }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 80vh;
+    "
+  >
+    <div class="max-w-[1200px] mx-auto px-5 h-full flex items-center">
+      <div class="text-right max-w-[500px] ml-auto">
+        <h2 class="font-sf-pro text-[35px] font-light text-white m-0 mb-4 leading-[1.2] md:text-[40px] sm:text-[32px] sm:mb-6">
+          Alcanta.<br/>
+          <span class="block text-right">انضم إلى نادينا الحصري</span>
+        </h2>
+        <h3 class="font-sf-pro text-[28px] font-light text-white m-0 mb-8 leading-[1.2] md:text-[32px] sm:text-[24px] sm:mb-6">
+        </h3>
+        <div 
+          class="flex rounded-lg overflow-hidden mb-8 justify-end mx-0" 
+          style="
+            width: 400px; 
+            height: 45px; 
+            background: rgba(255, 255, 255, 0.11); 
+            border: none;
+            backdrop-filter: blur(4px);
+            padding-right: 20px;
+            justify-content: space-between;
+            align-items: center;
+            align-self: stretch;
+            margin: 0 0 0 auto;
+            padding-bottom: 10px;
+          "
+        >
+          <button 
+            class="h-full py-3 px-6 font-sf-pro text-sm font-medium cursor-pointer transition-all duration-300" 
+            style="
+              background: #3C3C3C;
+              color: rgba(255, 255, 255, 1);
+              font-family: Inter;
+              font-size: 12px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: normal;
+              letter-spacing: -0.24px;
+              border-radius: 8px 0 0 8px;
+              border: 0.5px solid rgba(140, 135, 135, 0.30);
+              border-right: none;
+            "
+          >
+            سجل
+          </button>
+          <input 
+            type="email" 
+            class="flex-1 h-full py-3 px-4 font-sf-pro text-sm bg-transparent outline-none" 
+            style="
+              color: #FFF;
+              font-family: DINPro;
+              font-size: 16px;
+              font-style: normal;
+              font-weight: 300;
+              line-height: 130.231%;
+              text-align: right;
+              border-radius: 0 8px 8px 0;
+              border: 0.5px solid rgba(140, 135, 135, 0.30);
+              border-left: none;
+            " 
+            placeholder="أدخل عنوان البريد الإلكتروني"
+          />
+        </div>
+        <p 
+          class="font-comfortaa text-[15px] font-light text-white m-0 leading-[1.6] max-w-[450px] sm:text-base"
+          style="
+            color: rgba(255, 255, 255, 0.54);
+            text-align: right;
+            font-family: Comfortaa;
+            font-size: 15px;
+            font-style: normal;
+            font-weight: 300;
+            line-height: 130.231%;
+          "
+        >
+          كعضو، ستتلقى وصولاً مبكراً إلى الإصدارات المحدودة، وعروض خاصة محفوظة فقط للداخلين، ومحتوى منسق مصمم لرفع تجربتك.
+        </p>
+      </div>
     </div>
   </section>
-
+  
   <!-- Footer Bottom -->
-  <div class="footer-bottom">
-    <div class="footer-container">
+  <div class="bg-[#000000] h-16 flex items-center">
+    <div class="max-w-[1200px] mx-auto px-5 flex justify-between items-center whitespace-nowrap w-full">
       <div class="footer-left">
-        <p class="footer-copyright">Alcanta - All Rights Reserved</p>
+        <p class="font-sf-pro text-sm font-light text-[#888] m-0 sm:text-xs">Alcanta - All Rights Reserved</p>
       </div>
-      <div class="footer-right">
-        <div class="footer-info">
-          {% if store.settings.tax.number %}
-            <span class="footer-text">Vat Number: {{ store.settings.tax.number }}</span>
-          {% else %}
-            <span class="footer-text">Vat Number: 2390482398</span>
-          {% endif %}
+      <div class="flex items-center gap-2">
+        <div class="bg-white rounded-sm p-2 flex items-center justify-center" style="width: 60px; height: 30px;">
+          <img src="{{ 'images/payment/mada.png'|asset }}" alt="Mada" class="max-w-full max-h-full object-contain" />
         </div>
-        <div class="payment-methods">
-          <div class="payment-icon">
-            <img src="{{ 'images/payment/mada.png' | asset }}" alt="Mada">
-          </div>
-          <div class="payment-icon">
-            <img src="{{ 'images/payment/paypal.png' | asset }}" alt="PayPal">
-          </div>
-          <div class="payment-icon">
-            <img src="{{ 'images/payment/mastercard.png' | asset }}" alt="Mastercard">
-          </div>
-          <div class="payment-icon">
-            <img src="{{ 'images/payment/visa.png' | asset }}" alt="Visa">
-          </div>
+        <div class="bg-white rounded-sm p-2 flex items-center justify-center" style="width: 60px; height: 30px;">
+          <img src="{{ 'images/payment/paypal.png'|asset }}" alt="PayPal" class="max-w-full max-h-full object-contain" />
+        </div>
+        <div class="bg-white rounded-sm p-2 flex items-center justify-center" style="width: 60px; height: 30px;">
+          <img src="{{ 'images/payment/mastercard.png'|asset }}" alt="Mastercard" class="max-w-full max-h-full object-contain" />
+        </div>
+        <div class="bg-white rounded-sm p-2 flex items-center justify-center" style="width: 60px; height: 30px;">
+          <img src="{{ 'images/payment/visa.png'|asset }}" alt="Visa" class="max-w-full max-h-full object-contain" />
         </div>
       </div>
     </div>

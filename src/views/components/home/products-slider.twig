@@ -172,20 +172,45 @@ function handleViewCollection(productType) {
 }
 
 .product-image {
-  width: 160px;
-  height: auto;
-  object-fit: contain;
+  width: 160px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  position: static !important;
+  margin-bottom: 0 !important;
+  display: block !important;
+  justify-content: unset !important;
+  align-items: unset !important;
+  margin-left: unset !important;
+  margin-right: unset !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+}
+
+.product-image img {
+  width: 160px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  transition: none !important;
+  transform: none !important;
+  transform-origin: unset !important;
 }
 
 @media (min-width: 768px) {
   .product-image {
-    width: 256px;
+    width: 256px !important;
+  }
+  .product-image img {
+    width: 256px !important;
   }
 }
 
 @media (min-width: 1024px) {
   .product-image {
-    width: 320px;
+    width: 320px !important;
+  }
+  .product-image img {
+    width: 320px !important;
   }
 }
 </style>

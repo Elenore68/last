@@ -1,0 +1,190 @@
+{#
+| Variable                        | Type     | Description                                                                  |
+|---------------------------------|----------|------------------------------------------------------------------------------|
+| component                       | object   | Contains merchant settings for fields from twilight.json `component` section |
+| component.main_title            | object[] | Main title collection                                                        |
+| component.product_collection_select | object[] | Product collection items                                                    |
+| component.product_collection_select[].product_title | string | Product title                                                           |
+| component.product_collection_select[].description | string | Product description                                                    |
+| component.product_collection_select[].url | string | Product URL                                                           |
+| component.product_collection_select[].image | string | Product image URL                                                      |
+| position                        | int      | Sorting number start from zero                                               |
+#}
+
+<section class="alcantara-picker-section py-16 bg-white">
+  <div class="max-w-[1200px] mx-auto px-4 md:px-[200px] lg:px-[400px]">
+    <!-- Main Heading -->
+    <h2 class="text-center mb-12">
+      <div class="text-center">
+        <span class="arabic-heading">
+          {% if component.main_title|length > 0 %}
+            {{ component.main_title[0].main_title|raw }}
+          {% else %}
+            اختار الجوال اللي<br />تستخدمه
+          {% endif %}
+        </span>
+      </div>
+    </h2>
+
+    <!-- Product Picker Grid -->
+    <div class="flex flex-row gap-4 justify-center">
+      {% for item in component.product_collection_select %}
+        <div class="text-center">
+          <div class="mb-2">
+            <span class="product-name">
+              {{ item.product_title|raw }}
+            </span>
+          </div>
+          <div class="mb-2">
+            <span class="compatibility-text">
+              {{ item.description|raw }}
+            </span>
+          </div>
+          <div class="mb-4 flex justify-center">
+            <button 
+              onclick="handleViewCollection('{{ item.url }}')"
+              class="view-collection-btn"
+            >
+              <span class="arrow-icon"></span>
+              عرض المجموعة
+            </button>
+          </div>
+          <img 
+            src="{{ item.image }}" 
+            alt="{{ item.product_title|raw }}" 
+            class="product-image"
+          />
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+function handleViewCollection(url) {
+  // Navigate to the provided URL
+  if (url && url !== '#') {
+    window.location.href = url;
+  }
+}
+</script>
+
+<style>
+.alcantara-picker-section {
+  font-family: 'DIN Next LT W23', Arial, sans-serif;
+}
+
+.arabic-heading {
+  font-family: 'DIN Next LT W23', Arial, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 40px;
+  line-height: 42px;
+  letter-spacing: 0px;
+  text-align: center;
+  color: #161616;
+}
+
+.product-name {
+  text-align: center;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  color: #3C3C3C;
+  display: inline-block;
+}
+
+.compatibility-text {
+  font-family: 'SF Pro', Arial, sans-serif;
+  font-size: 10px;
+  font-weight: normal;
+  line-height: 12px;
+  color: rgba(45, 73, 158, 0.61);
+}
+
+.view-collection-btn {
+  color: black;
+  font-family: 'Comfortaa', Arial, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 130%;
+  vertical-align: bottom;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  transition: opacity 0.2s ease;
+}
+
+.view-collection-btn:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.arrow-icon {
+  width: 8.5px;
+  height: 10.625px;
+  display: inline-block;
+  position: relative;
+}
+
+.arrow-icon::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 8.5px solid black;
+  transform: translateY(-50%);
+}
+
+.product-image {
+  width: 160px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  position: static !important;
+  margin-bottom: 0 !important;
+  display: block !important;
+  justify-content: unset !important;
+  align-items: unset !important;
+  margin-left: unset !important;
+  margin-right: unset !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+}
+
+.product-image img {
+  width: 160px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  transition: none !important;
+  transform: none !important;
+  transform-origin: unset !important;
+}
+
+@media (min-width: 768px) {
+  .product-image {
+    width: 256px !important;
+  }
+  .product-image img {
+    width: 256px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-image {
+    width: 320px !important;
+  }
+  .product-image img {
+    width: 320px !important;
+  }
+}
+</style>
