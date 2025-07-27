@@ -1094,7 +1094,94 @@
             "title": "Products-collection",
             "icon": "sicon-cart2",
             "path": "home.Products-collection",
-            "fields": []
+            "fields": [
+                {
+                    "id": "Products-collection.main-title",
+                    "type": "collection",
+                    "format": "collection",
+                    "label": "main-title",
+                    "description": "Choose the phone you use",
+                    "labelHTML": null,
+                    "item_label": null,
+                    "icon": "sicon-list-add",
+                    "fields": [
+                        {
+                            "id": "Products-collection.main-title.main-title",
+                            "type": "static",
+                            "format": "title",
+                            "label": "Title",
+                            "value": null,
+                            "variant": "h2",
+                            "icon": "sicon-format-text"
+                        }
+                    ],
+                    "value": [],
+                    "minLength": 1,
+                    "maxLength": "1"
+                },
+                {
+                    "id": "product-collection-select",
+                    "type": "collection",
+                    "format": "collection",
+                    "label": "Product-collection-select1",
+                    "description": null,
+                    "labelHTML": null,
+                    "item_label": null,
+                    "icon": "sicon-list-add",
+                    "fields": [
+                        {
+                            "id": "product-collection-select.product-title",
+                            "type": "static",
+                            "format": "title",
+                            "label": "Product-title",
+                            "value": null,
+                            "variant": "h1",
+                            "icon": "sicon-format-text"
+                        },
+                        {
+                            "id": "product-collection-select.description",
+                            "type": "static",
+                            "format": "description",
+                            "label": "Description",
+                            "value": null,
+                            "variant": "h1",
+                            "icon": "sicon-format-size"
+                        },
+                        {
+                            "id": "product-collection-select.url",
+                            "type": "string",
+                            "format": "url",
+                            "inputType": "url",
+                            "label": "URL",
+                            "description": "link page of product",
+                            "labelHTML": null,
+                            "placeholder": "e.g. https://salla.sa",
+                            "icon": "sicon-link",
+                            "value": null,
+                            "required": true,
+                            "minLength": 6,
+                            "maxLength": 30,
+                            "public": true
+                        },
+                        {
+                            "id": "product-collection-select.image",
+                            "type": "string",
+                            "format": "image",
+                            "label": "Image",
+                            "description": "image of product",
+                            "labelHTML": null,
+                            "placeholder": "e.g. https://hostname.com/image.png",
+                            "icon": "sicon-image",
+                            "value": null,
+                            "required": true,
+                            "public": true
+                        }
+                    ],
+                    "value": [],
+                    "minLength": 1,
+                    "maxLength": "2"
+                }
+            ]
         }
     ],
     "support_url": "https://example.com",
