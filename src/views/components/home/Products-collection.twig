@@ -17,8 +17,8 @@
     <h2 class="text-center mb-12">
       <div class="text-center">
         <span class="arabic-heading">
-          {% if component.main_title|length > 0 %}
-            {{ component.main_title[0].main_title|raw }}
+          {% if component['Products-collection.main-title']|length > 0 %}
+            {{ component['Products-collection.main-title'][0]['Products-collection.main-title.Products-collection.main-title.Products-collection.main-title.main-title']|raw }}
           {% else %}
             اختار الجوال اللي<br />تستخدمه
           {% endif %}
@@ -28,21 +28,21 @@
 
     <!-- Product Picker Grid -->
     <div class="flex flex-row gap-4 justify-center">
-      {% for item in component.product_collection_select %}
+      {% for item in component['product-collection-select'] %}
         <div class="text-center">
           <div class="mb-2">
             <span class="product-name">
-              {{ item.product_title|raw }}
+              {{ item['product-collection-select.product-title']|raw }}
             </span>
           </div>
           <div class="mb-2">
             <span class="compatibility-text">
-              {{ item.description|raw }}
+              {{ item['product-collection-select.description']|raw }}
             </span>
           </div>
           <div class="mb-4 flex justify-center">
             <button 
-              onclick="handleViewCollection('{{ item.url }}')"
+              onclick="handleViewCollection('{{ item['product-collection-select.url'] }}')"
               class="view-collection-btn"
             >
               <span class="arrow-icon"></span>
@@ -50,8 +50,8 @@
             </button>
           </div>
           <img 
-            src="{{ item.image }}" 
-            alt="{{ item.product_title|raw }}" 
+            src="{{ item['product-collection-select.image'] }}" 
+            alt="{{ item['product-collection-select.product-title']|raw }}" 
             class="product-image"
           />
         </div>
