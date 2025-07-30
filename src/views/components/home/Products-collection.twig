@@ -143,7 +143,7 @@ function changeModalImage(src) {
   document.getElementById('modal-main-image').src = src;
   
   // Update active thumbnail state
-  const allThumbnails = document.querySelectorAll('.thumbnail-image');
+  const allThumbnails = document.querySelectorAll('[onclick*="changeModalImage"]');
   allThumbnails.forEach(thumb => {
     if (thumb.onclick.toString().includes(src)) {
       thumb.classList.add('border-gray-900', 'ring-2', 'ring-gray-200');
@@ -244,9 +244,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap');
-
 .alcantara-picker-section {
   font-family: 'DIN Next LT W23', Arial, sans-serif;
 }
@@ -438,10 +435,41 @@ document.addEventListener('DOMContentLoaded', function() {
                    class="object-contain"
                    style="height: 400px;" />
             </div>
+            
+            <!-- Product Information Section -->
+            <div class="space-y-4">
+              <h3 class="text-xl font-semibold text-gray-900">معلومات المنتج</h3>
+              
+              <div class="space-y-3">
+                <div>
+                  <h4 class="text-sm font-medium text-gray-700 mb-1">الأجهزة المتوافقة:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• سامسونج جالاكسي S24 / S24+ / S24 الترا</li>
+                    <li>• متوفر أيضاً لسلسلة S23</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 class="text-sm font-medium text-gray-700 mb-1">الخامة:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• جلد نباتي فاخر بملمس مستوحى من الألكانتارا</li>
+                    <li>• بطانة داخلية ناعمة من المايكروفايبر لحماية فعالة من الخدوش</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 class="text-sm font-medium text-gray-700 mb-1">التصميم:</h4>
+                  <ul class="text-sm text-gray-600 space-y-1">
+                    <li>• تصميم فائق النحافة مع حماية كاملة للجوانب والحواف</li>
+                    <li>• فتحات دقيقة للكاميرا، الأزرار، والمنافذ</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
           
           <!-- Product Info -->
-          <div class="space-y-8">
+          <div class="space-y-6">
             <!-- Model Selector -->
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">الموديل</label>
@@ -461,27 +489,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 <select id="modal-model-selector"
                         class="w-full bg-transparent border-none outline-none appearance-none cursor-pointer"
                         style="color: rgba(0, 0, 0, 0.87)">
-                  <option value="iPhone 16 Pro">ايفون 16 برو</option>
-                  <option value="iPhone 16 Pro Max">ايفون 16 برو ماكس</option>
-                  <option value="iPhone 16">ايفون 16</option>
+                  <option value="iPhone 15 Pro">آيفون 15 برو</option>
+                  <option value="iPhone 15 Pro Max">آيفون 15 برو ماكس</option>
+                  <option value="iPhone 15">آيفون 15</option>
                 </select>
                 <span class="text-gray-500 mr-2">▼</span>
               </div>
             </div>
-
-            <!-- Product Title -->
-            <h1 class="text-gray-900"
-                style="
-                  color: #000;
-                  font-family: 'SF Pro Display', Arial, sans-serif;
-                  font-size: 40px;
-                  font-style: normal;
-                  font-weight: 400;
-                  line-height: 40px;
-                  margin-bottom: 10px
-                ">
-              غطاء ايفون 16 برو - اسود
-            </h1>
 
             <!-- Description -->
             <p style="
@@ -527,11 +541,10 @@ document.addEventListener('DOMContentLoaded', function() {
                    background: #3C3C3C;
                    display: flex;
                    height: 45px;
-                   width: 400px;
+                   width: 100%;
                    padding: 0px 10px 0px 20px;
                    justify-content: space-between;
                    align-items: center;
-                   flex: 1 0 0;
                    color: white;
                    margin-top: 10px;
                    margin-bottom: 10px
@@ -547,12 +560,12 @@ document.addEventListener('DOMContentLoaded', function() {
             <!-- Payment Options -->
             <div class="flex items-center gap-3 text-sm text-gray-500"
                  style="
-                   width: 395px;
+                   width: 100%;
                    justify-content: space-between;
                    margin-top: 15px
                  ">
               <span class="text-gray-600 font-sf-pro"
-                    style="padding-left: 17px">
+                    style="padding-right: 17px">
                 متوفر الدفع تابي
               </span>
               <img src="{{ 'images/payment/tabby.png'|asset }}" 
@@ -564,143 +577,25 @@ document.addEventListener('DOMContentLoaded', function() {
                    " />
             </div>
             
-
-          </div>
-        </div>
-        
-        <!-- Product Information Section -->
-        <div class="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-16">
-          <!-- Product Information -->
-          <div class="space-y-6">
-            <h2 style="
-              color: #000;
-              font-family: 'SF Pro Display', Arial, sans-serif;
-              font-size: 30px;
-              font-style: normal;
-              font-weight: 400;
-              line-height: 40px
-            ">
-              معلومات المنتج
-            </h2>
-            
-            <div class="space-y-4">
-              <div>
-                <h3 class="mb-2"
-                    style="
-                      font-family: 'Comfortaa', Arial, sans-serif;
-                      font-size: 14px;
-                      font-style: normal;
-                      font-weight: 300;
-                      line-height: 130.231%;
-                      background: linear-gradient(90deg, #414141 0%, #999 100%);
-                      background-clip: text;
-                      -webkit-background-clip: text;
-                      -webkit-text-fill-color: transparent
-                    ">
-                  الأجهزة المتوافقة:
-                </h3>
-                <ul class="space-y-1"
-                    style="
-                      font-family: 'Comfortaa', Arial, sans-serif;
-                      font-size: 14px;
-                      font-style: normal;
-                      font-weight: 300;
-                      line-height: 130.231%;
-                      background: linear-gradient(90deg, #414141 0%, #999 100%);
-                      background-clip: text;
-                      -webkit-background-clip: text;
-                      -webkit-text-fill-color: transparent
-                    ">
-                  <li>• سامسونج جالاكسي S24 / S24+ / S24 الترا</li>
-                  <li>• متوفر أيضاً لسلسلة S23</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h3 class="mb-2"
-                    style="
-                      font-family: 'Comfortaa', Arial, sans-serif;
-                      font-size: 14px;
-                      font-style: normal;
-                      font-weight: 300;
-                      line-height: 130.231%;
-                      background: linear-gradient(90deg, #414141 0%, #999 100%);
-                      background-clip: text;
-                      -webkit-background-clip: text;
-                      -webkit-text-fill-color: transparent
-                    ">
-                  الخامة:
-                </h3>
-                <ul class="space-y-1"
-                    style="
-                      font-family: 'Comfortaa', Arial, sans-serif;
-                      font-size: 14px;
-                      font-style: normal;
-                      font-weight: 300;
-                      line-height: 130.231%;
-                      background: linear-gradient(90deg, #414141 0%, #999 100%);
-                      background-clip: text;
-                      -webkit-background-clip: text;
-                      -webkit-text-fill-color: transparent
-                    ">
-                  <li>• جلد نباتي فاخر بملمس مستوحى من الألكانتارا</li>
-                  <li>• بطانة داخلية ناعمة من المايكروفايبر لحماية فعالة من الخدوش</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h3 class="mb-2"
-                    style="
-                      font-family: 'Comfortaa', Arial, sans-serif;
-                      font-size: 14px;
-                      font-style: normal;
-                      font-weight: 300;
-                      line-height: 130.231%;
-                      background: linear-gradient(90deg, #414141 0%, #999 100%);
-                      background-clip: text;
-                      -webkit-background-clip: text;
-                      -webkit-text-fill-color: transparent
-                    ">
-                  التصميم:
-                </h3>
-                <ul class="space-y-1"
-                    style="
-                      font-family: 'Comfortaa', Arial, sans-serif;
-                      font-size: 14px;
-                      font-style: normal;
-                      font-weight: 300;
-                      line-height: 130.231%;
-                      background: linear-gradient(90deg, #414141 0%, #999 100%);
-                      background-clip: text;
-                      -webkit-background-clip: text;
-                      -webkit-text-fill-color: transparent
-                    ">
-                  <li>• تصميم فائق النحافة مع حماية كاملة للجوانب والحواف</li>
-                  <li>• فتحات دقيقة للكاميرا، الأزرار، والمنافذ</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Thumbnail Images -->
-          <div class="pb-8">
-            <div class="border-t border-gray-200 pt-0">
-              <div class="flex flex-wrap justify-start gap-6 pr-2">
-                <img src="{{ 'images/product/iphone2.png'|asset }}"
+            <!-- Thumbnails (Desktop Only) -->
+            <div class="hidden lg:block mt-6">
+              <h4 class="text-sm font-medium text-gray-700 mb-3">عرض المنتج:</h4>
+              <div class="flex gap-2">
+                <img src="{{ 'images/product/iphone2.png'|asset }}" 
                      alt="View 1" 
-                     class="w-24 h-24 object-cover rounded-lg cursor-pointer thumbnail-image border-2 border-gray-300 hover:border-gray-400 transition-colors"
+                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors"
                      onclick="changeModalImage('{{ 'images/product/iphone2.png'|asset }}')" />
-                <img src="{{ 'images/product/iphone3.png'|asset }}"
+                <img src="{{ 'images/product/iphone3.png'|asset }}" 
                      alt="View 2" 
-                     class="w-24 h-24 object-cover rounded-lg cursor-pointer thumbnail-image border-2 border-gray-300 hover:border-gray-400 transition-colors"
+                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors"
                      onclick="changeModalImage('{{ 'images/product/iphone3.png'|asset }}')" />
-                <img src="{{ 'images/product/iphone4.png'|asset }}"
+                <img src="{{ 'images/product/iphone4.png'|asset }}" 
                      alt="View 3" 
-                     class="w-24 h-24 object-cover rounded-lg cursor-pointer thumbnail-image border-2 border-gray-300 hover:border-gray-400 transition-colors"
+                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors"
                      onclick="changeModalImage('{{ 'images/product/iphone4.png'|asset }}')" />
-                <img src="{{ 'images/product/iphone5.png'|asset }}"
+                <img src="{{ 'images/product/iphone5.png'|asset }}" 
                      alt="View 4" 
-                     class="w-24 h-24 object-cover rounded-lg cursor-pointer thumbnail-image border-2 border-gray-300 hover:border-gray-400 transition-colors"
+                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors"
                      onclick="changeModalImage('{{ 'images/product/iphone5.png'|asset }}')" />
               </div>
             </div>
