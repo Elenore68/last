@@ -1106,12 +1106,12 @@
                     "icon": "sicon-list-add",
                     "fields": [
                         {
-                            "id": "Products-collection.main-title.Products-collection.main-title.Products-collection.main-title.main-title",
+                            "id": "Products-collection.main-title.title",
                             "type": "static",
                             "format": "title",
                             "label": "Title",
                             "value": null,
-                            "variant": "h2",
+                            "variant": "h1",
                             "icon": "sicon-format-text"
                         }
                     ],
@@ -1196,6 +1196,13 @@
                     "maxLength": "2"
                 }
             ]
+        },
+        {
+            "key": "014ca552-f0f7-4cce-a9b1-e4c2929d07a2",
+            "title": "Product",
+            "icon": "sicon-android-phone",
+            "path": "product",
+            "fields": []
         }
     ],
     "support_url": "https://example.com",

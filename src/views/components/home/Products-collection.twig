@@ -87,16 +87,16 @@ let selectedModalColor = 'black';
 function showProductModal(productType) {
   currentProductType = productType;
   const modal = document.getElementById('product-modal');
+  const title = document.getElementById('modal-title');
   const mainImage = document.getElementById('modal-main-image');
   const modelSelector = document.getElementById('modal-model-selector');
-  const productTitle = document.getElementById('modal-product-title');
   
   if (!modal) {
     return;
   }
   
   if (productType === 'iphone') {
-    productTitle.textContent = 'غطاء ايفون 16 برو - اسود';
+    title.textContent = 'غطاء ايفون 16 برو - اسود';
     mainImage.src = '{{ 'images/product/iphone2.png'|asset }}';
     modelSelector.innerHTML = `
       <option value="iPhone 16 Pro">ايفون 16 برو</option>
@@ -104,7 +104,7 @@ function showProductModal(productType) {
       <option value="iPhone 16">ايفون 16</option>
     `;
   } else {
-    productTitle.textContent = 'غطاء سامسونج S24 - اسود';
+    title.textContent = 'غطاء سامسونج S24 - اسود';
     mainImage.src = '{{ 'images/product/image 27.png'|asset }}';
     modelSelector.innerHTML = `
       <option value="Samsung S24">سامسونج S24</option>
@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto" dir="rtl">
       <div class="p-6">
         <div class="flex justify-between items-center mb-6">
-          <div></div>
+          <h2 id="modal-title" class="text-2xl font-bold">غلاف آيفون 15 برو – أسود</h2>
           <button 
             onclick="event.preventDefault(); closeProductModal(); return false;" 
             class="text-gray-500 hover:text-gray-700 text-2xl cursor-pointer p-2 rounded hover:bg-gray-100 transition-colors"
@@ -470,7 +470,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
 
             <!-- Product Title -->
-            <h1 id="modal-product-title" class="text-gray-900"
+            <h1 class="text-gray-900"
                 style="
                   color: #000;
                   font-family: 'SF Pro Display', Arial, sans-serif;
