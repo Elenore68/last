@@ -13,7 +13,9 @@
     "production": "webpack --mode production",
     "prod": "webpack --mode production",
     "development": "webpack --mode development",
-    "watch": "webpack --mode development --watch"
+    "watch": "webpack --mode development --watch",
+    "dev": "npx \"@salla.sa/twilight\" dev",
+    "serve": "npx \"@salla.sa/twilight\" dev --port 8000"
   },
   "author": "Salla",
   "dependencies": {
@@ -31,7 +33,7 @@
     "@babel/preset-env": "^7.16.5",
     "@salla.sa/twilight-components": "^2.14.157",
     "@tailwindcss/forms": "^0.5.2",
-    "@tailwindcss/line-clamp": "^0.4.0",
+
     "@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
     "autoprefixer": "^10.4.21",
     "babel-loader": "^10.0.0",
