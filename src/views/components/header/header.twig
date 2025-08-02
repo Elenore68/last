@@ -6,30 +6,69 @@
 | cart.total       | string  | Formatted total ex: "١٠٠ ر.س"   |
 #}
 {% set important_links = theme.settings.get('important_links') %}
-<header class="store-header" style="position: relative; z-index: 1000; background-color: #000000;">
+<header class="store-header">
   {# Top Nav #}
-  <div class="top-navbar text-white" style="background-color: #000000; min-height: 60px; display: flex; align-items: center;">
-    <div class="container flex justify-between items-center py-3 px-4 md:px-8 lg:px-20">
+  <div class="top-navbar text-white" style="background-color: #000000;">
+    <div class="container flex justify-between items-center py-2">
      
-      {# Left side - Cart #}
-      <div class="flex items-center gap-4">
-          <img 
-            src="{{ 'images/icons/bitcoin-icons_cart-outline.png'|asset }}" 
-            alt="Cart" 
-            class="w-6 h-6 cursor-pointer hover:opacity-80 transition-opacity"
-            onclick="salla.event.dispatch('cart::open')"
-          />
+
+      {# Left side - Cart and Profile #}
+      <div class="flex items-center gap-3">
+          {# Cart icon #}
+          <a href="{{ store.url }}/cart" 
+             class="cart-icon text-white hover:opacity-80 transition-opacity" 
+             style="
+               cursor: pointer;
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               width: 40px;
+               height: 40px;
+               border-radius: 50%;
+               background: transparent;
+               border: none;
+               transition: all 0.3s ease;
+               text-decoration: none;
+             ">
+            <img src="{{ 'images/icons/bitcoin-icons_cart-outline.png'|asset }}" 
+                 alt="Cart" 
+                 style="
+                   width: 20px;
+                   height: 20px;
+                 " />
+          </a>
+          
+          {# Profile icon #}
+          {% if user.type=='user' %}
+            <salla-user-menu avatar-only show-header class="text-white"></salla-user-menu>
+          {% else %}
+              <button class="text-white hover:opacity-80 transition-opacity" 
+                      aria-label="user-icon" 
+                      onclick="salla.event.dispatch('login::open')"
+                      style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 40px;
+                        height: 40px;
+                        background: transparent;
+                        border: none;
+                        cursor: pointer;
+                      ">
+                <img src="{{ 'images/icons/iconamoon_profile-thin.svg'|asset }}" 
+                     alt="Profile" 
+                     style="
+                       width: 20px;
+                       height: 20px;
+                       filter: brightness(0) invert(1);
+                     " />
+              </button>
+          {% endif %}
       </div>
-      
       {# Center - Logo #}
-      <div class="flex items-center">
+      <div class="flex-1 flex justify-center">
           <a class="navbar-brand" href="{{ store.url }}">
-              <img 
-                src="{{ 'images/logo.png'|asset }}" 
-                alt="{{ store.name }} logo" 
-                class="w-[132px] h-[26px] flex-shrink-0 object-contain"
-                style="aspect-ratio: 66/13;"
-              >
+              <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ 'images/logo.png'|asset }}" alt="{{ store.name }} logo" class="max-h-8">
               {% if is_page('index') %}
                 <h1 class="sr-only">{{ store.name }}</h1>
               {% else %}
@@ -37,45 +76,27 @@
               {% endif %}
           </a>
       </div>
-      
-      {# Right side - Language #}
-      <div class="flex items-center gap-2">
-          {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-          <span class="text-white font-comfortaa text-[12px] font-normal leading-[25px]">
-              {{ user.language.code == 'ar' ? 'En' : 'Ar' }}
-          </span>
-          <img 
-            src="{{ 'images/icons/material-symbols-light_language.png'|asset }}" 
-            alt="Language" 
-            class="w-5 h-5 cursor-pointer hover:opacity-80 transition-opacity"
-            onclick="toggleLanguageDropdown()"
-          />
-          
-          <div id="language-dropdown" class="absolute top-full ltr:right-0 rtl:left-0 mt-1 w-40 rounded-md shadow-xl border border-gray-400 z-[9999] hidden" style="background-color: #000000;">
-              <div class="py-1">
-                  <a href="#" onclick="changeLanguage('en')" class="flex items-center justify-between px-3 py-2 text-sm text-white hover:bg-gray-800 transition-colors duration-150">
-                      <div class="flex items-center">
-                          <span class="flag iti__flag iti__us rounded-sm ltr:mr-2 rtl:ml-2"></span>
-                          <span>English</span>
-                      </div>
-                      <span class="text-gray-300 text-xs">EN</span>
-                  </a>
-                  <a href="#" onclick="changeLanguage('ar')" class="flex items-center justify-between px-3 py-2 text-sm text-white hover:bg-gray-800 transition-colors duration-150">
-                      <div class="flex items-center">
-                          <span class="flag iti__flag iti__sa rounded-sm ltr:mr-2 rtl:ml-2"></span>
-                          <span>العربية</span>
-                      </div>
-                      <span class="text-gray-300 text-xs">AR</span>
-                  </a>
+       {# Right side - Language #}
+      <div class="flex items-center">
+              {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+              <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchLanguage()">
+                  <span class="text-white font-comfortaa text-[12px] font-normal leading-[25px]" id="language-toggle-text">
+                    {{ user.language.code == 'ar' ? 'En' : 'Ar' }}
+                  </span>
+                  <img 
+                    src="{{ 'images/icons/material-symbols-light_language.png'|asset }}" 
+                    alt="Language" 
+                    class="w-5 h-5"
+                    data-translate-alt="header.language"
+                  />
               </div>
-          </div>
           {% endif %}
       </div>
     </div>
   </div>
 
   {# Main Nav #}
-  <div id="mainnav" class="main-nav-container shadow-default bg-black" style="min-height: 60px;">
+  <div id="mainnav" class="main-nav-container shadow-default bg-black">
       <div class="inner bg-inherit">
           <div class="container">
               <div class="flex items-stretch justify-center relative">
@@ -97,47 +118,31 @@
 {% endif %}
 
 <script>
-// Language dropdown functionality
-function toggleLanguageDropdown() {
-    const dropdown = document.getElementById('language-dropdown');
-    if (dropdown) {
-        dropdown.classList.toggle('hidden');
+function switchLanguage() {
+    if (window.languageManager) {
+        window.languageManager.switchLanguage();
+    } else {
+        // Fallback if language manager is not loaded
+        const currentLanguage = '{{ user.language.code }}';
+        const newLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
+        
+        if (window.salla && window.salla.language) {
+            window.salla.language.change(newLanguage);
+        } else {
+            const currentUrl = window.location.href;
+            const baseUrl = currentUrl.split('?')[0];
+            window.location.href = baseUrl + '?lang=' + newLanguage;
+        }
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const dropdown = document.getElementById('language-dropdown');
-    
-    if (dropdown) {
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            const languageIcon = document.querySelector('img[alt="Language"]');
-            if (!languageIcon.contains(e.target) && !dropdown.contains(e.target)) {
-                dropdown.classList.add('hidden');
-            }
-        });
-        
-        // Close dropdown on escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                dropdown.classList.add('hidden');
-            }
-        });
+// Update language toggle text when language changes
+document.addEventListener('languageChanged', function(event) {
+    const languageToggleText = document.getElementById('language-toggle-text');
+    if (languageToggleText) {
+        languageToggleText.textContent = event.detail.language === 'ar' ? 'En' : 'Ar';
     }
 });
 
-function changeLanguage(languageCode) {
-    // Use Salla's language change API
-    if (window.salla && window.salla.language) {
-        window.salla.language.change(languageCode);
-    } else {
-        // Fallback: redirect to the language-specific URL
-        const currentUrl = window.location.href;
-        const baseUrl = currentUrl.split('?')[0];
-        window.location.href = baseUrl + '?lang=' + languageCode;
-    }
-    
-    // Close dropdown
-    document.getElementById('language-dropdown').classList.add('hidden');
-}
+
 </script>

@@ -18,6 +18,14 @@
 #}
 {% set component_id='featured-products-style2-' ~ position %}
 {% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
+{% set has_products = false %}
+{% for section in items %}
+  {% if section.products.source_value and section.products.source_value|length > 0 %}
+    {% set has_products = true %}
+  {% endif %}
+{% endfor %}
+
+{% if has_products %}
 <section class="s-block s-block-tabs s-block--tabs-produtcs s-block--full-bg {{ is_slider ? 'as-slider':'as-grid' }} bg-gray-100 py-8 sm:py-16" id="{{ component_id }}">
   <div class="container">
 
@@ -57,4 +65,5 @@
         {% endfor %}
       </div>
   </div>
-</section> 
+</section>
+{% endif %} 

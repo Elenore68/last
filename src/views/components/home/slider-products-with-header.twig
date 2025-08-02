@@ -8,6 +8,7 @@
 | component.products    | Product[] *Collection | @see views/pages/product.twig                                                |
 | position              | int                   | Sorting number start from zero                                               |
 #}
+{% if component.products and component.products|length > 0 %}
 <section class="s-block s-block--slider-with-bg s-block--full-bg">
     <div class="slider-bg" style="background-image: url('{{ component.background }}');">
         <div class="container pt-8 sm:pt-20 relative">
@@ -37,4 +38,5 @@
         ></salla-products-slider>
     </div>
 </section>
+{% endif %}
  

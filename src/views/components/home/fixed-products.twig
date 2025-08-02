@@ -9,6 +9,7 @@
 | limit                 | int       | Number of products to be shown                                   |
 #}
 {% set is_vertical = theme.settings.get('vertical_fixed_products', true) %}
+{% if products and products.source_value and products.source_value|length > 0 %}
 <section class="s-block container">
     {% if title %}
       <div class="s-block__title">
@@ -31,5 +32,6 @@
       >
     </salla-products-list>
 </section>
+{% endif %}
 
 

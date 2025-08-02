@@ -70,6 +70,35 @@
         window.header_is_sticky = "{{theme.settings.get('header_is_sticky', 'Default Value')}}"
         window.imageZoom = "{{theme.settings.get('imageZoom')}}"
         window.can_access_wallet = {{ user.can_access_wallet | json_encode }}
+        
+        // Remove unwanted floating elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to hide unwanted elements
+            function hideUnwantedElements() {
+                // Hide any elements that might be floating search or cart interfaces
+                const allElements = document.querySelectorAll('*');
+                allElements.forEach(el => {
+                    const style = window.getComputedStyle(el);
+                    const classes = el.className || '';
+                    const id = el.id || '';
+                    
+                    // Check if element is floating and contains search or cart
+                    if (style.position === 'fixed' && 
+                        (classes.includes('search') || classes.includes('cart') || 
+                         id.includes('search') || id.includes('cart'))) {
+                        el.style.display = 'none';
+                        console.log('Hidden unwanted element:', el);
+                    }
+                });
+            }
+            
+            // Run immediately
+            hideUnwantedElements();
+            
+            // Run again after a short delay to catch elements added later
+            setTimeout(hideUnwantedElements, 1000);
+            setTimeout(hideUnwantedElements, 2000);
+        });
     </script>
     
     {% hook 'head:start' %}
@@ -86,6 +115,31 @@
             --color-primary-dark: {{ theme.color.darker(0.15) }};
             --color-primary-light: {{ theme.color.lighter(0.15) }};
             --color-primary-reverse: {{ theme.color.reverse_text }};
+        }
+        
+        /* Hide unwanted floating elements */
+        body > div:not(.app-inner):not(.loader-init) {
+            display: none !important;
+        }
+        
+        /* Hide any floating action buttons outside the main content */
+        body > [style*="position: fixed"]:not(.store-header):not(.footer) {
+            display: none !important;
+        }
+        
+        /* Hide search interfaces that might be automatically added */
+        body > [class*="search"]:not(.store-header *) {
+            display: none !important;
+        }
+        
+        /* Hide cart icons that might be automatically added */
+        body > [class*="cart"]:not(.store-header *) {
+            display: none !important;
+        }
+        
+        /* Hide unwanted Salla components but keep important ones */
+        body > salla-*:not(salla-offer-modal):not(salla-login-modal):not(salla-user-menu):not(salla-cart-summary) {
+            display: none !important;
         }
     </style>
     {# tracking services, custom css feature. #}
@@ -115,7 +169,6 @@
 
 {# Twilight Components #}
 <salla-offer-modal></salla-offer-modal>
-<salla-search></salla-search>
 
 {% if user.type=='guest' %}
     <salla-login-modal></salla-login-modal>
