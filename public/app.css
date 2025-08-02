@@ -583,7 +583,6 @@ select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/
 .h-64{height:16rem}
 .h-7{height:1.75rem}
 .h-80{height:20rem}
-.h-\[25px\]{height:25px}
 .h-\[300px\]{height:300px}
 .h-\[34px\]{height:34px}
 .h-auto{height:auto}
@@ -818,7 +817,6 @@ select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/
 .pt-5{padding-top:1.25rem}
 .pt-6{padding-top:1.5rem}
 .pt-8{padding-top:2rem}
-.pt-\[12px\]{padding-top:12px}
 .text-left{text-align:left}
 .text-center{text-align:center}
 .text-right{text-align:right}
@@ -4456,7 +4454,6 @@ lite-youtube.lyt-activated > .lty-playbtn {
 .md\:h-20{height:5rem}
 .md\:h-24{height:6rem}
 .md\:h-\[400px\]{height:400px}
-.md\:h-\[50px\]{height:50px}
 .md\:\!w-2\/4{width:50% !important}
 .md\:w-2\/4{width:50%}
 .md\:w-24{width:6rem}
@@ -4495,7 +4492,6 @@ lite-youtube.lyt-activated > .lty-playbtn {
 .md\:py-4{padding-top:1rem;padding-bottom:1rem}
 .md\:pb-16{padding-bottom:4rem}
 .md\:pt-16{padding-top:4rem}
-.md\:pt-\[25px\]{padding-top:25px}
 .md\:text-center{text-align:center}
 .md\:text-2xl{font-size:1.5rem;line-height:2rem}
 .md\:text-5xl{font-size:3rem;line-height:1}
