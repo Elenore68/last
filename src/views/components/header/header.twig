@@ -6,33 +6,30 @@
 | cart.total       | string  | Formatted total ex: "١٠٠ ر.س"   |
 #}
 {% set important_links = theme.settings.get('important_links') %}
-<header class="store-header">
+<header class="store-header" style="position: relative; z-index: 1000; background-color: #000000;">
   {# Top Nav #}
-  <div class="top-navbar text-white" style="background-color: #3C3C3C;">
-    <div class="container flex justify-between items-center py-2">
+  <div class="top-navbar text-white" style="background-color: #000000; min-height: 60px; display: flex; align-items: center;">
+    <div class="container flex justify-between items-center py-3 px-4 md:px-8 lg:px-20">
      
-
-      {# Left side - Search and Profile #}
-      <div class="flex items-center gap-3">
-          {# Search icon #}
-          <button class="text-white hover:text-gray-300" aria-label="search-icon" onclick="salla.event.dispatch('search::open')">
-            <i class="sicon-search text-lg"></i>
-          </button>
-          <salla-search-modal></salla-search-modal>
-          
-          {# Profile icon #}
-          {% if user.type=='user' %}
-            <salla-user-menu avatar-only show-header class="text-white"></salla-user-menu>
-          {% else %}
-              <button class="text-white hover:text-gray-300" aria-label="user-icon" onclick="salla.event.dispatch('login::open')">
-                <i class="sicon-user-circle text-lg"></i>
-              </button>
-          {% endif %}
+      {# Left side - Cart #}
+      <div class="flex items-center gap-4">
+          <img 
+            src="{{ 'images/icons/bitcoin-icons_cart-outline.png'|asset }}" 
+            alt="Cart" 
+            class="w-6 h-6 cursor-pointer hover:opacity-80 transition-opacity"
+            onclick="salla.event.dispatch('cart::open')"
+          />
       </div>
+      
       {# Center - Logo #}
-      <div class="flex-1 flex justify-center">
+      <div class="flex items-center">
           <a class="navbar-brand" href="{{ store.url }}">
-              <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ store.logo }}" alt="{{ store.name }} logo" class="max-h-8">
+              <img 
+                src="{{ 'images/logo.png'|asset }}" 
+                alt="{{ store.name }} logo" 
+                class="w-[132px] h-[26px] flex-shrink-0 object-contain"
+                style="aspect-ratio: 66/13;"
+              >
               {% if is_page('index') %}
                 <h1 class="sr-only">{{ store.name }}</h1>
               {% else %}
@@ -40,33 +37,37 @@
               {% endif %}
           </a>
       </div>
-       {# Right side - Language #}
-      <div class="flex items-center">
-              {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-              <div class="relative">
-                  <button type="button" id="language-dropdown-btn" class="text-white text-sm hover:text-gray-300 flex items-center py-1 px-2 rounded">
-                      <span class="flag iti__flag iti__{{ user.language.country_code }} rounded-sm ltr:mr-1 rtl:ml-1"></span>
-                      {{ user.language.name }}
-                  </button>
-                  
-                  <div id="language-dropdown" class="absolute top-full ltr:right-0 rtl:left-0 mt-1 w-40 rounded-md shadow-xl border border-gray-400 z-[9999] hidden" style="background-color: #3c3c3c;">
-                      <div class="py-1">
-                          <a href="#" onclick="changeLanguage('en')" class="flex items-center justify-between px-3 py-2 text-sm text-white hover:bg-gray-600 transition-colors duration-150">
-                              <div class="flex items-center">
-                                  <span class="flag iti__flag iti__us rounded-sm ltr:mr-2 rtl:ml-2"></span>
-                                  <span>English</span>
-                              </div>
-                              <span class="text-gray-300 text-xs">EN</span>
-                          </a>
-                          <a href="#" onclick="changeLanguage('ar')" class="flex items-center justify-between px-3 py-2 text-sm text-white hover:bg-gray-600 transition-colors duration-150">
-                              <div class="flex items-center">
-                                  <span class="flag iti__flag iti__sa rounded-sm ltr:mr-2 rtl:ml-2"></span>
-                                  <span>العربية</span>
-                              </div>
-                              <span class="text-gray-300 text-xs">AR</span>
-                          </a>
+      
+      {# Right side - Language #}
+      <div class="flex items-center gap-2">
+          {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+          <span class="text-white font-comfortaa text-[12px] font-normal leading-[25px]">
+              {{ user.language.code == 'ar' ? 'En' : 'Ar' }}
+          </span>
+          <img 
+            src="{{ 'images/icons/material-symbols-light_language.png'|asset }}" 
+            alt="Language" 
+            class="w-5 h-5 cursor-pointer hover:opacity-80 transition-opacity"
+            onclick="toggleLanguageDropdown()"
+          />
+          
+          <div id="language-dropdown" class="absolute top-full ltr:right-0 rtl:left-0 mt-1 w-40 rounded-md shadow-xl border border-gray-400 z-[9999] hidden" style="background-color: #000000;">
+              <div class="py-1">
+                  <a href="#" onclick="changeLanguage('en')" class="flex items-center justify-between px-3 py-2 text-sm text-white hover:bg-gray-800 transition-colors duration-150">
+                      <div class="flex items-center">
+                          <span class="flag iti__flag iti__us rounded-sm ltr:mr-2 rtl:ml-2"></span>
+                          <span>English</span>
                       </div>
-                  </div>
+                      <span class="text-gray-300 text-xs">EN</span>
+                  </a>
+                  <a href="#" onclick="changeLanguage('ar')" class="flex items-center justify-between px-3 py-2 text-sm text-white hover:bg-gray-800 transition-colors duration-150">
+                      <div class="flex items-center">
+                          <span class="flag iti__flag iti__sa rounded-sm ltr:mr-2 rtl:ml-2"></span>
+                          <span>العربية</span>
+                      </div>
+                      <span class="text-gray-300 text-xs">AR</span>
+                  </a>
+              </div>
           </div>
           {% endif %}
       </div>
@@ -74,7 +75,7 @@
   </div>
 
   {# Main Nav #}
-  <div id="mainnav" class="main-nav-container shadow-default bg-black">
+  <div id="mainnav" class="main-nav-container shadow-default bg-black" style="min-height: 60px;">
       <div class="inner bg-inherit">
           <div class="container">
               <div class="flex items-stretch justify-center relative">
@@ -97,20 +98,21 @@
 
 <script>
 // Language dropdown functionality
+function toggleLanguageDropdown() {
+    const dropdown = document.getElementById('language-dropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('hidden');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    const dropdownBtn = document.getElementById('language-dropdown-btn');
     const dropdown = document.getElementById('language-dropdown');
     
-    if (dropdownBtn && dropdown) {
-        // Toggle dropdown on button click
-        dropdownBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            dropdown.classList.toggle('hidden');
-        });
-        
+    if (dropdown) {
         // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
-            if (!dropdownBtn.contains(e.target) && !dropdown.contains(e.target)) {
+            const languageIcon = document.querySelector('img[alt="Language"]');
+            if (!languageIcon.contains(e.target) && !dropdown.contains(e.target)) {
                 dropdown.classList.add('hidden');
             }
         });

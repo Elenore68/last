@@ -104,7 +104,7 @@
 </noscript>
 <div class="app-inner flex flex-col min-h-full">
     {% hook 'body:start' %}
-    {# {% component 'header.header' %} #}
+    {% component 'header.header' %}
     {% block content %}{% endblock %}
     {% component 'footer.footer' %}
 </div>
