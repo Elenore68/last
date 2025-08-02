@@ -138,49 +138,9 @@
         }
         
         /* Hide unwanted Salla components but keep important ones */
-body > salla-*:not(salla-offer-modal):not(salla-login-modal):not(salla-user-menu):not(salla-cart-summary) {
-    display: none !important;
-}
-
-/* Ensure login modal appears as proper overlay */
-salla-login-modal {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    z-index: 9999 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background-color: rgba(0, 0, 0, 0.5) !important;
-    backdrop-filter: blur(5px) !important;
-}
-
-/* Hide login modal by default */
-salla-login-modal:not([open]) {
-    display: none !important;
-}
-
-/* Show login modal when open */
-salla-login-modal[open] {
-    display: flex !important;
-}
-
-/* Style the modal content */
-salla-login-modal .modal-content,
-salla-login-modal [slot="modal-content"] {
-    background: white !important;
-    border-radius: 12px !important;
-    padding: 2rem !important;
-    max-width: 400px !important;
-    width: 90% !important;
-    max-height: 90vh !important;
-    overflow-y: auto !important;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3) !important;
-    position: relative !important;
-    z-index: 10000 !important;
-}
+        body > salla-*:not(salla-offer-modal):not(salla-login-modal):not(salla-user-menu):not(salla-cart-summary) {
+            display: none !important;
+        }
     </style>
     {# tracking services, custom css feature. #}
     {% hook 'head:end' %}

@@ -44,7 +44,7 @@
           {% else %}
               <button class="text-white hover:opacity-80 transition-opacity" 
                       aria-label="user-icon" 
-                      onclick="openLoginModal()"
+                      onclick="salla.event.dispatch('login::open')"
                       style="
                         display: flex;
                         align-items: center;
@@ -89,7 +89,7 @@
                     class="w-5 h-5"
                     data-translate-alt="header.language"
                   />
-          </div>
+              </div>
           {% endif %}
       </div>
     </div>
@@ -122,92 +122,17 @@ function switchLanguage() {
     if (window.languageManager) {
         window.languageManager.switchLanguage();
     } else {
-        // Get current language from multiple sources
-        const currentLanguage = localStorage.getItem('currentLanguage') || 
-                               document.documentElement.lang || 
-                               '{{ user.language.code }}' || 
-                               'ar';
+        // Fallback if language manager is not loaded
+        const currentLanguage = '{{ user.language.code }}';
         const newLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
         
-        console.log('Header: Switching language from', currentLanguage, 'to', newLanguage);
-        
-        // Update HTML lang attribute immediately
-        document.documentElement.lang = newLanguage;
-        document.querySelector('html').setAttribute('lang', newLanguage);
-        
-        // Store in localStorage for persistence
-        localStorage.setItem('currentLanguage', newLanguage);
-        
-        // Dispatch custom event for other components to listen
-        const languageChangeEvent = new CustomEvent('languageChanged', {
-            detail: { 
-                from: currentLanguage, 
-                to: newLanguage,
-                language: newLanguage 
-            }
-        });
-        document.dispatchEvent(languageChangeEvent);
-        
-        console.log('Header: Event dispatched, HTML lang updated to:', newLanguage);
-        
-        // Update the language toggle text
-        updateLanguageToggleText(newLanguage);
-        
-        // Try Salla's language change method
         if (window.salla && window.salla.language) {
-            console.log('Header: Using Salla language change');
             window.salla.language.change(newLanguage);
         } else {
-            console.log('Header: Salla not available, using URL redirect');
             const currentUrl = window.location.href;
             const baseUrl = currentUrl.split('?')[0];
             window.location.href = baseUrl + '?lang=' + newLanguage;
         }
-    }
-}
-
-// Function to update language toggle text
-function updateLanguageToggleText(currentLang) {
-    const toggleText = document.getElementById('language-toggle-text');
-    if (toggleText) {
-        // Show the opposite language (what we can switch TO)
-        toggleText.textContent = currentLang === 'ar' ? 'En' : 'Ar';
-        console.log('Header: Updated toggle text to show:', toggleText.textContent);
-    }
-}
-
-// Function to open login modal properly
-function openLoginModal() {
-    // Wait for Salla to be ready
-    if (window.salla && window.salla.event) {
-        // Try to dispatch the login event
-        window.salla.event.dispatch('login::open');
-        
-        // Ensure the modal appears as overlay
-        setTimeout(() => {
-            const loginModal = document.querySelector('salla-login-modal');
-            if (loginModal) {
-                // Force the modal to appear as overlay
-                loginModal.style.position = 'fixed';
-                loginModal.style.top = '0';
-                loginModal.style.left = '0';
-                loginModal.style.width = '100%';
-                loginModal.style.height = '100%';
-                loginModal.style.zIndex = '9999';
-                loginModal.style.display = 'flex';
-                loginModal.style.alignItems = 'center';
-                loginModal.style.justifyContent = 'center';
-                loginModal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-                
-                // Prevent body scroll
-                document.body.style.overflow = 'hidden';
-            }
-        }, 100);
-    } else {
-        // Fallback: wait for Salla to load
-        setTimeout(() => {
-            openLoginModal();
-        }, 500);
     }
 }
 
@@ -216,69 +141,8 @@ document.addEventListener('languageChanged', function(event) {
     const languageToggleText = document.getElementById('language-toggle-text');
     if (languageToggleText) {
         languageToggleText.textContent = event.detail.language === 'ar' ? 'En' : 'Ar';
-            }
-        });
-        
-// Ensure login modal is properly styled when it appears
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Header: DOM loaded, initializing language...');
-    
-    // Initialize language on page load
-    const currentLang = localStorage.getItem('currentLanguage') || 
-                       document.documentElement.lang || 
-                       '{{ user.language.code }}' || 
-                       'ar';
-    
-    console.log('Header: Initializing with language:', currentLang);
-    
-    // Update HTML lang attribute
-    document.documentElement.lang = currentLang;
-    document.querySelector('html').setAttribute('lang', currentLang);
-    
-    // Update toggle text
-    updateLanguageToggleText(currentLang);
-    
-    // Dispatch initial language event for banner
-    setTimeout(() => {
-        const languageInitEvent = new CustomEvent('languageChanged', {
-            detail: { 
-                from: currentLang, 
-                to: currentLang,
-                language: currentLang,
-                initial: true
-            }
-        });
-        document.dispatchEvent(languageInitEvent);
-        console.log('Header: Initial language event dispatched for:', currentLang);
-    }, 100);
-    
-    // Listen for login modal events
-    if (window.salla && window.salla.event) {
-        window.salla.event.on('login::opened', function() {
-            const loginModal = document.querySelector('salla-login-modal');
-            if (loginModal) {
-                // Force modal styling
-                loginModal.style.position = 'fixed';
-                loginModal.style.top = '0';
-                loginModal.style.left = '0';
-                loginModal.style.width = '100%';
-                loginModal.style.height = '100%';
-                loginModal.style.zIndex = '9999';
-                loginModal.style.display = 'flex';
-                loginModal.style.alignItems = 'center';
-                loginModal.style.justifyContent = 'center';
-                loginModal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-                
-                // Prevent body scroll
-                document.body.style.overflow = 'hidden';
-            }
-        });
-        
-        window.salla.event.on('login::closed', function() {
-            // Restore body scroll
-            document.body.style.overflow = 'auto';
-        });
     }
 });
+
 
 </script>
