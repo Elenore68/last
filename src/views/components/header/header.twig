@@ -9,11 +9,11 @@
 <header class="store-header">
   {# Top Nav #}
   <div class="top-navbar text-white" style="background-color: #000000;">
-    <div class="container flex justify-between items-center py-1">
+    <div class="container flex justify-between items-center py-2">
      
 
       {# Left side - Cart and Profile #}
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-3">
           {# Cart icon #}
           <a href="{{ store.url }}/cart" 
              class="cart-icon text-white hover:opacity-80 transition-opacity" 
@@ -22,8 +22,8 @@
                display: flex;
                align-items: center;
                justify-content: center;
-               width: 32px;
-               height: 32px;
+               width: 40px;
+               height: 40px;
                border-radius: 50%;
                background: transparent;
                border: none;
@@ -33,8 +33,8 @@
             <img src="{{ 'images/icons/bitcoin-icons_cart-outline.png'|asset }}" 
                  alt="Cart" 
                  style="
-                   width: 18px;
-                   height: 18px;
+                   width: 20px;
+                   height: 20px;
                  " />
           </a>
           
@@ -49,8 +49,8 @@
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        width: 32px;
-                        height: 32px;
+                        width: 40px;
+                        height: 40px;
                         background: transparent;
                         border: none;
                         cursor: pointer;
@@ -58,8 +58,8 @@
                 <img src="{{ 'images/icons/iconamoon_profile-thin.svg'|asset }}" 
                      alt="Profile" 
                      style="
-                       width: 18px;
-                       height: 18px;
+                       width: 20px;
+                       height: 20px;
                        filter: brightness(0) invert(1);
                      " />
               </button>
@@ -68,7 +68,7 @@
       {# Center - Logo #}
       <div class="flex-1 flex justify-center">
           <a class="navbar-brand" href="{{ store.url }}">
-              <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ 'images/logo.png'|asset }}" alt="{{ store.name }} logo" class="max-h-6">
+              <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ 'images/logo.png'|asset }}" alt="{{ store.name }} logo" class="max-h-8">
               {% if is_page('index') %}
                 <h1 class="sr-only">{{ store.name }}</h1>
               {% else %}
@@ -79,14 +79,14 @@
        {# Right side - Language #}
       <div class="flex items-center">
               {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-              <div class="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchLanguage()">
-                  <span class="text-white font-comfortaa text-[11px] font-normal leading-[20px]" id="language-toggle-text">
+              <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchLanguage()">
+                  <span class="text-white font-comfortaa text-[12px] font-normal leading-[25px]" id="language-toggle-text">
                     {{ user.language.code == 'ar' ? 'En' : 'Ar' }}
                   </span>
                   <img 
                     src="{{ 'images/icons/material-symbols-light_language.png'|asset }}" 
                     alt="Language" 
-                    class="w-4 h-4"
+                    class="w-5 h-5"
                     data-translate-alt="header.language"
                   />
           </div>
@@ -101,6 +101,10 @@
           <div class="container">
               <div class="flex items-stretch justify-center relative">
                   <div class="flex items-center">
+                      <a class="lg:hidden mburger mburger--collapse leading-none rtl:ml-4 ltr:mr-4" href="#mobile-menu" aria-label="Open-menu">
+                        <i class="sicon-menu text-primary text-2xl"></i>
+                      </a>
+                     
                       <custom-main-menu></custom-main-menu>
                   </div>
                   
@@ -125,7 +129,7 @@ function switchLanguage() {
                                'ar';
         const newLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
         
-
+        console.log('Header: Switching language from', currentLanguage, 'to', newLanguage);
         
         // Update HTML lang attribute immediately
         document.documentElement.lang = newLanguage;
@@ -144,45 +148,17 @@ function switchLanguage() {
         });
         document.dispatchEvent(languageChangeEvent);
         
-
-        
-        // Directly call banner update function if available
-        if (window.updateBannerImages) {
-
-            window.updateBannerImages(newLanguage);
-        } else {
-
-        }
-        
-        // Directly call footer update function if available
-        if (window.updateFooterTexts) {
-
-            window.updateFooterTexts(newLanguage);
-        } else {
-
-        }
+        console.log('Header: Event dispatched, HTML lang updated to:', newLanguage);
         
         // Update the language toggle text
         updateLanguageToggleText(newLanguage);
         
-        // Try calling banner and footer functions again after a short delay
-        setTimeout(() => {
-            if (window.updateBannerImages) {
-
-                window.updateBannerImages(newLanguage);
-            }
-            if (window.updateFooterTexts) {
-
-                window.updateFooterTexts(newLanguage);
-            }
-        }, 100);
-        
         // Try Salla's language change method
         if (window.salla && window.salla.language) {
-
+            console.log('Header: Using Salla language change');
             window.salla.language.change(newLanguage);
         } else {
-
+            console.log('Header: Salla not available, using URL redirect');
             const currentUrl = window.location.href;
             const baseUrl = currentUrl.split('?')[0];
             window.location.href = baseUrl + '?lang=' + newLanguage;
@@ -196,7 +172,7 @@ function updateLanguageToggleText(currentLang) {
     if (toggleText) {
         // Show the opposite language (what we can switch TO)
         toggleText.textContent = currentLang === 'ar' ? 'En' : 'Ar';
-
+        console.log('Header: Updated toggle text to show:', toggleText.textContent);
     }
 }
 
@@ -245,7 +221,7 @@ document.addEventListener('languageChanged', function(event) {
         
 // Ensure login modal is properly styled when it appears
 document.addEventListener('DOMContentLoaded', function() {
-
+    console.log('Header: DOM loaded, initializing language...');
     
     // Initialize language on page load
     const currentLang = localStorage.getItem('currentLanguage') || 
@@ -253,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
                        '{{ user.language.code }}' || 
                        'ar';
     
-
+    console.log('Header: Initializing with language:', currentLang);
     
     // Update HTML lang attribute
     document.documentElement.lang = currentLang;
@@ -273,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         document.dispatchEvent(languageInitEvent);
-
+        console.log('Header: Initial language event dispatched for:', currentLang);
     }, 100);
     
     // Listen for login modal events

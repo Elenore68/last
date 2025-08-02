@@ -1,79 +1,32 @@
 <section class="s-block s-block--full-bg" style="display: block !important; visibility: visible !important;">
     <!-- Banner Component Working! -->
 
-    <!-- Component Data Debug -->
-    <div style="background: #000; color: #0f0; padding: 10px; margin: 10px; font-family: monospace; font-size: 12px;">
-        <strong>🔍 COMPONENT DEBUG:</strong><br>
-        Component exists: {{ component ? 'YES' : 'NO' }}<br>
-        Banner_last exists: {{ component.banner_last ? 'YES' : 'NO' }}<br>
-        Banner count: {{ component.banner_last ? component.banner_last|length : '0' }}<br>
-        {% if component.banner_last and component.banner_last|length > 0 %}
-            {% for banner in component.banner_last %}
-                Banner {{ loop.index }}: AR={{ banner.imageAr ? 'YES' : 'NO' }}, EN={{ banner.imageEn ? 'YES' : 'NO' }}<br>
-            {% endfor %}
-        {% endif %}
-    </div>
-
     {% if component.banner_last and component.banner_last|length > 0 %}
         {% for banner in component.banner_last %}
             <div class="relative">
                 <div class="relative w-full h-auto">
                     <!-- Debug: Show what we have -->
                     {% if banner.imageAr or banner.imageEn %}
-                        <!-- Arabic Image Container -->
+                        <!-- Arabic Image -->
                         {% if banner.imageAr %}
-                        <div class="banner-image-container" data-lang="ar" id="container-ar-{{ loop.index }}" style="display: none !important; position: relative !important; width: 100% !important; height: 300px !important; background: #f0f0f0 !important; border: 3px solid transparent !important;">
-                            <img
-                                src="{{ banner.imageAr }}"
-                                alt="Arabic Banner"
-                                data-lang="ar"
-                                class="localized-img"
-                                style="
-                                    width: 100% !important;
-                                    height: 100% !important;
-                                    object-fit: cover !important;
-                                    position: absolute !important;
-                                    top: 0 !important;
-                                    left: 0 !important;
-                                    z-index: 1 !important;
-                                "
-                                id="banner-ar-{{ loop.index }}"
-                                onload="console.log('🖼️ Arabic image loaded:', this.src); this.parentElement.style.display = 'block';"
-                                onerror="console.error('❌ Arabic image failed to load:', this.src)"
-                            />
-                            <div class="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 text-xs rounded" 
-                                 id="indicator-ar-{{ loop.index }}" style="z-index: 10; position: absolute;">
-                                🇸🇦 Arabic Active
-                            </div>
-                        </div>
+                        <img
+                            src="{{ banner.imageAr }}"
+                            alt="Arabic Banner"
+                            data-lang="ar"
+                            class="localized-img w-full h-auto object-cover"
+                            style="display: none;"
+                        />
                         {% endif %}
 
-                        <!-- English Image Container -->
+                        <!-- English Image -->
                         {% if banner.imageEn %}
-                        <div class="banner-image-container" data-lang="en" id="container-en-{{ loop.index }}" style="display: none !important; position: relative !important; width: 100% !important; height: 300px !important; background: #f0f0f0 !important; border: 3px solid transparent !important;">
-                            <img
-                                src="{{ banner.imageEn }}"
-                                alt="English Banner"
-                                data-lang="en"
-                                class="localized-img"
-                                style="
-                                    width: 100% !important;
-                                    height: 100% !important;
-                                    object-fit: cover !important;
-                                    position: absolute !important;
-                                    top: 0 !important;
-                                    left: 0 !important;
-                                    z-index: 1 !important;
-                                "
-                                id="banner-en-{{ loop.index }}"
-                                onload="console.log('🖼️ English image loaded:', this.src); this.parentElement.style.display = 'block';"
-                                onerror="console.error('❌ English image failed to load:', this.src)"
-                            />
-                            <div class="absolute top-2 left-2 bg-blue-500 text-white px-2 py-1 text-xs rounded" 
-                                 id="indicator-en-{{ loop.index }}" style="z-index: 10; position: absolute;">
-                                🇺🇸 English Active
-                            </div>
-                        </div>
+                        <img
+                            src="{{ banner.imageEn }}"
+                            alt="English Banner"
+                            data-lang="en"
+                            class="localized-img w-full h-auto object-cover"
+                            style="display: none;"
+                        />
                         {% endif %}
                     {% else %}
                         <!-- Fallback if no images are configured -->
@@ -101,22 +54,6 @@
                     <div class="mb-8">
                         <h1 class="text-4xl md:text-5xl font-bold mb-4">✨ Multi-Language Banner Ready!</h1>
                         <p class="text-xl md:text-2xl opacity-90">Your banner component is working perfectly!</p>
-                        
-                        <!-- Test Buttons -->
-                        <div class="mt-6 space-x-4">
-                            <button onclick="testBannerFunction('ar')" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors">
-                                🇸🇦 Test Arabic
-                            </button>
-                            <button onclick="testBannerFunction('en')" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors">
-                                🇺🇸 Test English
-                            </button>
-                            <button onclick="debugBannerStatus()" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors">
-                                🔍 Debug Info
-                            </button>
-                            <button onclick="forceShowBanner()" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors">
-                                🚨 Force Show
-                            </button>
-                        </div>
                     </div>
                     
                     <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-8 mb-8">
@@ -155,253 +92,84 @@
 </section>
 
 <script>
-  console.log('🚀 BANNER SCRIPT STARTING - ' + new Date().toLocaleTimeString());
-  
-  // Test function to check if JavaScript is working
-  function testBannerFunction(lang) {
-    console.log('🔥 TEST BUTTON CLICKED - Language:', lang);
-    console.log('🔥 Current time:', new Date().toLocaleTimeString());
-    alert('Test button clicked! Language: ' + lang + '\nCheck console for details.');
-    
-    try {
-      updateBannerImages(lang);
-    } catch (error) {
-      console.error('❌ Error calling updateBannerImages:', error);
-      alert('Error: ' + error.message);
-    }
-  }
-  
-  // Debug function to show current status
-  function debugBannerStatus() {
-    console.log('🔍 === BANNER DEBUG STATUS ===');
-    console.log('📅 Time:', new Date().toLocaleTimeString());
-    console.log('🌍 Current Language:', localStorage.getItem('currentLanguage'));
-    console.log('🏷️ HTML Lang:', document.documentElement.lang);
-    console.log('🖼️ Banner Containers Found:', document.querySelectorAll('.banner-image-container').length);
-    console.log('📦 Component Data Available:', typeof component !== 'undefined');
-    console.log('🔧 Salla Available:', typeof window.salla !== 'undefined');
-    
-    const containers = document.querySelectorAll('.banner-image-container');
-    containers.forEach((container, index) => {
-      console.log(`📦 Container ${index + 1}:`, {
-        lang: container.dataset.lang,
-        visible: container.style.display !== 'none',
-        id: container.id
-      });
-    });
-    
-    alert('Debug info logged to console! Check F12 → Console tab');
-  }
-  
-  // Force show banner for testing
-  function forceShowBanner() {
-    console.log('🚨 FORCE SHOWING BANNER');
-    const containers = document.querySelectorAll('.banner-image-container');
-    if (containers.length === 0) {
-      console.log('❌ No banner containers found - need to configure in Salla admin');
-      alert('No banner containers found!\n\nPlease:\n1. Go to Salla Admin\n2. Theme Customizer\n3. Find "banner" component\n4. Add Arabic and English images');
-      return;
-    }
-    
-    console.log('🖼️ Found', containers.length, 'containers, forcing them to show...');
-    
-    containers.forEach((container, index) => {
-      // Remove all hiding styles and force visibility
-      container.style.cssText = `
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        width: 100% !important;
-        height: 300px !important;
-        position: relative !important;
-        z-index: 100 !important;
-        border: 5px solid red !important;
-        background: yellow !important;
-      `;
-      
-      console.log(`🖼️ Forced showing container ${index + 1}:`, {
-        lang: container.dataset.lang,
-        display: container.style.display,
-        visibility: container.style.visibility,
-        opacity: container.style.opacity
-      });
-    });
-    
-    alert('Forced all banner containers to show with red borders and yellow background!\nIf you still can\'t see them, there might be a container issue.');
-  }
+  console.log('✅ Banner component loaded successfully');
   
   // Function to update banner images based on language
   function updateBannerImages(forcedLang = null) {
-    console.log('🚀 updateBannerImages called with:', forcedLang);
-    
     // Get language from multiple sources, prioritizing forced language
     let lang = forcedLang;
     
     if (!lang) {
       // Try to get current language from various sources
-      lang = localStorage.getItem('currentLanguage') ||
-             document.documentElement.lang ||
+      lang = document.documentElement.lang ||
              document.querySelector('html').getAttribute('lang') ||
+             localStorage.getItem('currentLanguage') ||
              '{{ user.language.code }}' ||
              navigator.language.slice(0, 2) ||
              'ar';
     }
 
-    console.log('🌍 Banner: Final language to use:', lang);
-    console.log('🖼️ Banner: Available containers:', document.querySelectorAll('.banner-image-container').length);
+    console.log('Banner: Updating images for language:', lang);
+    console.log('Banner: Available images:', document.querySelectorAll('.localized-img').length);
 
-    // Find all banner containers
-    const containers = document.querySelectorAll('.banner-image-container');
-    console.log('📋 Banner: Found containers:', containers);
-
-    if (containers.length === 0) {
-      console.error('❌ Banner: No .banner-image-container elements found!');
-      alert('No banner containers found! Please configure images in Salla admin panel.');
-      return;
-    }
-
-    // Show only the container that matches the current language
-    let containerFound = false;
-    let totalContainers = 0;
-    
-    containers.forEach((container, index) => {
-      totalContainers++;
-      const containerLang = container.dataset.lang;
-      
-      console.log(`🔍 Container ${index + 1}:`, {
-        element: container,
-        'data-lang': containerLang,
-        currentDisplay: container.style.display,
-        targetLang: lang,
-        matches: containerLang === lang
-      });
-      
-      if (containerLang === lang) {
-        // Show this container with cssText to override everything
-        container.style.cssText = `
-          display: block !important;
-          visibility: visible !important;
-          opacity: 1 !important;
-          width: 100% !important;
-          height: 300px !important;
-          position: relative !important;
-          z-index: 10 !important;
-          border: 3px solid #10B981 !important;
-          background: #f0f0f0 !important;
-        `;
-        container.classList.remove('hidden');
-        container.setAttribute('data-active', 'true');
-        
-        // Show indicator
-        const indicator = document.getElementById('indicator-' + containerLang + '-' + (index + 1));
-        if (indicator) {
-          indicator.style.cssText = 'display: block !important; position: absolute !important; z-index: 20 !important;';
-        }
-        
-        containerFound = true;
-        console.log('✅ Banner: SHOWING', lang, 'container');
+    // Show only the image that matches the current language
+    let imageFound = false;
+    document.querySelectorAll('.localized-img').forEach((img) => {
+      console.log('Banner: Checking image with data-lang:', img.dataset.lang);
+      if (img.dataset.lang === lang) {
+        img.style.display = 'block';
+        img.classList.remove('hidden');
+        imageFound = true;
+        console.log('Banner: ✅ Showing', lang, 'image');
       } else {
-        // Hide this container with cssText
-        container.style.cssText = `
-          display: none !important;
-          visibility: hidden !important;
-          opacity: 0 !important;
-          width: 100% !important;
-          height: 300px !important;
-          position: relative !important;
-          z-index: 1 !important;
-          border: 3px solid transparent !important;
-          background: #f0f0f0 !important;
-        `;
-        container.classList.add('hidden');
-        container.setAttribute('data-active', 'false');
-        
-        // Hide indicator
-        const indicator = document.getElementById('indicator-' + containerLang + '-' + (index + 1));
-        if (indicator) {
-          indicator.style.cssText = 'display: none !important;';
-        }
-        
-        console.log('❌ Banner: HIDING', containerLang, 'container');
+        img.style.display = 'none';
+        img.classList.add('hidden');
+        console.log('Banner: ❌ Hiding', img.dataset.lang, 'image');
       }
     });
     
-    if (!containerFound) {
-      console.warn('⚠️ Banner: No container found for language:', lang, 'Total containers:', totalContainers);
-      console.warn('Available languages:', Array.from(containers).map(container => container.dataset.lang));
-    } else {
-      console.log('🎉 Banner: Successfully switched to', lang);
+    if (!imageFound) {
+      console.warn('Banner: No image found for language:', lang);
     }
     
     // Store current language for future reference
     localStorage.setItem('currentLanguage', lang);
-    
-    // Force a visual update
-    setTimeout(() => {
-      console.log('🔄 Banner: Checking final state...');
-      containers.forEach((container, index) => {
-        console.log(`Final state ${index + 1}:`, {
-          'data-lang': container.dataset.lang,
-          display: container.style.display,
-          visibility: container.style.visibility,
-          opacity: container.style.opacity,
-          active: container.getAttribute('data-active')
-        });
-      });
-    }, 100);
   }
 
-  // Initialize banner on page load
+  // Update images on page load
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('📄 Banner: DOM loaded, initializing...');
-    setTimeout(() => {
-      updateBannerImages();
-    }, 100);
+    updateBannerImages();
   });
 
-  // Listen for custom language change events from header
+  // Listen for language changes from header
   document.addEventListener('languageChanged', function(event) {
-    console.log('🔄 Banner: Language changed event received:', event.detail);
+    console.log('Banner: Language changed event received:', event.detail);
     const newLang = event.detail.to || event.detail.language;
-    console.log('🎯 Banner: Switching to language:', newLang);
+    console.log('Banner: Switching to language:', newLang);
     updateBannerImages(newLang);
   });
 
-  // Listen for Salla language change events
+  // Also listen for Salla language change events
   if (window.salla && window.salla.event) {
     window.salla.event.on('language::changed', function(data) {
-      console.log('🔄 Banner: Salla language changed:', data);
-      const lang = data.language || data.code || data;
-      updateBannerImages(lang);
+      console.log('Banner: Salla language changed:', data);
+      updateBannerImages();
     });
   }
 
-  // Enhanced fallback: Monitor for language changes
-  let bannerCurrentLang = localStorage.getItem('currentLanguage') || '{{ user.language.code }}' || 'ar';
-  let checkCount = 0;
-  
-  const languageChecker = setInterval(() => {
-    checkCount++;
-    const htmlLang = document.documentElement.lang || document.querySelector('html').getAttribute('lang');
-    const storedLang = localStorage.getItem('currentLanguage');
-    const detectedLang = htmlLang || storedLang || '{{ user.language.code }}' || 'ar';
-    
-    if (detectedLang !== bannerCurrentLang) {
-      console.log('🔍 Banner: Language change detected from', bannerCurrentLang, 'to', detectedLang, '(check #' + checkCount + ')');
-      bannerCurrentLang = detectedLang;
-      updateBannerImages(detectedLang);
-    }
-    
-    // Stop checking after 60 seconds to avoid infinite monitoring
-    if (checkCount > 60) {
-      clearInterval(languageChecker);
-      console.log('⏰ Banner: Language monitoring stopped after 60 checks');
+  // Fallback: Check for language changes periodically
+  let currentLang = '{{ user.language.code }}' || 'ar';
+  setInterval(() => {
+    const newLang = document.documentElement.lang || 
+                   document.querySelector('html').getAttribute('lang') || 
+                   '{{ user.language.code }}' || 'ar';
+    if (newLang !== currentLang) {
+      console.log('Banner: Language changed from', currentLang, 'to', newLang);
+      currentLang = newLang;
+      updateBannerImages();
     }
   }, 1000);
 
-  // Initial call with delay to ensure DOM is ready
-  setTimeout(() => {
-    console.log('🚀 Banner: Initial language setup');
-    updateBannerImages();
-  }, 200);
+  // Initial call
+  updateBannerImages();
 </script>
