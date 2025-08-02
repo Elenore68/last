@@ -47,7 +47,7 @@
             </div>
             <div class="mb-4 flex justify-center">
               <button 
-                onclick="event.preventDefault(); showProductModal('{{ item['product-type']|default('iphone') }}'); return false;"
+                onclick="event.preventDefault(); navigateToProductPage('{{ item['url']|default('') }}', '{{ item['product-type']|default('iphone') }}'); return false;"
                 class="view-collection-btn"
                 style="text-decoration: none; border: none; background: none; cursor: pointer;"
                 type="button"
@@ -79,168 +79,26 @@
 </section>
 
 <script>
-// Global variables
-let currentProductType = 'iphone';
-let selectedModalColor = 'black';
-
-// Function to show product modal
-function showProductModal(productType) {
-  currentProductType = productType;
-  const modal = document.getElementById('product-modal');
-  const title = document.getElementById('modal-title');
-  const mainImage = document.getElementById('modal-main-image');
-  const modelSelector = document.getElementById('modal-model-selector');
-  
-  if (!modal) {
-    return;
-  }
-  
-  if (productType === 'iphone') {
-    title.textContent = 'غطاء ايفون 16 برو - اسود';
-    mainImage.src = '{{ 'images/product/iphone2.png'|asset }}';
-    modelSelector.innerHTML = `
-      <option value="iPhone 16 Pro">ايفون 16 برو</option>
-      <option value="iPhone 16 Pro Max">ايفون 16 برو ماكس</option>
-      <option value="iPhone 16">ايفون 16</option>
-    `;
+// Function to navigate to product page using dynamic URL
+function navigateToProductPage(customUrl, productType) {
+  // Check if custom URL is provided and not empty
+  if (customUrl && customUrl.trim() !== '') {
+    // Use the custom URL configured in the component
+    window.location.href = customUrl;
   } else {
-    title.textContent = 'غطاء سامسونج S24 - اسود';
-    mainImage.src = '{{ 'images/product/image 27.png'|asset }}';
-    modelSelector.innerHTML = `
-      <option value="Samsung S24">سامسونج S24</option>
-      <option value="Samsung S24 Ultra">سامسونج S24 الترا</option>
-      <option value="Samsung S24 Plus">سامسونج S24 بلس</option>
-    `;
-  }
-  
-  modal.classList.remove('hidden');
-  modal.style.display = 'block';
-  modal.style.visibility = 'visible';
-  modal.style.opacity = '1';
-  document.body.style.overflow = 'hidden';
-  
-  // Initialize mobile slider
-  initMobileSlider();
-}
-
-// Function to close product modal
-function closeProductModal() {
-  const modal = document.getElementById('product-modal');
-  
-  if (!modal) {
-    return;
-  }
-  
-  modal.classList.add('hidden');
-  modal.style.display = 'none';
-  modal.style.visibility = 'hidden';
-  modal.style.opacity = '0';
-  document.body.style.overflow = 'auto';
-}
-
-// Function to change modal image
-function changeModalImage(src) {
-  document.getElementById('modal-main-image').src = src;
-  
-  // Update active thumbnail state
-  const allThumbnails = document.querySelectorAll('[onclick*="changeModalImage"]');
-  allThumbnails.forEach(thumb => {
-    if (thumb.onclick.toString().includes(src)) {
-      thumb.classList.add('border-gray-900', 'ring-2', 'ring-gray-200');
-      thumb.classList.remove('border-gray-300');
+    // Fallback to default behavior if no custom URL is set
+    if (productType === 'iphone') {
+      // Navigate to iPhone case page
+      window.location.href = '{{ store.url }}/product/iphone-case';
+    } else if (productType === 'samsung') {
+      // Navigate to Samsung case page
+      window.location.href = '{{ store.url }}/product/samsung-case';
     } else {
-      thumb.classList.remove('border-gray-900', 'ring-2', 'ring-gray-200');
-      thumb.classList.add('border-gray-300');
+      // Fallback to general products page
+      window.location.href = '{{ store.url }}/products?type=' + productType;
     }
-  });
-}
-
-// Function to initialize mobile slider
-function initMobileSlider() {
-  const slider = document.getElementById('mobile-slider');
-  if (slider) {
-    // Add touch/swipe functionality for mobile
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-
-    slider.addEventListener('mousedown', (e) => {
-      isDown = true;
-      slider.classList.add('active');
-      startX = e.pageX - slider.offsetLeft;
-      scrollLeft = slider.scrollLeft;
-    });
-
-    slider.addEventListener('mouseleave', () => {
-      isDown = false;
-      slider.classList.remove('active');
-    });
-
-    slider.addEventListener('mouseup', () => {
-      isDown = false;
-      slider.classList.remove('active');
-    });
-
-    slider.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - slider.offsetLeft;
-      const walk = (x - startX) * 2;
-      slider.scrollLeft = scrollLeft - walk;
-    });
   }
 }
-
-// Function to select modal color
-function selectModalColor(color) {
-  selectedModalColor = color;
-  
-  document.getElementById('modal-color-black').className = 
-    color === 'black' ? 'w-10 h-10 rounded-full border-2 border-gray-900 ring-2 ring-gray-200' : 'w-10 h-10 rounded-full border-2 border-gray-300';
-  document.getElementById('modal-color-gray').className = 
-    color === 'gray' ? 'w-10 h-10 rounded-full border-2 border-gray-900 ring-2 ring-gray-200' : 'w-10 h-10 rounded-full border-2 border-gray-300';
-}
-
-// Function to add to cart
-function addToCart() {
-  const lockIcon = document.getElementById('modal-lock-icon');
-  const model = document.getElementById('modal-model-selector').value;
-  
-  // Add animation effect
-  lockIcon.style.transition = 'all 0.3s ease';
-  lockIcon.style.transform = 'scale(1.1) rotate(5deg)';
-  
-  setTimeout(() => {
-    lockIcon.style.transform = 'scale(1) rotate(0deg)';
-  }, 300);
-  
-
-  
-  // Here you would typically call Salla's add to cart function
-  // salla.cart.addItem(productId, quantity, options);
-}
-
-
-
-// Initialize modal event listeners when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-  // Close modal when clicking outside
-  const modal = document.getElementById('product-modal');
-  if (modal) {
-    modal.addEventListener('click', function(e) {
-      if (e.target === this) {
-        closeProductModal();
-      }
-    });
-  }
-  
-  // Close modal on escape key
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      closeProductModal();
-    }
-  });
-});
 </script>
 
 <style>
@@ -408,226 +266,6 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 </style>
 
-<!-- Product Modal -->
-<div id="product-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-  <div class="flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto" dir="rtl">
-      <div class="p-6">
-        <div class="flex justify-between items-center mb-6">
-          <h2 id="modal-title" class="text-2xl font-bold">غلاف آيفون 15 برو – أسود</h2>
-          <button 
-            onclick="event.preventDefault(); closeProductModal(); return false;" 
-            class="text-gray-500 hover:text-gray-700 text-2xl cursor-pointer p-2 rounded hover:bg-gray-100 transition-colors"
-            type="button"
-            style="min-width: 40px; min-height: 40px; display: flex; align-items: center; justify-content: center;"
-          >
-            ×
-          </button>
-        </div>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <!-- Product Images -->
-          <div class="space-y-4">
-            <div class="flex justify-center">
-              <img id="modal-main-image"
-                   src="{{ 'images/product/iphone2.png'|asset }}"
-                   alt="Product"
-                   class="object-contain"
-                   style="height: 400px;" />
-            </div>
-            
-            <!-- Product Information Section -->
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold text-gray-900">معلومات المنتج</h3>
-              
-              <div class="space-y-3">
-                <div>
-                  <h4 class="text-sm font-medium text-gray-700 mb-1">الأجهزة المتوافقة:</h4>
-                  <ul class="text-sm text-gray-600 space-y-1">
-                    <li>• سامسونج جالاكسي S24 / S24+ / S24 الترا</li>
-                    <li>• متوفر أيضاً لسلسلة S23</li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h4 class="text-sm font-medium text-gray-700 mb-1">الخامة:</h4>
-                  <ul class="text-sm text-gray-600 space-y-1">
-                    <li>• جلد نباتي فاخر بملمس مستوحى من الألكانتارا</li>
-                    <li>• بطانة داخلية ناعمة من المايكروفايبر لحماية فعالة من الخدوش</li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h4 class="text-sm font-medium text-gray-700 mb-1">التصميم:</h4>
-                  <ul class="text-sm text-gray-600 space-y-1">
-                    <li>• تصميم فائق النحافة مع حماية كاملة للجوانب والحواف</li>
-                    <li>• فتحات دقيقة للكاميرا، الأزرار، والمنافذ</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Product Info -->
-          <div class="space-y-6">
-            <!-- Model Selector -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">الموديل</label>
-              <div class="relative"
-                   style="
-                     border-radius: 8px;
-                     border: 1px solid rgba(0, 0, 0, 0.60);
-                     background: #FCFCFC;
-                     display: flex;
-                     height: 37px;
-                     width: 175px;
-                     padding: 10px;
-                     justify-content: space-between;
-                     align-items: center;
-                     align-self: stretch
-                   ">
-                <select id="modal-model-selector"
-                        class="w-full bg-transparent border-none outline-none appearance-none cursor-pointer"
-                        style="color: rgba(0, 0, 0, 0.87)">
-                  <option value="iPhone 15 Pro">آيفون 15 برو</option>
-                  <option value="iPhone 15 Pro Max">آيفون 15 برو ماكس</option>
-                  <option value="iPhone 15">آيفون 15</option>
-                </select>
-                <span class="text-gray-500 mr-2">▼</span>
-              </div>
-            </div>
 
-            <!-- Description -->
-            <p style="
-              font-family: 'Comfortaa', Arial, sans-serif;
-              font-size: 15px;
-              font-style: normal;
-              font-weight: 300;
-              line-height: 130.231%;
-              background: linear-gradient(90deg, #414141 0%, #999 100%);
-              background-clip: text;
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-              margin-top: 0px
-            ">
-              ملمس فاخر. إحساس خالد. — مصنوع من ألكانتارا الإيطالية الأصيلة®
-            </p>
-
-            <!-- Price -->
-            <div class="text-3xl font-bold text-gray-900">
-              250 ريال
-            </div>
-
-            <!-- Color Selection -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-3">أسود</label>
-              <div class="flex gap-4">
-                <button id="modal-color-black"
-                        class="w-10 h-10 rounded-full border-2 border-gray-900 ring-2 ring-gray-200"
-                        style="background-color: #1a1a1a"
-                        onclick="selectModalColor('black')"></button>
-                <button id="modal-color-gray"
-                        class="w-10 h-10 rounded-full border-2 border-gray-300"
-                        style="background-color: #6b7280"
-                        onclick="selectModalColor('gray')"></button>
-              </div>
-            </div>
-
-            <!-- Add to Cart Button -->
-            <div class="flex items-center cursor-pointer"
-                 style="
-                   border-radius: 8px;
-                   border: 1px solid #3C3C3C;
-                   background: #3C3C3C;
-                   display: flex;
-                   height: 45px;
-                   width: 100%;
-                   padding: 0px 10px 0px 20px;
-                   justify-content: space-between;
-                   align-items: center;
-                   color: white;
-                   margin-top: 10px;
-                   margin-bottom: 10px
-                 "
-                 onclick="addToCart()">
-              <span class="font-medium text-lg">أضف إلى السلة</span>
-              <img src="{{ 'images/icons/uim_lock.png'|asset }}"
-                   alt="Lock"
-                   class="w-5 h-5"
-                   id="modal-lock-icon" />
-            </div>
-
-            <!-- Payment Options -->
-            <div class="flex items-center gap-3 text-sm text-gray-500"
-                 style="
-                   width: 100%;
-                   justify-content: space-between;
-                   margin-top: 15px
-                 ">
-              <span class="text-gray-600 font-sf-pro"
-                    style="padding-right: 17px">
-                متوفر الدفع تابي
-              </span>
-              <img src="{{ 'images/payment/tabby.png'|asset }}" 
-                   alt="Tabby" 
-                   style="
-                     width: 86px;
-                     height: 34px;
-                     aspect-ratio: 43/17
-                   " />
-            </div>
-            
-            <!-- Thumbnails (Desktop Only) -->
-            <div class="hidden lg:block mt-6">
-              <h4 class="text-sm font-medium text-gray-700 mb-3">عرض المنتج:</h4>
-              <div class="flex gap-2">
-                <img src="{{ 'images/product/iphone2.png'|asset }}" 
-                     alt="View 1" 
-                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors"
-                     onclick="changeModalImage('{{ 'images/product/iphone2.png'|asset }}')" />
-                <img src="{{ 'images/product/iphone3.png'|asset }}" 
-                     alt="View 2" 
-                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors"
-                     onclick="changeModalImage('{{ 'images/product/iphone3.png'|asset }}')" />
-                <img src="{{ 'images/product/iphone4.png'|asset }}" 
-                     alt="View 3" 
-                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors"
-                     onclick="changeModalImage('{{ 'images/product/iphone4.png'|asset }}')" />
-                <img src="{{ 'images/product/iphone5.png'|asset }}" 
-                     alt="View 4" 
-                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors"
-                     onclick="changeModalImage('{{ 'images/product/iphone5.png'|asset }}')" />
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Mobile Slider (Mobile Only) -->
-        <div class="lg:hidden mt-6">
-          <div class="relative">
-            <div id="mobile-slider" class="flex overflow-x-auto gap-4 pb-4 scrollbar-hide">
-              <img src="{{ 'images/product/iphone2.png'|asset }}" 
-                   alt="View 1" 
-                   class="w-20 h-20 object-cover rounded flex-shrink-0 cursor-pointer border-2 border-gray-300"
-                   onclick="changeModalImage('{{ 'images/product/iphone2.png'|asset }}')" />
-              <img src="{{ 'images/product/iphone3.png'|asset }}" 
-                   alt="View 2" 
-                   class="w-20 h-20 object-cover rounded flex-shrink-0 cursor-pointer border-2 border-gray-300"
-                   onclick="changeModalImage('{{ 'images/product/iphone3.png'|asset }}')" />
-              <img src="{{ 'images/product/iphone4.png'|asset }}" 
-                   alt="View 3" 
-                   class="w-20 h-20 object-cover rounded flex-shrink-0 cursor-pointer border-2 border-gray-300"
-                   onclick="changeModalImage('{{ 'images/product/iphone4.png'|asset }}')" />
-              <img src="{{ 'images/product/iphone5.png'|asset }}" 
-                   alt="View 4" 
-                   class="w-20 h-20 object-cover rounded flex-shrink-0 cursor-pointer border-2 border-gray-300"
-                   onclick="changeModalImage('{{ 'images/product/iphone5.png'|asset }}')" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 

@@ -44,7 +44,7 @@
           {% else %}
               <button class="text-white hover:opacity-80 transition-opacity" 
                       aria-label="user-icon" 
-                      onclick="salla.event.dispatch('login::open')"
+                      onclick="openLoginModal()"
                       style="
                         display: flex;
                         align-items: center;
@@ -136,6 +136,41 @@ function switchLanguage() {
     }
 }
 
+// Function to open login modal properly
+function openLoginModal() {
+    // Wait for Salla to be ready
+    if (window.salla && window.salla.event) {
+        // Try to dispatch the login event
+        window.salla.event.dispatch('login::open');
+        
+        // Ensure the modal appears as overlay
+        setTimeout(() => {
+            const loginModal = document.querySelector('salla-login-modal');
+            if (loginModal) {
+                // Force the modal to appear as overlay
+                loginModal.style.position = 'fixed';
+                loginModal.style.top = '0';
+                loginModal.style.left = '0';
+                loginModal.style.width = '100%';
+                loginModal.style.height = '100%';
+                loginModal.style.zIndex = '9999';
+                loginModal.style.display = 'flex';
+                loginModal.style.alignItems = 'center';
+                loginModal.style.justifyContent = 'center';
+                loginModal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+                
+                // Prevent body scroll
+                document.body.style.overflow = 'hidden';
+            }
+        }, 100);
+    } else {
+        // Fallback: wait for Salla to load
+        setTimeout(() => {
+            openLoginModal();
+        }, 500);
+    }
+}
+
 // Update language toggle text when language changes
 document.addEventListener('languageChanged', function(event) {
     const languageToggleText = document.getElementById('language-toggle-text');
@@ -144,5 +179,35 @@ document.addEventListener('languageChanged', function(event) {
     }
 });
 
+// Ensure login modal is properly styled when it appears
+document.addEventListener('DOMContentLoaded', function() {
+    // Listen for login modal events
+    if (window.salla && window.salla.event) {
+        window.salla.event.on('login::opened', function() {
+            const loginModal = document.querySelector('salla-login-modal');
+            if (loginModal) {
+                // Force modal styling
+                loginModal.style.position = 'fixed';
+                loginModal.style.top = '0';
+                loginModal.style.left = '0';
+                loginModal.style.width = '100%';
+                loginModal.style.height = '100%';
+                loginModal.style.zIndex = '9999';
+                loginModal.style.display = 'flex';
+                loginModal.style.alignItems = 'center';
+                loginModal.style.justifyContent = 'center';
+                loginModal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+                
+                // Prevent body scroll
+                document.body.style.overflow = 'hidden';
+            }
+        });
+        
+        window.salla.event.on('login::closed', function() {
+            // Restore body scroll
+            document.body.style.overflow = 'auto';
+        });
+    }
+});
 
 </script>
