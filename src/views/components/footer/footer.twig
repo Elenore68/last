@@ -14,7 +14,7 @@
       <div class="text-right max-w-[500px] ml-auto">
         <h2 class="font-sf-pro text-[35px] font-light text-white m-0 mb-4 leading-[1.2] md:text-[40px] sm:text-[32px] sm:mb-6">
           Alcanta.<br/>
-          <span class="block text-right">انضم إلى نادينا الحصري</span>
+          <span class="block text-right footer-title-text" data-ar="انضم إلى نادينا الحصري" data-en="Join Our Exclusive Club">انضم إلى نادينا الحصري</span>
         </h2>
         <h3 class="font-sf-pro text-[28px] font-light text-white m-0 mb-8 leading-[1.2] md:text-[32px] sm:text-[24px] sm:mb-6">
         </h3>
@@ -50,7 +50,7 @@
               border-right: none;
             "
           >
-            سجل
+            <span class="newsletter-button-text" data-ar="سجل" data-en="Subscribe">سجل</span>
           </button>
           <input 
             type="email" 
@@ -68,10 +68,13 @@
               border-left: none;
             " 
             placeholder="أدخل عنوان البريد الإلكتروني"
+            class="newsletter-input"
+            data-placeholder-ar="أدخل عنوان البريد الإلكتروني"
+            data-placeholder-en="Enter your email address"
           />
         </div>
         <p 
-          class="font-comfortaa text-[15px] font-light text-white m-0 leading-[1.6] max-w-[450px] sm:text-base"
+          class="font-comfortaa text-[15px] font-light text-white m-0 leading-[1.6] max-w-[450px] sm:text-base footer-description-text"
           style="
             color: rgba(255, 255, 255, 0.54);
             text-align: right;
@@ -81,6 +84,8 @@
             font-weight: 300;
             line-height: 130.231%;
           "
+          data-ar="كعضو، ستتلقى وصولاً مبكراً إلى الإصدارات المحدودة، وعروض خاصة محفوظة فقط للداخلين، ومحتوى منسق مصمم لرفع تجربتك."
+          data-en="As a member, you'll receive early access to limited releases, exclusive offers reserved only for insiders, and curated content designed to elevate your experience."
         >
           كعضو، ستتلقى وصولاً مبكراً إلى الإصدارات المحدودة، وعروض خاصة محفوظة فقط للداخلين، ومحتوى منسق مصمم لرفع تجربتك.
         </p>
@@ -92,7 +97,7 @@
   <div class="bg-[#000000] h-16 flex items-center">
     <div class="max-w-[1200px] mx-auto px-5 flex justify-between items-center whitespace-nowrap w-full">
       <div class="footer-left">
-        <p class="font-sf-pro text-sm font-light text-[#888] m-0 sm:text-xs">Alcanta - All Rights Reserved</p>
+        <p class="font-sf-pro text-sm font-light text-[#888] m-0 sm:text-xs footer-copyright-text" data-ar="الكانتا - جميع الحقوق محفوظة" data-en="Alcanta - All Rights Reserved">Alcanta - All Rights Reserved</p>
       </div>
       <div class="flex items-center gap-2">
         <div class="bg-white rounded-sm p-2 flex items-center justify-center" style="width: 60px; height: 30px;">
@@ -111,3 +116,129 @@
     </div>
   </div>
 </footer>
+
+<script>
+(function() {
+  // Prevent multiple script execution
+  if (window.footerScriptLoaded) {
+
+    return;
+  }
+  window.footerScriptLoaded = true;
+  
+
+  
+  // Function to update footer text based on language
+  window.updateFooterTexts = function(lang = null) {
+
+    
+    // Detect current language
+    const currentLang = lang || 
+                       localStorage.getItem('currentLanguage') || 
+                       document.documentElement.lang || 
+                       document.querySelector('html').getAttribute('lang') || 
+                       '{{ user.language.code }}' || 
+                       'ar';
+    
+
+    
+    // Update footer title
+    const footerTitle = document.querySelector('.footer-title-text');
+    if (footerTitle) {
+      const text = currentLang === 'ar' ? footerTitle.getAttribute('data-ar') : footerTitle.getAttribute('data-en');
+      if (text) {
+        footerTitle.textContent = text;
+
+      }
+    }
+    
+    // Update copyright text
+    const copyrightText = document.querySelector('.footer-copyright-text');
+    if (copyrightText) {
+      const text = currentLang === 'ar' ? copyrightText.getAttribute('data-ar') : copyrightText.getAttribute('data-en');
+      if (text) {
+        copyrightText.textContent = text;
+
+      }
+    }
+    
+    // Update newsletter input placeholder
+    const newsletterInput = document.querySelector('.newsletter-input');
+    if (newsletterInput) {
+      const placeholder = currentLang === 'ar' ? 
+        newsletterInput.getAttribute('data-placeholder-ar') : 
+        newsletterInput.getAttribute('data-placeholder-en');
+      if (placeholder) {
+        newsletterInput.placeholder = placeholder;
+
+      }
+      
+      // Update text direction
+      newsletterInput.style.direction = currentLang === 'ar' ? 'rtl' : 'ltr';
+      newsletterInput.style.textAlign = currentLang === 'ar' ? 'right' : 'left';
+    }
+    
+    // Update newsletter button text
+    const buttonText = document.querySelector('.newsletter-button-text');
+    if (buttonText) {
+      const text = currentLang === 'ar' ? buttonText.getAttribute('data-ar') : buttonText.getAttribute('data-en');
+      if (text) {
+        buttonText.textContent = text;
+
+      }
+    }
+    
+    // Update footer description text
+    const descriptionText = document.querySelector('.footer-description-text');
+    if (descriptionText) {
+      const text = currentLang === 'ar' ? descriptionText.getAttribute('data-ar') : descriptionText.getAttribute('data-en');
+      if (text) {
+        descriptionText.textContent = text;
+
+      }
+      
+      // Update text alignment for description
+      descriptionText.style.textAlign = currentLang === 'ar' ? 'right' : 'left';
+    }
+    
+    // Update footer direction
+    const footer = document.querySelector('footer');
+    if (footer) {
+      footer.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+
+    }
+    
+
+  };
+  
+  // Listen for language change events from header
+  document.addEventListener('languageChanged', function(event) {
+
+    const newLang = event.detail.to || event.detail.language;
+
+    updateFooterTexts(newLang);
+  });
+  
+  // Listen for Salla language change events
+  if (window.salla && window.salla.event) {
+    window.salla.event.on('language::changed', function(data) {
+
+      const lang = data.language || data.code || data;
+      updateFooterTexts(lang);
+    });
+  }
+  
+  // Initialize footer on DOM load
+  document.addEventListener('DOMContentLoaded', function() {
+
+    updateFooterTexts();
+  });
+  
+  // Initialize footer after a short delay
+  setTimeout(() => {
+
+    updateFooterTexts();
+  }, 200);
+  
+})(); // End of footer script scope
+</script>

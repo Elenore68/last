@@ -116,11 +116,7 @@ class NavigationMenu extends HTMLElement {
     */
     render() {
         this.innerHTML =  `
-        <nav id="mobile-menu" class="mobile-menu">
-            <ul class="main-menu">${this.getMenus()}</ul>
-            <button class="btn--close close-mobile-menu sicon-cancel lg:hidden"></button>
-        </nav>
-        <button class="btn--close-sm close-mobile-menu sicon-cancel hidden"></button>`;
+        <ul class="main-menu">${this.getMenus()}</ul>`;
     }
 }
 

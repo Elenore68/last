@@ -1,15 +1,252 @@
-<section class="s-block s-block--full-bg">
-    {% for banner in component.banner_last %}
-        <div class="relative">
-            <img src="{{ banner.image }}" alt="{{ banner.title }}" class="w-full h-auto object-cover">
-            <div class="absolute inset-0 flex items-center justify-center">
-                <div class="container text-center text-white">
-                    <div class="w-full py-20">
-                        <h3 class="text-4xl font-bold mb-4">{{ banner.title }}</h3>
-                        <p class="text-lg">{{ banner.subtitle }}</p>
+<section class="s-block s-block--full-bg" style="display: block !important; visibility: visible !important;">
+    <!-- Banner Component Working! -->
+
+    
+
+    {% if component.banner_last and component.banner_last|length > 0 %}
+        {% for banner in component.banner_last %}
+            <div class="relative">
+                <div class="relative w-full h-auto">
+                    <!-- Debug: Show what we have -->
+                    {% if banner.imageAr or banner.imageEn %}
+                        <!-- Arabic Image -->
+                        {% if banner.imageAr %}
+                        <img
+                            src="{{ banner.imageAr }}"
+                            alt="Arabic Banner"
+                            data-lang="ar"
+                            class="localized-img"
+                            style="
+                                display: none !important;
+                                width: 100% !important;
+                                height: auto !important;
+                                object-fit: cover !important;
+                                border: 3px solid transparent !important;
+                                position: relative !important;
+                                z-index: 1 !important;
+                                max-width: 100% !important;
+                                min-height: 200px !important;
+                            "
+                            id="banner-ar-{{ loop.index }}"
+
+                        />
+
+                        {% endif %}
+
+                        <!-- English Image -->
+                        {% if banner.imageEn %}
+                        <img
+                            src="{{ banner.imageEn }}"
+                            alt="English Banner"
+                            data-lang="en"
+                            class="localized-img"
+                            style="
+                                display: none !important;
+                                width: 100% !important;
+                                height: auto !important;
+                                object-fit: cover !important;
+                                border: 3px solid transparent !important;
+                                position: relative !important;
+                                z-index: 1 !important;
+                                max-width: 100% !important;
+                                min-height: 200px !important;
+                            "
+                            id="banner-en-{{ loop.index }}"
+
+                        />
+
+                        {% endif %}
+                    {% else %}
+                        <!-- Fallback if no images are configured -->
+                        <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                            <p class="text-gray-500">Banner found but no images configured</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="container text-center text-white">
+                        <div class="w-full py-20">
+                            <h3 class="text-4xl font-bold mb-4">{{ banner.title }}</h3>
+                            <p class="text-lg">{{ banner.subtitle }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <!-- No banner configured - show beautiful setup guide -->
+        <div class="w-full bg-gradient-to-r from-blue-600 to-purple-700 text-white py-20" style="display: block !important;">
+            <div class="container mx-auto px-4 text-center">
+                <div class="max-w-3xl mx-auto">
+                    <div class="mb-8">
+                        <h1 class="text-4xl md:text-5xl font-bold mb-4">✨ Multi-Language Banner Ready!</h1>
+                        <p class="text-xl md:text-2xl opacity-90">Your banner component is working perfectly!</p>
+                        
+
+                    </div>
+                    
+                    <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-8 mb-8">
+                        <h2 class="text-2xl font-semibold mb-6">🚀 Quick Setup Guide</h2>
+                        <div class="grid md:grid-cols-2 gap-6 text-left">
+                            <div class="space-y-3">
+                                <h3 class="font-semibold text-lg">📋 Steps:</h3>
+                                <ol class="list-decimal list-inside space-y-2 text-sm">
+                                    <li>Go to <strong>Salla Admin Panel</strong></li>
+                                    <li>Navigate to <strong>Theme Customizer</strong></li>
+                                    <li>Find the <strong>"banner"</strong> component</li>
+                                    <li>Add your banner images</li>
+                                    <li>Save changes</li>
+                                </ol>
+                            </div>
+                            <div class="space-y-3">
+                                <h3 class="font-semibold text-lg">🌍 Multi-Language:</h3>
+                                <ul class="space-y-2 text-sm">
+                                    <li>• <strong>Arabic Image:</strong> "الصورة بالعربي"</li>
+                                    <li>• <strong>English Image:</strong> "الصورة بالانجليزي"</li>
+                                    <li>• <strong>Auto-switching</strong> based on language</li>
+                                    <li>• <strong>Instant updates</strong> when toggling</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p class="text-lg mb-4">🎯 <strong>Everything is ready!</strong> Just add your images.</p>
+                        <p class="text-sm opacity-75">The banner will automatically appear here once configured.</p>
                     </div>
                 </div>
             </div>
         </div>
-    {% endfor %}
+    {% endif %}
 </section>
+
+<script>
+  (function() {
+    // Prevent multiple script execution
+    if (window.bannerScriptLoaded) {
+  
+      return;
+    }
+    window.bannerScriptLoaded = true;
+    
+
+  
+
+  
+  // Function to update banner images based on language (make global)
+  window.updateBannerImages = function(forcedLang = null) {
+    // Get language from multiple sources, prioritizing forced language
+    let lang = forcedLang;
+    
+    if (!lang) {
+      // Try to get current language from various sources
+      lang = localStorage.getItem('currentLanguage') ||
+             document.documentElement.lang ||
+             document.querySelector('html').getAttribute('lang') ||
+             '{{ user.language.code }}' ||
+             navigator.language.slice(0, 2) ||
+             'ar';
+    }
+
+    // Find all banner images
+    const images = document.querySelectorAll('.localized-img');
+
+    if (images.length === 0) {
+      return;
+    }
+
+    // Show only the image that matches the current language
+    let imageFound = false;
+    
+    images.forEach((img, index) => {
+      const imgLang = img.dataset.lang;
+      
+      if (imgLang === lang) {
+        // Show this image with cssText to override everything
+        img.style.cssText = `
+          display: block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+          width: 100% !important;
+          height: auto !important;
+          position: relative !important;
+          z-index: 10 !important;
+          max-width: 100% !important;
+          object-fit: cover !important;
+        `;
+        img.classList.remove('hidden');
+        img.setAttribute('data-active', 'true');
+        imageFound = true;
+
+      } else {
+        // Hide this image with cssText
+        img.style.cssText = `
+          display: none !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
+          width: 100% !important;
+          height: auto !important;
+          position: relative !important;
+          z-index: 1 !important;
+          max-width: 100% !important;
+          object-fit: cover !important;
+        `;
+        img.classList.add('hidden');
+        img.setAttribute('data-active', 'false');
+      }
+    });
+    
+    // Store current language for future reference
+    localStorage.setItem('currentLanguage', lang);
+  };
+
+  // Initialize banner on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+      updateBannerImages();
+    }, 100);
+  });
+
+  // Listen for custom language change events from header
+  document.addEventListener('languageChanged', function(event) {
+    const newLang = event.detail.to || event.detail.language;
+    updateBannerImages(newLang);
+  });
+
+  // Listen for Salla language change events
+  if (window.salla && window.salla.event) {
+    window.salla.event.on('language::changed', function(data) {
+      const lang = data.language || data.code || data;
+      updateBannerImages(lang);
+    });
+  }
+
+  // Enhanced fallback: Monitor for language changes
+  let bannerCurrentLang = localStorage.getItem('currentLanguage') || '{{ user.language.code }}' || 'ar';
+  let checkCount = 0;
+  
+  const languageChecker = setInterval(() => {
+    checkCount++;
+    const htmlLang = document.documentElement.lang || document.querySelector('html').getAttribute('lang');
+    const storedLang = localStorage.getItem('currentLanguage');
+    const detectedLang = htmlLang || storedLang || '{{ user.language.code }}' || 'ar';
+    
+    if (detectedLang !== bannerCurrentLang) {
+      bannerCurrentLang = detectedLang;
+      updateBannerImages(detectedLang);
+    }
+    
+    // Stop checking after 60 seconds to avoid infinite monitoring
+    if (checkCount > 60) {
+      clearInterval(languageChecker);
+    }
+  }, 1000);
+
+  // Initial call with delay to ensure DOM is ready
+  setTimeout(() => {
+    updateBannerImages();
+  }, 200);
+  
+  })(); // End of banner script scope
+</script>

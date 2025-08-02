@@ -137,19 +137,18 @@
   } 
   .menu-opened{
     .btn--close-sm.close-mobile-menu{
-      display: block !important;
+      display: none !important;
     }
   }
   .mobile-menu {
-      display: none;
-      @apply lg:hidden overflow-hidden;
+      display: none !important;
   }
   .mm-ocd__content{
     overflow-y: auto;
   }
   .mm-ocd-opened {
     .mobile-menu {
-      display: block;
+      display: none !important;
     }
 
     @media (max-width: 480px) {
