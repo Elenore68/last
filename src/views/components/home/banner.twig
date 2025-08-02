@@ -1,5 +1,23 @@
-<section class="s-block s-block--full-bg" style="display: block !important; visibility: visible !important;">
-    <!-- Banner Component Working! -->
+<section class="s-block s-block--full-bg banner-component-test" style="display: block !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 1000 !important;">
+    <!-- BANNER COMPONENT IS LOADING - THIS PROVES IT'S BEING CALLED -->
+    <div id="banner-test-box" style="background: #ff0000 !important; color: white !important; padding: 20px !important; margin: 10px !important; font-size: 18px !important; font-weight: bold !important; text-align: center !important; display: block !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 1001 !important;">
+        🚨 BANNER COMPONENT IS LOADING! 🚨<br>
+        This red box proves the banner.twig file is being executed!<br>
+        <span id="banner-timestamp">Loading at: <script>document.write(new Date().toLocaleTimeString())</script></span>
+    </div>
+    
+    <!-- Debug Info -->
+    <div style="background: #f0f0f0; padding: 10px; margin: 10px; border: 1px solid #ccc; font-family: monospace; font-size: 12px;">
+        <strong>🔍 Banner Debug Info:</strong><br>
+        Component: {{ component ? 'Found' : 'Not Found' }}<br>
+        Banner Last: {{ component.banner_last ? 'Found' : 'Not Found' }}<br>
+        Banner Count: {{ component.banner_last|length }}<br>
+        {% if component.banner_last|length > 0 %}
+            First Banner: {{ component.banner_last[0] ? 'Has Data' : 'Empty' }}<br>
+        {% endif %}
+        <strong>Full Component Data:</strong><br>
+        {{ component|json_encode }}<br>
+    </div>
 
     {% if component.banner_last and component.banner_last|length > 0 %}
         {% for banner in component.banner_last %}
@@ -47,44 +65,22 @@
             </div>
         {% endfor %}
     {% else %}
-        <!-- No banner configured - show beautiful setup guide -->
-        <div class="w-full bg-gradient-to-r from-blue-600 to-purple-700 text-white py-20" style="display: block !important;">
+        <!-- No banner configured - show setup instructions -->
+        <div class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-16">
             <div class="container mx-auto px-4 text-center">
-                <div class="max-w-3xl mx-auto">
-                    <div class="mb-8">
-                        <h1 class="text-4xl md:text-5xl font-bold mb-4">✨ Multi-Language Banner Ready!</h1>
-                        <p class="text-xl md:text-2xl opacity-90">Your banner component is working perfectly!</p>
+                <div class="max-w-2xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-4">🎨 Banner Component Setup Required</h2>
+                    <p class="text-lg mb-6">To display your banner, please configure it in the Salla admin panel:</p>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 text-left">
+                        <ol class="list-decimal list-inside space-y-2">
+                            <li>Go to <strong>Theme Customizer</strong> in your Salla admin</li>
+                            <li>Find the <strong>"banner"</strong> component</li>
+                            <li>Add your <strong>Arabic image URL</strong> in "الصورة بالعربي"</li>
+                            <li>Add your <strong>English image URL</strong> in "الصورة بالانجليزي"</li>
+                            <li>Save the changes</li>
+                        </ol>
                     </div>
-                    
-                    <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-8 mb-8">
-                        <h2 class="text-2xl font-semibold mb-6">🚀 Quick Setup Guide</h2>
-                        <div class="grid md:grid-cols-2 gap-6 text-left">
-                            <div class="space-y-3">
-                                <h3 class="font-semibold text-lg">📋 Steps:</h3>
-                                <ol class="list-decimal list-inside space-y-2 text-sm">
-                                    <li>Go to <strong>Salla Admin Panel</strong></li>
-                                    <li>Navigate to <strong>Theme Customizer</strong></li>
-                                    <li>Find the <strong>"banner"</strong> component</li>
-                                    <li>Add your banner images</li>
-                                    <li>Save changes</li>
-                                </ol>
-                            </div>
-                            <div class="space-y-3">
-                                <h3 class="font-semibold text-lg">🌍 Multi-Language:</h3>
-                                <ul class="space-y-2 text-sm">
-                                    <li>• <strong>Arabic Image:</strong> "الصورة بالعربي"</li>
-                                    <li>• <strong>English Image:</strong> "الصورة بالانجليزي"</li>
-                                    <li>• <strong>Auto-switching</strong> based on language</li>
-                                    <li>• <strong>Instant updates</strong> when toggling</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="text-center">
-                        <p class="text-lg mb-4">🎯 <strong>Everything is ready!</strong> Just add your images.</p>
-                        <p class="text-sm opacity-75">The banner will automatically appear here once configured.</p>
-                    </div>
+                    <p class="text-sm mt-4 opacity-80">Once configured, the banner will automatically switch between languages!</p>
                 </div>
             </div>
         </div>
@@ -92,7 +88,67 @@
 </section>
 
 <script>
-  console.log('✅ Banner component loaded successfully');
+  console.log('🚨 BANNER SCRIPT LOADING at:', new Date().toLocaleTimeString());
+  
+  // Monitor banner visibility
+  function monitorBanner() {
+    const bannerSection = document.querySelector('.banner-component-test');
+    const testBox = document.getElementById('banner-test-box');
+    
+    if (bannerSection && testBox) {
+      console.log('✅ Banner elements found');
+      
+      // Force visibility every 100ms for the first 5 seconds
+      let attempts = 0;
+      const maxAttempts = 50; // 5 seconds
+      
+      const keepVisible = setInterval(() => {
+        attempts++;
+        
+        // Force banner to stay visible
+        if (bannerSection) {
+          bannerSection.style.display = 'block';
+          bannerSection.style.visibility = 'visible';
+          bannerSection.style.opacity = '1';
+        }
+        
+        if (testBox) {
+          testBox.style.display = 'block';
+          testBox.style.visibility = 'visible';
+          testBox.style.opacity = '1';
+          testBox.innerHTML = `🚨 BANNER STILL VISIBLE! 🚨<br>Attempt: ${attempts}/${maxAttempts}<br>Time: ${new Date().toLocaleTimeString()}`;
+        }
+        
+        if (attempts >= maxAttempts) {
+          clearInterval(keepVisible);
+          console.log('✅ Banner monitoring completed');
+        }
+      }, 100);
+      
+      // Watch for changes
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.target === bannerSection || mutation.target === testBox) {
+            console.log('🔍 Banner element changed:', mutation);
+          }
+        });
+      });
+      
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style', 'class']
+      });
+      
+    } else {
+      console.log('❌ Banner elements not found');
+    }
+  }
+  
+  // Start monitoring immediately and after DOM loads
+  monitorBanner();
+  document.addEventListener('DOMContentLoaded', monitorBanner);
   
   // Function to update banner images based on language
   function updateBannerImages(forcedLang = null) {
