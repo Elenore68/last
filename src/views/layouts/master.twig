@@ -92,6 +92,54 @@
             }
             
             console.log('Master Layout: Language initialized to:', languageToUse);
+            
+            // Synchronize Salla components language
+            synchronizeSallaComponents(languageToUse);
+        });
+        
+        // Function to synchronize Salla components language
+        function synchronizeSallaComponents(lang) {
+            console.log('Master Layout: Synchronizing Salla components to language:', lang);
+            
+            // Update Salla's language if available
+            if (window.salla && window.salla.language) {
+                window.salla.language.current = lang;
+                console.log('Master Layout: Updated Salla language to:', lang);
+            }
+            
+            // Dispatch Salla language change event
+            if (window.salla && window.salla.event) {
+                window.salla.event.dispatch('language::changed', { language: lang });
+                console.log('Master Layout: Dispatched Salla language change event');
+            }
+            
+            // Update any Salla components that might be listening
+            setTimeout(() => {
+                const sallaComponents = document.querySelectorAll('salla-*');
+                sallaComponents.forEach(component => {
+                    if (component.setLanguage) {
+                        component.setLanguage(lang);
+                    }
+                    if (component.language) {
+                        component.language = lang;
+                    }
+                });
+                console.log('Master Layout: Updated', sallaComponents.length, 'Salla components');
+            }, 100);
+        }
+        
+        // Listen for language change events and synchronize Salla components
+        document.addEventListener('languageChanged', function(event) {
+            const newLang = event.detail.to || event.detail.language;
+            console.log('Master Layout: Language change event received, synchronizing Salla components:', newLang);
+            synchronizeSallaComponents(newLang);
+        });
+        
+        // Listen for Salla custom language change events
+        document.addEventListener('salla:language:changed', function(event) {
+            const lang = event.detail.language || event.detail.code;
+            console.log('Master Layout: Salla custom language change event received:', lang);
+            synchronizeSallaComponents(lang);
         });
         
         // Remove unwanted floating elements
@@ -121,6 +169,28 @@
             // Run again after a short delay to catch elements added later
             setTimeout(hideUnwantedElements, 1000);
             setTimeout(hideUnwantedElements, 2000);
+        });
+        
+        // Monitor for Salla components and synchronize their language
+        const sallaObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType === 1 && node.tagName && node.tagName.startsWith('SALLA-')) {
+                        console.log('Master Layout: Salla component detected:', node.tagName);
+                        const currentLang = localStorage.getItem('currentLanguage') || '{{ user.language.code }}' || 'en';
+                        synchronizeSallaComponents(currentLang);
+                    }
+                });
+            });
+        });
+        
+        // Start observing when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            sallaObserver.observe(document.body, { 
+                childList: true, 
+                subtree: true 
+            });
+            console.log('Master Layout: Started monitoring for Salla components');
         });
     </script>
     
@@ -199,6 +269,39 @@
 
 <!-- Salla SDK Script -->
 <script src="https://cdn.assets.salla.network/latest/@salla.sa/bridge-sdk/index.js"></script>
+
+<script>
+// Initialize Salla language system when SDK loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Wait for Salla SDK to load
+    const initSallaLanguage = () => {
+        if (window.salla && window.salla.language) {
+            const currentLang = localStorage.getItem('currentLanguage') || '{{ user.language.code }}' || 'en';
+            
+            console.log('Master Layout: Initializing Salla language system with:', currentLang);
+            
+            // Set Salla's language
+            window.salla.language.current = currentLang;
+            
+            // Dispatch Salla's language change event
+            if (window.salla.event) {
+                window.salla.event.dispatch('language::changed', { 
+                    language: currentLang,
+                    code: currentLang 
+                });
+            }
+            
+            console.log('Master Layout: Salla language system initialized');
+        } else {
+            // Retry after a short delay if Salla SDK hasn't loaded yet
+            setTimeout(initSallaLanguage, 100);
+        }
+    };
+    
+    // Start initialization
+    initSallaLanguage();
+});
+</script>
 
 {% block scripts %}{% endblock %}
 </body>

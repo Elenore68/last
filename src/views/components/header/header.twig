@@ -142,7 +142,7 @@ function switchLanguage() {
         languageToggleText.textContent = newLanguage === 'ar' ? 'En' : 'Ar';
     }
     
-    // Dispatch custom language change event for footer
+    // Dispatch custom language change event for footer and banner
     const languageChangeEvent = new CustomEvent('languageChanged', {
         detail: {
             from: currentLanguage,
@@ -163,10 +163,23 @@ function switchLanguage() {
     document.dispatchEvent(sallaLanguageEvent);
     console.log('Header: Dispatched salla:language:changed event:', sallaLanguageEvent.detail);
     
-    // Use Salla's language change if available
+    // Use Salla's official language change method for ready-made components
     if (window.salla && window.salla.language) {
-        console.log('Header: Calling Salla language change');
+        console.log('Header: Calling Salla official language change');
         window.salla.language.change(newLanguage);
+        
+        // Also update Salla's current language property
+        window.salla.language.current = newLanguage;
+        
+        // Dispatch Salla's internal language change event
+        if (window.salla.event) {
+            window.salla.event.dispatch('language::changed', { 
+                language: newLanguage,
+                code: newLanguage 
+            });
+        }
+        
+        console.log('Header: Salla language changed to:', newLanguage);
     } else {
         // Fallback to URL parameter method
         const currentUrl = window.location.href;
@@ -175,6 +188,31 @@ function switchLanguage() {
         console.log('Header: Redirecting to:', newUrl);
         window.location.href = newUrl;
     }
+}
+
+// Function to synchronize Salla components
+function synchronizeSallaComponents(lang) {
+    console.log('Header: Synchronizing Salla components to language:', lang);
+    
+    // Update Salla's language if available
+    if (window.salla && window.salla.language) {
+        window.salla.language.current = lang;
+        console.log('Header: Updated Salla language to:', lang);
+    }
+    
+    // Update any Salla components that might be listening
+    setTimeout(() => {
+        const sallaComponents = document.querySelectorAll('salla-*');
+        sallaComponents.forEach(component => {
+            if (component.setLanguage) {
+                component.setLanguage(lang);
+            }
+            if (component.language) {
+                component.language = lang;
+            }
+        });
+        console.log('Header: Updated', sallaComponents.length, 'Salla components');
+    }, 100);
 }
 
 // Update language toggle text when language changes
