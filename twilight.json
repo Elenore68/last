@@ -1088,7 +1088,7 @@
                     "icon": "sicon-list-add",
                     "fields": [
                         {
-                            "id": "Products-collection.main-title.title",
+                            "id": "Products-collection.main-title.Products-collection.main-title.title",
                             "type": "static",
                             "format": "title",
                             "label": "Title",
@@ -1123,7 +1123,7 @@
                             "value": null,
                             "multilanguage": true,
                             "required": false,
-                            "minLength": 6,
+                            "minLength": "2",
                             "maxLength": 30,
                             "public": true
                         },
@@ -1139,7 +1139,7 @@
                             "value": null,
                             "multilanguage": true,
                             "required": false,
-                            "minLength": 6,
+                            "minLength": "2",
                             "maxLength": 30,
                             "public": true
                         },
@@ -1155,7 +1155,7 @@
                             "icon": "sicon-link",
                             "value": null,
                             "required": false,
-                            "minLength": 6,
+                            "minLength": "2",
                             "maxLength": 30,
                             "public": true
                         },
