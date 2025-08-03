@@ -1088,7 +1088,7 @@
                     "icon": "sicon-list-add",
                     "fields": [
                         {
-                            "id": "Products-collection.main-title.title.en",
+                            "id": "Products-collection.main-title.Products-collection.main-title.title.en",
                             "type": "static",
                             "format": "title",
                             "label": "Title.en",
@@ -1097,7 +1097,7 @@
                             "icon": "sicon-format-text"
                         },
                         {
-                            "id": "Products-collection.main-title.Products-collection.main-title.Products-collection.main-title.title",
+                            "id": "Products-collection.main-title.PC-Title",
                             "type": "static",
                             "format": "title",
                             "label": "Title",
