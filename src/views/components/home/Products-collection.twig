@@ -11,12 +11,27 @@
 | position                        | int      | Sorting number start from zero                                               |
 #}
 
-<section class="alcantara-picker-section py-16 bg-white">
+<section class="bg-white" style="padding-top: 60px;">
   <div class="max-w-[1200px] mx-auto px-4 md:px-[200px] lg:px-[400px]">
     <!-- Main Heading -->
     <h2 class="text-center mb-12">
       <div class="text-center">
-        <span class="arabic-heading">
+        <span 
+          class="text-[40px] leading-[42px] font-bold arabic-gradient-text"
+          style="
+            font-family: 'DIN Next LT W23', Arial, sans-serif;
+            font-weight: 700;
+            font-style: normal;
+            font-size: 40px;
+            line-height: 42px;
+            letter-spacing: 0px;
+            text-align: center;
+            background: linear-gradient(75deg, #161616 35.9%, #565050 70.56%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          "
+        >
           اختار الجوال اللي<br />تستخدمه
         </span>
       </div>
@@ -28,7 +43,13 @@
         {% for item in component['product-collection-select'] %}
           <div class="text-center">
             <div class="mb-2">
-              <span class="product-name">
+              <span 
+                class="text-center font-din-bold text-[20px] leading-[24px]"
+                style="
+                  color: #3C3C3C;
+                  display: inline-block;
+                "
+              >
                 {% if item['product-title'] is defined %}
                   {{ item['product-title']|raw }}
                 {% else %}
@@ -37,7 +58,10 @@
               </span>
             </div>
             <div class="mb-2">
-              <span class="compatibility-text">
+              <span 
+                class="text-[10px] font-normal leading-[12px] text-[rgba(45,73,158,0.61)]"
+                style="font-family: 'DIN Next LT W23', Arial, sans-serif;"
+              >
                 {% if item['description'] is defined %}
                   {{ item['description']|raw }}
                 {% else %}
@@ -48,19 +72,36 @@
             <div class="mb-4 flex justify-center">
               <button 
                 onclick="event.preventDefault(); navigateToProductPage('{{ item['url']|default('') }}', '{{ item['product-type']|default('iphone') }}'); return false;"
-                class="view-collection-btn"
-                style="text-decoration: none; border: none; background: none; cursor: pointer;"
+                class="text-black text-[12px] font-normal leading-[15.628px] hover:underline cursor-pointer"
+                style="
+                  font-family: 'DIN Next LT W23', Arial, sans-serif;
+                  font-size: 16px;
+                  line-height: 130%;
+                  vertical-align: bottom;
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                "
                 type="button"
               >
-                <span class="arrow-icon"></span>
                 عرض المجموعة
+                <img 
+                  src="{{ 'images/icons/mynaui_arrow-up.png'|asset }}" 
+                  alt="Arrow" 
+                  style="
+                    width: 20px;
+                    height: 20px;
+                    object-fit: contain;
+                    transform: rotate(180deg);
+                  "
+                />
               </button>
             </div>
             {% if item['image'] is defined and item['image'] %}
               <img 
                 src="{{ item['image'] }}" 
                 alt="{{ item['product-title']|default('Product') }}" 
-                class="product-image"
+                class="w-40 md:w-64 lg:w-80 h-auto object-contain"
               />
             {% else %}
               <div class="product-image" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;">
@@ -106,75 +147,29 @@ function navigateToProductPage(customUrl, productType) {
   font-family: 'DIN Next LT W23', Arial, sans-serif;
 }
 
-.arabic-heading {
+.arabic-gradient-text {
+  background: linear-gradient(75deg, #161616 35.9%, #565050 70.56%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.font-din-bold {
   font-family: 'DIN Next LT W23', Arial, sans-serif;
   font-weight: 700;
-  font-style: normal;
-  font-size: 40px;
-  line-height: 42px;
-  letter-spacing: 0px;
-  text-align: center;
-  color: #161616;
 }
 
-.product-name {
-  text-align: center;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 24px;
-  color: #3C3C3C;
-  display: inline-block;
+.font-din-light {
+  font-family: 'DIN Next LT W23', Arial, sans-serif;
+  font-weight: 300;
 }
 
-.compatibility-text {
-  font-family: 'SF Pro', Arial, sans-serif;
-  font-size: 10px;
-  font-weight: normal;
-  line-height: 12px;
-  color: rgba(45, 73, 158, 0.61);
-}
-
-.view-collection-btn {
-  color: black;
+.font-comfortaa {
   font-family: 'Comfortaa', Arial, sans-serif;
-  font-size: 16px;
-  font-weight: normal;
-  line-height: 130%;
-  vertical-align: bottom;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  transition: opacity 0.2s ease;
 }
 
-.view-collection-btn:hover {
-  opacity: 0.8;
-  text-decoration: underline;
-}
-
-.arrow-icon {
-  width: 8.5px;
-  height: 10.625px;
-  display: inline-block;
-  position: relative;
-}
-
-.arrow-icon::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-right: 8.5px solid black;
-  transform: translateY(-50%);
+.font-sf-pro {
+  font-family: 'SF Pro', Arial, sans-serif;
 }
 
 .product-image {
@@ -183,6 +178,7 @@ function navigateToProductPage(customUrl, productType) {
   object-fit: contain !important;
   position: static !important;
   margin-bottom: 0 !important;
+  margin-top: 0 !important;
   display: block !important;
   justify-content: unset !important;
   align-items: unset !important;

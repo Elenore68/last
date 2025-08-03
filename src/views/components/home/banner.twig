@@ -1,15 +1,26 @@
 <section class="s-block s-block--full-bg">
     {% if component.banner_last %}
         {% for banner in component.banner_last %}
-            <div class="relative">
-                {% if user.language.code == 'ar' %}
-                    <img src="{{ banner.imageAr }}" alt="Banner" class="w-full h-auto object-cover">
-                {% else %}
-                    <img src="{{ banner.imageEn }}" alt="Banner" class="w-full h-auto object-cover">
-                {% endif %}
+            <div class="relative banner-container">
+                <img 
+                    src="{{ banner.imageAr }}" 
+                    alt="Banner" 
+                    class="w-full h-auto object-cover banner-image"
+                    data-language="ar"
+                    data-image-ar="{{ banner.imageAr }}"
+                    data-image-en="{{ banner.imageEn }}"
+                >
+                <img 
+                    src="{{ banner.imageEn }}" 
+                    alt="Banner" 
+                    class="w-full h-auto object-cover banner-image"
+                    data-language="en"
+                    data-image-ar="{{ banner.imageAr }}"
+                    data-image-en="{{ banner.imageEn }}"
+                >
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="container text-center text-white">
-                        <div class="w-full py-20">
+                        <div class="w-full py-0">
                             <!-- Banner content can be added here if needed -->
                         </div>
                     </div>
@@ -18,3 +29,141 @@
         {% endfor %}
     {% endif %}
 </section>
+
+<style>
+.banner-image {
+    transition: opacity 0.3s ease;
+}
+.banner-active {
+    display: block !important;
+    opacity: 1;
+}
+.banner-hidden {
+    display: none !important;
+    opacity: 0;
+}
+</style>
+
+<script>
+// Simple banner language state
+window.bannerLanguageState = {
+    current: '{{ user.language.code }}',
+    setLanguage: function(lang) {
+        this.current = lang;
+        localStorage.setItem('banner_language', lang);
+        this.updateBanners();
+        console.log('Banner: Language set to', lang);
+    },
+    updateBanners: function() {
+        const banners = document.querySelectorAll('.banner-image');
+        banners.forEach(banner => {
+            const bannerLang = banner.getAttribute('data-language');
+            if (bannerLang === this.current) {
+                banner.classList.remove('banner-hidden');
+                banner.classList.add('banner-active');
+            } else {
+                banner.classList.remove('banner-active');
+                banner.classList.add('banner-hidden');
+            }
+        });
+        console.log('Banner: Language updated to', this.current);
+    },
+    getStoredLanguage: function() {
+        return localStorage.getItem('banner_language') || '{{ user.language.code }}';
+    },
+    applyStoredLanguage: function() {
+        const storedLang = this.getStoredLanguage();
+        this.setLanguage(storedLang);
+        console.log('Banner: Applied stored language:', storedLang);
+    }
+};
+
+// Apply stored language immediately when script loads
+(function() {
+    const storedLang = window.bannerLanguageState.getStoredLanguage();
+    window.bannerLanguageState.setLanguage(storedLang);
+    console.log('Banner: Initial language applied:', storedLang);
+})();
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    window.bannerLanguageState.applyStoredLanguage();
+});
+
+// Listen for Salla's language change events
+if (window.salla && window.salla.event) {
+    salla.event.on('language::changed', function(event) {
+        console.log('Banner: Salla language event received:', event.detail.language);
+        window.bannerLanguageState.setLanguage(event.detail.language);
+    });
+    
+    salla.event.on('twilight::ready', function() {
+        console.log('Banner: Twilight ready, applying stored language');
+        window.bannerLanguageState.applyStoredLanguage();
+    });
+    
+    salla.event.on('page.view', function(event) {
+        console.log('Banner: Page view event, applying stored language');
+        setTimeout(() => {
+            window.bannerLanguageState.applyStoredLanguage();
+        }, 100);
+    });
+}
+
+// Simple language change function that works with Salla
+function changeBannerLanguage(lang) {
+    console.log('Banner: Changing language to:', lang);
+    window.bannerLanguageState.setLanguage(lang);
+    
+    // Update Salla's language if available
+    if (window.salla && window.salla.language) {
+        window.salla.language.current = lang;
+        salla.event.dispatch('language::changed', { language: lang });
+    }
+}
+
+// Monitor for URL changes
+let currentUrl = window.location.href;
+setInterval(() => {
+    if (window.location.href !== currentUrl) {
+        currentUrl = window.location.href;
+        console.log('Banner: URL changed, maintaining stored language');
+        window.bannerLanguageState.applyStoredLanguage();
+    }
+}, 500);
+
+// Monitor for DOM changes
+const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+            const target = mutation.target;
+            if (target.classList.contains('banner-image')) {
+                setTimeout(() => {
+                    window.bannerLanguageState.updateBanners();
+                }, 10);
+            }
+        }
+    });
+});
+
+// Start observing when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    const banners = document.querySelectorAll('.banner-image');
+    banners.forEach(banner => {
+        observer.observe(banner, { attributes: true, attributeFilter: ['style'] });
+    });
+});
+
+// Apply stored language when page becomes visible
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+        console.log('Banner: Page became visible, applying stored language');
+        setTimeout(() => {
+            window.bannerLanguageState.applyStoredLanguage();
+        }, 50);
+    }
+});
+
+// Make the function globally available
+window.changeBannerLanguage = changeBannerLanguage;
+</script>

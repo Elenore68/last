@@ -35,15 +35,16 @@
             متوافق مع ماغسيف
           </span>
         </div>
-        <div class="mb-4 flex justify-center">
-          <button 
-            onclick="handleViewCollection('iphone')"
-            class="view-collection-btn"
-          >
-            <span class="arrow-icon"></span>
-            عرض المجموعة
-          </button>
-        </div>
+                 <div class="mb-4 flex justify-center">
+           <button 
+             onclick="handleViewCollection('iphone')"
+             class="view-collection-btn"
+             style="font-family: 'DINNextLTArabic', Arial, sans-serif;"
+           >
+             <img src="{{ 'images/icons/mynaui_arrow-up.png'|asset }}" alt="Arrow" class="arrow-icon-img" />
+             <span style="font-family: 'DINNextLTArabic', Arial, sans-serif !important;">عرض المجموعة</span>
+           </button>
+         </div>
         <img 
           src="{{ 'images/iphone-case.png.png'|asset }}" 
           alt="iPhone Case" 
@@ -63,15 +64,16 @@
             متوافق مع ماغسيف
           </span>
         </div>
-        <div class="mb-4 flex justify-center">
-          <button 
-            onclick="handleViewCollection('samsung')"
-            class="view-collection-btn"
-          >
-            <span class="arrow-icon"></span>
-            عرض المجموعة
-          </button>
-        </div>
+                 <div class="mb-4 flex justify-center">
+           <button 
+             onclick="handleViewCollection('samsung')"
+             class="view-collection-btn"
+             style="font-family: 'DINNextLTArabic', Arial, sans-serif;"
+           >
+             <img src="{{ 'images/icons/mynaui_arrow-up.png'|asset }}" alt="Arrow" class="arrow-icon-img" />
+             <span style="font-family: 'DINNextLTArabic', Arial, sans-serif !important;">عرض المجموعة</span>
+           </button>
+         </div>
         <img 
           src="{{ 'images/samsung-case.png.png'|asset }}" 
           alt="Samsung Case" 
@@ -130,7 +132,7 @@ function handleViewCollection(productType) {
 
 .view-collection-btn {
   color: black;
-  font-family: 'Comfortaa', Arial, sans-serif;
+  font-family: 'DINNextLTArabic', Arial, sans-serif !important;
   font-size: 16px;
   font-weight: normal;
   line-height: 130%;
@@ -146,29 +148,20 @@ function handleViewCollection(productType) {
   transition: opacity 0.2s ease;
 }
 
+.view-collection-btn span {
+  font-family: 'DINNextLTArabic', Arial, sans-serif !important;
+}
+
 .view-collection-btn:hover {
   opacity: 0.8;
   text-decoration: underline;
 }
 
-.arrow-icon {
+.arrow-icon-img {
   width: 8.5px;
   height: 10.625px;
   display: inline-block;
-  position: relative;
-}
-
-.arrow-icon::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-right: 8.5px solid black;
-  transform: translateY(-50%);
+  object-fit: contain;
 }
 
 .product-image {

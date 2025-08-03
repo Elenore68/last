@@ -1,7 +1,7 @@
 <footer class="footer bg-[#1a1a1a] text-white" dir="rtl">
   <!-- Newsletter Section -->
   <section 
-    class="py-24 md:py-20 sm:py-16 bg-cover bg-center bg-no-repeat relative min-h-screen"
+    class="py-8 md:py-6 sm:py-4 bg-cover bg-center bg-no-repeat relative min-h-screen"
     style="
       background-image: url('{{ 'images/footerar.png'|asset }}');
       background-size: cover;
@@ -11,81 +11,79 @@
     "
   >
     <div class="max-w-[1200px] mx-auto px-5 h-full flex items-center">
-      <div class="text-right max-w-[500px] ml-auto">
-        <h2 class="font-sf-pro text-[35px] font-light text-white m-0 mb-4 leading-[1.2] md:text-[40px] sm:text-[32px] sm:mb-6">
-          Alcanta.<br/>
-          <span class="block text-right footer-title-text" data-ar="انضم إلى نادينا الحصري" data-en="Join Our Exclusive Club">انضم إلى نادينا الحصري</span>
-        </h2>
-        <h3 class="font-sf-pro text-[28px] font-light text-white m-0 mb-8 leading-[1.2] md:text-[32px] sm:text-[24px] sm:mb-6">
+      <div class="text-center max-w-[500px] ml-auto">
+        <div class="mb-4">
+          <img 
+            src="{{ 'images/footerlogo.png'|asset }}" 
+            alt="Alcanta" 
+            class="h-12 md:h-14 sm:h-10 mx-auto"
+            style="max-height: 56px;"
+          />
+        </div>
+        <h3 class="font-sf-pro text-[28px] font-light text-white m-0 mb-8 leading-[1.2] md:text-[32px] sm:text-[24px] sm:mb-6 text-center footer-title-text" data-ar="انضم إلى نادينا الحصري" data-en="Join Our Exclusive Club">
+          انضم إلى نادينا الحصري
         </h3>
         <div 
-          class="flex rounded-lg overflow-hidden mb-8 justify-end mx-0" 
+          class="flex rounded-lg overflow-hidden mb-8 mx-auto" 
           style="
             width: 400px; 
             height: 45px; 
-            background: rgba(255, 255, 255, 0.11); 
-            border: none;
-            backdrop-filter: blur(4px);
-            padding-right: 20px;
+            background: rgba(60, 60, 60, 0.49); 
+            border: 1px solid rgba(121, 119, 119, 0.56);
+            backdrop-filter: none;
+            padding-right: 0;
             justify-content: space-between;
             align-items: center;
             align-self: stretch;
-            margin: 0 0 0 auto;
-            padding-bottom: 10px;
+            margin: 0 auto;
+            padding-bottom: 0;
           "
         >
-          <button 
-            class="h-full py-3 px-6 font-sf-pro text-sm font-medium cursor-pointer transition-all duration-300" 
+          <input 
+            type="email" 
+            class="flex-1 h-full py-3 px-4 font-sf-pro text-sm bg-transparent border-none outline-none newsletter-input" 
             style="
-              background: #3C3C3C;
-              color: rgba(255, 255, 255, 1);
-              font-family: Inter;
-              font-size: 12px;
+              color: rgba(255, 255, 255, 0.64);
+              font-family: SF Pro Display;
+              font-size: 14px;
               font-style: normal;
               font-weight: 400;
               line-height: normal;
-              letter-spacing: -0.24px;
-              border-radius: 8px 0 0 8px;
-              border: 0.5px solid rgba(140, 135, 135, 0.30);
-              border-right: none;
-            "
-          >
-            <span class="newsletter-button-text" data-ar="سجل" data-en="Subscribe">سجل</span>
-          </button>
-          <input 
-            type="email" 
-            class="flex-1 h-full py-3 px-4 font-sf-pro text-sm bg-transparent outline-none" 
-            style="
-              color: #FFF;
-              font-family: DINPro;
-              font-size: 16px;
-              font-style: normal;
-              font-weight: 300;
-              line-height: 130.231%;
               text-align: right;
-              border-radius: 0 8px 8px 0;
-              border: 0.5px solid rgba(140, 135, 135, 0.30);
-              border-left: none;
             " 
             placeholder="أدخل عنوان البريد الإلكتروني"
-            class="newsletter-input"
             data-placeholder-ar="أدخل عنوان البريد الإلكتروني"
-            data-placeholder-en="Enter your email address"
+            data-placeholder-en="Enter Email Address"
           />
+          <button 
+            class="h-full py-3 px-6 font-sf-pro text-sm font-medium border-none cursor-pointer transition-all duration-300 newsletter-button" 
+            style="
+              background: rgba(140, 135, 135, 0.43); 
+              color: rgba(255, 255, 255, 1);
+              font-family: SF Pro Display;
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 500;
+              line-height: normal;
+            "
+          >
+            <span class="newsletter-button-text" data-ar="سجل" data-en="Register">سجل</span>
+          </button>
         </div>
         <p 
-          class="font-comfortaa text-[15px] font-light text-white m-0 leading-[1.6] max-w-[450px] sm:text-base footer-description-text"
+          class="font-sf-pro text-[15px] font-light text-white mt-6 leading-[1.6] max-w-[450px] sm:text-base text-center footer-description-text"
           style="
             color: rgba(255, 255, 255, 0.54);
-            text-align: right;
-            font-family: Comfortaa;
+            text-align: center;
+            font-family: SF Pro Display, system-ui, sans-serif;
             font-size: 15px;
             font-style: normal;
             font-weight: 300;
             line-height: 130.231%;
+            margin-top: 24px;
           "
           data-ar="كعضو، ستتلقى وصولاً مبكراً إلى الإصدارات المحدودة، وعروض خاصة محفوظة فقط للداخلين، ومحتوى منسق مصمم لرفع تجربتك."
-          data-en="As a member, you'll receive early access to limited releases, exclusive offers reserved only for insiders, and curated content designed to elevate your experience."
+          data-en="As a subscriber, you'll receive early access to limited releases, private offers reserved only for insiders, and curated content designed to elevate your experience."
         >
           كعضو، ستتلقى وصولاً مبكراً إلى الإصدارات المحدودة، وعروض خاصة محفوظة فقط للداخلين، ومحتوى منسق مصمم لرفع تجربتك.
         </p>
@@ -121,17 +119,12 @@
 (function() {
   // Prevent multiple script execution
   if (window.footerScriptLoaded) {
-
     return;
   }
   window.footerScriptLoaded = true;
   
-
-  
   // Function to update footer text based on language
   window.updateFooterTexts = function(lang = null) {
-
-    
     // Detect current language
     const currentLang = lang || 
                        localStorage.getItem('currentLanguage') || 
@@ -140,15 +133,12 @@
                        '{{ user.language.code }}' || 
                        'ar';
     
-
-    
     // Update footer title
     const footerTitle = document.querySelector('.footer-title-text');
     if (footerTitle) {
       const text = currentLang === 'ar' ? footerTitle.getAttribute('data-ar') : footerTitle.getAttribute('data-en');
       if (text) {
         footerTitle.textContent = text;
-
       }
     }
     
@@ -158,7 +148,6 @@
       const text = currentLang === 'ar' ? copyrightText.getAttribute('data-ar') : copyrightText.getAttribute('data-en');
       if (text) {
         copyrightText.textContent = text;
-
       }
     }
     
@@ -170,10 +159,9 @@
         newsletterInput.getAttribute('data-placeholder-en');
       if (placeholder) {
         newsletterInput.placeholder = placeholder;
-
       }
       
-      // Update text direction
+      // Update text direction and alignment
       newsletterInput.style.direction = currentLang === 'ar' ? 'rtl' : 'ltr';
       newsletterInput.style.textAlign = currentLang === 'ar' ? 'right' : 'left';
     }
@@ -184,7 +172,6 @@
       const text = currentLang === 'ar' ? buttonText.getAttribute('data-ar') : buttonText.getAttribute('data-en');
       if (text) {
         buttonText.textContent = text;
-
       }
     }
     
@@ -194,7 +181,6 @@
       const text = currentLang === 'ar' ? descriptionText.getAttribute('data-ar') : descriptionText.getAttribute('data-en');
       if (text) {
         descriptionText.textContent = text;
-
       }
       
       // Update text alignment for description
@@ -205,24 +191,35 @@
     const footer = document.querySelector('footer');
     if (footer) {
       footer.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
-
     }
     
-
+    // Update background image based on language
+    const footerSection = document.querySelector('footer section');
+    if (footerSection) {
+      const backgroundImage = currentLang === 'ar' ? 
+        'url("{{ "images/footerar.png"|asset }}")' : 
+        'url("{{ "images/footerBG.png"|asset }}")';
+      footerSection.style.backgroundImage = backgroundImage;
+    }
+    
+    // Update content alignment based on language
+    const footerContent = document.querySelector('footer .text-center');
+    if (footerContent) {
+      footerContent.className = currentLang === 'ar' ? 
+        'text-center max-w-[500px] ml-auto' : 
+        'text-center max-w-[500px] mr-auto';
+    }
   };
   
   // Listen for language change events from header
   document.addEventListener('languageChanged', function(event) {
-
     const newLang = event.detail.to || event.detail.language;
-
     updateFooterTexts(newLang);
   });
   
   // Listen for Salla language change events
   if (window.salla && window.salla.event) {
     window.salla.event.on('language::changed', function(data) {
-
       const lang = data.language || data.code || data;
       updateFooterTexts(lang);
     });
@@ -230,13 +227,11 @@
   
   // Initialize footer on DOM load
   document.addEventListener('DOMContentLoaded', function() {
-
     updateFooterTexts();
   });
   
   // Initialize footer after a short delay
   setTimeout(() => {
-
     updateFooterTexts();
   }, 200);
   
