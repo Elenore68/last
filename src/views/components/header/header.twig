@@ -117,39 +117,63 @@
 function switchLanguage() {
     console.log('Header: Language switch initiated');
     
-    if (window.languageManager) {
-        window.languageManager.switchLanguage();
+    // Get current language from stored preference or fallback
+    let currentLanguage = '{{ user.language.code }}';
+    const storedLanguage = localStorage.getItem('currentLanguage');
+    const urlLanguage = new URLSearchParams(window.location.search).get('lang');
+    
+    // Determine current language
+    currentLanguage = urlLanguage || storedLanguage || currentLanguage || 'en';
+    
+    const newLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
+    
+    console.log('Header: Switching from', currentLanguage, 'to', newLanguage);
+    
+    // Store the new language preference
+    localStorage.setItem('currentLanguage', newLanguage);
+    
+    // Update HTML attributes
+    document.documentElement.lang = newLanguage;
+    document.documentElement.dir = newLanguage === 'ar' ? 'rtl' : 'ltr';
+    
+    // Update language toggle text immediately
+    const languageToggleText = document.getElementById('language-toggle-text');
+    if (languageToggleText) {
+        languageToggleText.textContent = newLanguage === 'ar' ? 'En' : 'Ar';
+    }
+    
+    // Dispatch custom language change event for footer
+    const languageChangeEvent = new CustomEvent('languageChanged', {
+        detail: {
+            from: currentLanguage,
+            to: newLanguage,
+            language: newLanguage
+        }
+    });
+    document.dispatchEvent(languageChangeEvent);
+    console.log('Header: Dispatched languageChanged event:', languageChangeEvent.detail);
+    
+    // Dispatch Salla custom event
+    const sallaLanguageEvent = new CustomEvent('salla:language:changed', {
+        detail: {
+            language: newLanguage,
+            code: newLanguage
+        }
+    });
+    document.dispatchEvent(sallaLanguageEvent);
+    console.log('Header: Dispatched salla:language:changed event:', sallaLanguageEvent.detail);
+    
+    // Use Salla's language change if available
+    if (window.salla && window.salla.language) {
+        console.log('Header: Calling Salla language change');
+        window.salla.language.change(newLanguage);
     } else {
-        // Get current language from stored preference or fallback
-        let currentLanguage = '{{ user.language.code }}';
-        if (window.bannerLanguageState) {
-            currentLanguage = window.bannerLanguageState.getStoredLanguage();
-        }
-        
-        const newLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
-        
-        console.log('Header: Switching from', currentLanguage, 'to', newLanguage);
-        
-        // Update banner language immediately
-        if (window.changeBannerLanguage) {
-            window.changeBannerLanguage(newLanguage);
-        }
-        
-        // Update language toggle text immediately
-        const languageToggleText = document.getElementById('language-toggle-text');
-        if (languageToggleText) {
-            languageToggleText.textContent = newLanguage === 'ar' ? 'En' : 'Ar';
-        }
-        
-        // Use Salla's language change if available
-        if (window.salla && window.salla.language) {
-            console.log('Header: Calling Salla language change');
-            window.salla.language.change(newLanguage);
-        } else {
-            const currentUrl = window.location.href;
-            const baseUrl = currentUrl.split('?')[0];
-            window.location.href = baseUrl + '?lang=' + newLanguage;
-        }
+        // Fallback to URL parameter method
+        const currentUrl = window.location.href;
+        const baseUrl = currentUrl.split('?')[0];
+        const newUrl = baseUrl + '?lang=' + newLanguage;
+        console.log('Header: Redirecting to:', newUrl);
+        window.location.href = newUrl;
     }
 }
 
@@ -157,9 +181,21 @@ function switchLanguage() {
 document.addEventListener('languageChanged', function(event) {
     const languageToggleText = document.getElementById('language-toggle-text');
     if (languageToggleText) {
-        languageToggleText.textContent = event.detail.language === 'ar' ? 'En' : 'Ar';
+        const newLang = event.detail.to || event.detail.language;
+        languageToggleText.textContent = newLang === 'ar' ? 'En' : 'Ar';
     }
 });
 
+// Initialize language toggle text on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const storedLanguage = localStorage.getItem('currentLanguage');
+    const urlLanguage = new URLSearchParams(window.location.search).get('lang');
+    const currentLanguage = urlLanguage || storedLanguage || '{{ user.language.code }}' || 'en';
+    
+    const languageToggleText = document.getElementById('language-toggle-text');
+    if (languageToggleText) {
+        languageToggleText.textContent = currentLanguage === 'ar' ? 'En' : 'Ar';
+    }
+});
 
 </script>

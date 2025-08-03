@@ -76,17 +76,19 @@
             // Get stored language preference
             const storedLanguage = localStorage.getItem('currentLanguage');
             const urlLanguage = new URLSearchParams(window.location.search).get('lang');
+            const userLanguage = '{{ user.language.code }}';
             
-            // Determine the language to use
-            const languageToUse = urlLanguage || storedLanguage || 'en';
+            // Determine the language to use - prioritize URL parameter and user language
+            const languageToUse = urlLanguage || userLanguage || storedLanguage || 'en';
             
             // Update HTML attributes
             document.documentElement.lang = languageToUse;
             document.documentElement.dir = languageToUse === 'ar' ? 'rtl' : 'ltr';
             
-            // Store the language if not already stored
-            if (!storedLanguage) {
+            // Update localStorage to match the detected language
+            if (languageToUse !== storedLanguage) {
                 localStorage.setItem('currentLanguage', languageToUse);
+                console.log('Master Layout: Updated localStorage to:', languageToUse);
             }
             
             console.log('Master Layout: Language initialized to:', languageToUse);

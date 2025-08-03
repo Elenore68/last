@@ -45,7 +45,7 @@
 </style>
 
 <script>
-// Simple banner language state
+// Enhanced banner language state
 window.bannerLanguageState = {
     current: '{{ user.language.code }}',
     setLanguage: function(lang) {
@@ -75,19 +75,55 @@ window.bannerLanguageState = {
         const storedLang = this.getStoredLanguage();
         this.setLanguage(storedLang);
         console.log('Banner: Applied stored language:', storedLang);
+    },
+    // New method to detect current language like footer
+    detectCurrentLanguage: function() {
+        const urlLang = new URLSearchParams(window.location.search).get('lang');
+        const storedLang = localStorage.getItem('currentLanguage');
+        const domLang = document.documentElement.lang || document.querySelector('html').getAttribute('lang');
+        const userLang = '{{ user.language.code }}';
+        
+        console.log('Banner: Language detection details:');
+        console.log('  - urlLang:', urlLang);
+        console.log('  - storedLang:', storedLang);
+        console.log('  - domLang:', domLang);
+        console.log('  - userLang:', userLang);
+        
+        // Priority order: URL parameter > user language > DOM language > stored language > fallback
+        const currentLang = urlLang || userLang || domLang || storedLang || 'en';
+        
+        console.log('Banner: Final language detected:', currentLang);
+        return currentLang;
     }
 };
 
 // Apply stored language immediately when script loads
 (function() {
-    const storedLang = window.bannerLanguageState.getStoredLanguage();
-    window.bannerLanguageState.setLanguage(storedLang);
-    console.log('Banner: Initial language applied:', storedLang);
+    const detectedLang = window.bannerLanguageState.detectCurrentLanguage();
+    window.bannerLanguageState.setLanguage(detectedLang);
+    console.log('Banner: Initial language applied:', detectedLang);
 })();
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
-    window.bannerLanguageState.applyStoredLanguage();
+    const detectedLang = window.bannerLanguageState.detectCurrentLanguage();
+    window.bannerLanguageState.setLanguage(detectedLang);
+    console.log('Banner: DOMContentLoaded - language applied:', detectedLang);
+});
+
+// Listen for custom language change events from header
+document.addEventListener('languageChanged', function(event) {
+    const newLang = event.detail.to || event.detail.language;
+    console.log('Banner: Language change event received:', newLang);
+    console.log('Banner: Event details:', event.detail);
+    window.bannerLanguageState.setLanguage(newLang);
+});
+
+// Listen for Salla custom language change events
+document.addEventListener('salla:language:changed', function(event) {
+    const lang = event.detail.language || event.detail.code;
+    console.log('Banner: Salla custom language change event received:', lang);
+    window.bannerLanguageState.setLanguage(lang);
 });
 
 // Listen for Salla's language change events
@@ -166,4 +202,36 @@ document.addEventListener('visibilitychange', function() {
 
 // Make the function globally available
 window.changeBannerLanguage = changeBannerLanguage;
+
+// Add manual test function for debugging
+window.testBannerLanguage = function(lang) {
+    console.log('Banner: Manual test called with language:', lang);
+    if (lang) {
+        localStorage.setItem('currentLanguage', lang);
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    }
+    const detectedLang = window.bannerLanguageState.detectCurrentLanguage();
+    window.bannerLanguageState.setLanguage(detectedLang);
+    console.log('Banner: Manual test completed - language set to:', detectedLang);
+};
+
+// Add test buttons for manual language switching (for debugging)
+setTimeout(() => {
+    const testDiv = document.createElement('div');
+    testDiv.style.position = 'fixed';
+    testDiv.style.top = '60px';
+    testDiv.style.right = '10px';
+    testDiv.style.zIndex = '9999';
+    testDiv.style.background = 'rgba(0,0,0,0.8)';
+    testDiv.style.color = 'white';
+    testDiv.style.padding = '10px';
+    testDiv.style.borderRadius = '5px';
+    testDiv.innerHTML = `
+        <div>Banner Language Test:</div>
+        <button onclick="window.testBannerLanguage('en')" style="margin: 5px; padding: 5px;">English</button>
+        <button onclick="window.testBannerLanguage('ar')" style="margin: 5px; padding: 5px;">Arabic</button>
+    `;
+    document.body.appendChild(testDiv);
+}, 1000);
 </script>
