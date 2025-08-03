@@ -135,16 +135,15 @@
     console.log('  - localStorage language:', localStorage.getItem('language'));
     console.log('  - user.language.code:', '{{ user.language.code }}');
     
-    // Detect current language - prioritize URL parameter and DOM language over localStorage
+    // Detect current language - prioritize stored language and URL parameter
     const urlLang = new URLSearchParams(window.location.search).get('lang');
+    const storedLang = localStorage.getItem('currentLanguage');
     const domLang = document.documentElement.lang || document.querySelector('html').getAttribute('lang');
     
     const currentLang = lang || 
+                       storedLang ||
                        urlLang ||
                        domLang ||
-                       localStorage.getItem('currentLanguage') || 
-                       localStorage.getItem('language') ||
-                       '{{ user.language.code }}' || 
                        'en';
     
     console.log('Footer: Final language detected:', currentLang);

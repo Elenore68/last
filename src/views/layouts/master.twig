@@ -50,7 +50,7 @@
 | theme.settings.get(settingName, default=null)      | mixed    | get theme setting ex `theme.settings.get('my_var', 'fallback')`                                          |
 #}
 <!DOCTYPE html>
-<html lang="{{ user.language.code }}" dir="{{ user.language.dir }}">
+<html lang="en" dir="ltr">
 <!-- بسم الله الرحمن الرحيم -->
 <head>
     <meta charset="UTF-8">
@@ -70,6 +70,27 @@
         window.header_is_sticky = "{{theme.settings.get('header_is_sticky', 'Default Value')}}"
         window.imageZoom = "{{theme.settings.get('imageZoom')}}"
         window.can_access_wallet = {{ user.can_access_wallet | json_encode }}
+        
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get stored language preference
+            const storedLanguage = localStorage.getItem('currentLanguage');
+            const urlLanguage = new URLSearchParams(window.location.search).get('lang');
+            
+            // Determine the language to use
+            const languageToUse = urlLanguage || storedLanguage || 'en';
+            
+            // Update HTML attributes
+            document.documentElement.lang = languageToUse;
+            document.documentElement.dir = languageToUse === 'ar' ? 'rtl' : 'ltr';
+            
+            // Store the language if not already stored
+            if (!storedLanguage) {
+                localStorage.setItem('currentLanguage', languageToUse);
+            }
+            
+            console.log('Master Layout: Language initialized to:', languageToUse);
+        });
         
         // Remove unwanted floating elements
         document.addEventListener('DOMContentLoaded', function() {
