@@ -1,9 +1,9 @@
-<footer class="footer bg-[#1a1a1a] text-white" dir="rtl">
+<footer class="footer bg-[#1a1a1a] text-white" dir="ltr">
   <!-- Newsletter Section -->
   <section 
     class="py-8 md:py-6 sm:py-4 bg-cover bg-center bg-no-repeat relative min-h-screen"
     style="
-      background-image: url('{{ 'images/footerar.png'|asset }}');
+      background-image: url('{{ 'images/footerBG.png'|asset }}');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -20,8 +20,8 @@
             style="max-height: 56px;"
           />
         </div>
-        <h3 class="font-sf-pro text-[28px] font-light text-white m-0 mb-4 leading-[1.2] md:text-[32px] sm:text-[24px] sm:mb-6 text-center footer-title-text" data-ar="انضم إلى نادينا الحصري" data-en="Join Our Exclusive Club">
-          انضم إلى نادينا الحصري
+        <h3 class="font-sf-pro text-[28px] font-light text-white m-0 mb-4 leading-[1.2] md:text-[32px] sm:text-[24px] sm:mb-6 text-center footer-title-text" data-ar="انضم إلى نادينا الحصري" data-en="Join Our Exclusive Club" style="font-family: 'DIN Display', 'DIN Next LT W23', Arial, sans-serif;">
+          Join Our Exclusive Club
         </h3>
         <div 
           class="flex rounded-lg overflow-hidden mb-4 mx-auto" 
@@ -51,7 +51,7 @@
               line-height: normal;
               text-align: right;
             " 
-            placeholder="أدخل عنوان البريد الإلكتروني"
+            placeholder="Enter Email Address"
             data-placeholder-ar="أدخل عنوان البريد الإلكتروني"
             data-placeholder-en="Enter Email Address"
           />
@@ -67,7 +67,7 @@
               line-height: normal;
             "
           >
-            <span class="newsletter-button-text" data-ar="سجل" data-en="Register">سجل</span>
+            <span class="newsletter-button-text" data-ar="سجل" data-en="Register">Register</span>
           </button>
         </div>
         <p 
@@ -86,7 +86,7 @@
           data-ar="كعضو، ستتلقى وصولاً مبكراً إلى الإصدارات المحدودة، وعروض خاصة محفوظة فقط للداخلين، ومحتوى منسق مصمم لرفع تجربتك."
           data-en="As a subscriber, you'll receive early access to limited releases, private offers reserved only for insiders, and curated content designed to elevate your experience."
         >
-          كعضو، ستتلقى وصولاً مبكراً إلى الإصدارات المحدودة، وعروض خاصة محفوظة فقط للداخلين، ومحتوى منسق مصمم لرفع تجربتك.
+          As a subscriber, you'll receive early access to limited releases, private offers reserved only for insiders, and curated content designed to elevate your experience.
         </p>
       </div>
     </div>
@@ -126,21 +126,46 @@
   
   // Function to update footer text based on language
   window.updateFooterTexts = function(lang = null) {
-    // Detect current language
+    // Debug all language sources
+    console.log('Footer: Debug - Language sources:');
+    console.log('  - lang parameter:', lang);
+    console.log('  - URL lang parameter:', new URLSearchParams(window.location.search).get('lang'));
+    console.log('  - DOM language:', document.documentElement.lang || document.querySelector('html').getAttribute('lang'));
+    console.log('  - localStorage currentLanguage:', localStorage.getItem('currentLanguage'));
+    console.log('  - localStorage language:', localStorage.getItem('language'));
+    console.log('  - user.language.code:', '{{ user.language.code }}');
+    
+    // Detect current language - prioritize URL parameter and DOM language over localStorage
+    const urlLang = new URLSearchParams(window.location.search).get('lang');
+    const domLang = document.documentElement.lang || document.querySelector('html').getAttribute('lang');
+    
     const currentLang = lang || 
+                       urlLang ||
+                       domLang ||
                        localStorage.getItem('currentLanguage') || 
-                       document.documentElement.lang || 
-                       document.querySelector('html').getAttribute('lang') || 
+                       localStorage.getItem('language') ||
                        '{{ user.language.code }}' || 
-                       'ar';
+                       'en';
+    
+    console.log('Footer: Final language detected:', currentLang);
     
     // Update footer title
     const footerTitle = document.querySelector('.footer-title-text');
     if (footerTitle) {
       const text = currentLang === 'ar' ? footerTitle.getAttribute('data-ar') : footerTitle.getAttribute('data-en');
+      console.log('Footer: Title update - currentLang:', currentLang, 'text:', text);
       if (text) {
         footerTitle.textContent = text;
+        // Apply DIN Display font for Arabic text
+        if (currentLang === 'ar') {
+          footerTitle.style.fontFamily = "'DIN Display', 'DIN Next LT W23', Arial, sans-serif";
+        } else {
+          footerTitle.style.fontFamily = "'SF Pro Display', system-ui, sans-serif";
+        }
+        console.log('Footer: Title updated to:', text);
       }
+    } else {
+      console.log('Footer: ERROR - footer-title-text element not found');
     }
     
     // Update copyright text
@@ -197,10 +222,16 @@
     // Update background image based on language
     const footerSection = document.querySelector('footer section');
     if (footerSection) {
-      const backgroundImage = currentLang === 'ar' ? 
-        'url("{{ "images/footerar.png"|asset }}")' : 
-        'url("{{ "images/footerBG.png"|asset }}")';
-      footerSection.style.backgroundImage = backgroundImage;
+      if (currentLang === 'ar') {
+        footerSection.style.backgroundImage = 'url("{{ "images/footerar.png"|asset }}")';
+        console.log('Footer: Background image updated to Arabic:', '{{ "images/footerar.png"|asset }}');
+      } else {
+        // For English, use footerBG.png
+        footerSection.style.backgroundImage = 'url("{{ "images/footerBG.png"|asset }}")';
+        console.log('Footer: Background image updated to English:', '{{ "images/footerBG.png"|asset }}');
+      }
+    } else {
+      console.log('Footer: ERROR - footer section element not found');
     }
     
     // Update content alignment based on language
@@ -215,26 +246,71 @@
   // Listen for language change events from header
   document.addEventListener('languageChanged', function(event) {
     const newLang = event.detail.to || event.detail.language;
+    console.log('Footer: Language change event received:', newLang);
+    console.log('Footer: Event details:', event.detail);
     updateFooterTexts(newLang);
   });
+  
+  // Listen for URL changes (when language changes via URL)
+  let currentUrl = window.location.href;
+  setInterval(() => {
+    if (window.location.href !== currentUrl) {
+      console.log('Footer: URL changed, updating language');
+      currentUrl = window.location.href;
+      updateFooterTexts();
+    }
+  }, 100);
   
   // Listen for Salla language change events
   if (window.salla && window.salla.event) {
     window.salla.event.on('language::changed', function(data) {
       const lang = data.language || data.code || data;
+      console.log('Footer: Salla language change event received:', lang);
       updateFooterTexts(lang);
     });
   }
   
   // Initialize footer on DOM load
   document.addEventListener('DOMContentLoaded', function() {
+    console.log('Footer: DOMContentLoaded event fired');
     updateFooterTexts();
   });
   
   // Initialize footer after a short delay
   setTimeout(() => {
+    console.log('Footer: Delayed initialization');
     updateFooterTexts();
   }, 200);
+  
+  // Also initialize immediately
+  console.log('Footer: Immediate initialization');
+  updateFooterTexts();
+  
+  // Make the function globally available for manual triggering
+  window.updateFooterLanguage = function(lang) {
+    console.log('Footer: Manual language update called with:', lang);
+    updateFooterTexts(lang);
+  };
+  
+  // Add test buttons to manually switch languages
+  console.log('Footer: Adding test buttons for manual language switching');
+  setTimeout(() => {
+    const testDiv = document.createElement('div');
+    testDiv.style.position = 'fixed';
+    testDiv.style.top = '10px';
+    testDiv.style.right = '10px';
+    testDiv.style.zIndex = '9999';
+    testDiv.style.background = 'rgba(0,0,0,0.8)';
+    testDiv.style.color = 'white';
+    testDiv.style.padding = '10px';
+    testDiv.style.borderRadius = '5px';
+    testDiv.innerHTML = `
+      <div>Footer Language Test:</div>
+      <button onclick="window.updateFooterLanguage('en')" style="margin: 5px; padding: 5px;">English</button>
+      <button onclick="window.updateFooterLanguage('ar')" style="margin: 5px; padding: 5px;">Arabic</button>
+    `;
+    document.body.appendChild(testDiv);
+  }, 1000);
   
 })(); // End of footer script scope
 </script>
