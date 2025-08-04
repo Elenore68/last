@@ -3,7 +3,7 @@
   <section 
     class="py-8 md:py-6 sm:py-4 bg-cover bg-center bg-no-repeat relative min-h-screen footer-section"
     style="
-      background-image: url('{{ 'images/footeren.png'|asset }}');
+      background-image: url('{{ 'images/Hero3.png'|asset }}');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -14,7 +14,7 @@
       <div class="text-center max-w-[500px] ml-auto footer-content">
         <div class="mb-2">
           <img 
-            src="{{ 'images/footerlogo.png'|asset }}" 
+            src="{{ 'images/Vector4.png'|asset }}" 
             alt="Alcanta" 
             class="h-12 md:h-14 sm:h-10 mx-auto footer-logo"
             style="max-height: 56px;"
@@ -127,14 +127,18 @@
   // Store image paths
   const FOOTER_IMAGES = {
     en: {
-      background: '{{ "images/footeren.png"|asset }}',
-      logo: '{{ "images/footerlogo.png"|asset }}'
+      background: '{{ "images/Hero3.png"|asset }}',
+      logo: '{{ "images/Vector4.png"|asset }}'
     },
     ar: {
       background: '{{ "images/footerar.png"|asset }}',
-      logo: '{{ "images/footerlogo.png"|asset }}'
+      logo: '{{ "images/Vector4.png"|asset }}'
     }
   };
+  
+  // Test if the English background image exists
+  console.log('Footer: English background path:', FOOTER_IMAGES.en.background);
+  console.log('Footer: Arabic background path:', FOOTER_IMAGES.ar.background);
   
   // Function to update footer text based on language
   window.updateFooterTexts = function(lang = null) {
@@ -254,8 +258,21 @@
     const footerSection = document.querySelector('.footer-section');
     if (footerSection && FOOTER_IMAGES[currentLang]) {
       const backgroundImage = FOOTER_IMAGES[currentLang].background;
+      
+      // Force the background image update
       footerSection.style.backgroundImage = `url("${backgroundImage}")`;
+      footerSection.style.backgroundSize = 'cover';
+      footerSection.style.backgroundPosition = 'center';
+      footerSection.style.backgroundRepeat = 'no-repeat';
+      
       console.log('Footer: Background image updated to:', currentLang, backgroundImage);
+      
+      // Add debugging for background image
+      console.log('Footer: Background image URL:', backgroundImage);
+      console.log('Footer: Footer section found:', !!footerSection);
+      console.log('Footer: Current language:', currentLang);
+      console.log('Footer: Available images:', FOOTER_IMAGES);
+      console.log('Footer: Applied background styles:', footerSection.style.backgroundImage);
     } else {
       console.log('Footer: ERROR - footer section element not found or no image for language:', currentLang);
     }
