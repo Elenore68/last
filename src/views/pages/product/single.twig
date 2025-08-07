@@ -19,7 +19,7 @@
 | product.rating                         | ?Rating                     |                                                                        |
 | product.rating.count                   | int                         |                                                                        |
 | product.rating.stars                   | int                         |                                                                        |
-| product.price                          | float                       | can be string too `-`, when merchant doesn't want to show zero         |
+| product.price                          | float                       | can be string too -, when merchant doesn't want to show zero         |
 | product.sale_price                     | float                       |                                                                        |
 | product.regular_price                  | float                       |                                                                        |
 | product.starting_price                 | ?float                      |                                                                        |
@@ -39,7 +39,7 @@
 | product.images[].url                   | string                      |                                                                        |
 | product.images[].alt                   | ?string                     |                                                                        |
 | product.images[].video_url             | ?string                     |                                                                        |
-| product.images[].type                  | string                      | `image` `video`                                                        |
+| product.images[].type                  | string                      | image video                                                        |
 | product.brand                          | ?object                     |                                                                        |
 | product.brand.id                       | int                         |                                                                        |
 | product.brand.url                      | ?string                     |                                                                        |
@@ -58,13 +58,13 @@
 | product.donation.target_amount         | float                       |                                                                        |
 | product.donation.target_percent        | float                       |                                                                        |
 | product.donation.target_end_date       | ?Date                       |                                                                        |
-| product.donation.can_donate            | bool                        | `true` When there is no campaign or (target not reached & not expired) |
+| product.donation.can_donate            | bool                        | true When there is no campaign or (target not reached & not expired) |
 | product.has_read_more                  | bool                        |                                                                        |
 | product.can_add_note                   | bool                        |                                                                        |
 | product.can_show_remained_quantity     | bool                        |                                                                        |
 | product.can_show_sold                  | bool                        |                                                                        |
 | product.can_upload_file                | bool                        |                                                                        |
-| product.has_custom_form                | bool                        | Is it for  `Food` or `Custom Service` product                          |
+| product.has_custom_form                | bool                        | Is it for  Food or Custom Service product                          |
 | product.has_metadata                   | bool                        |                                                                        |
 | product.has_options                    | bool                        |                                                                        |
 | product.is_on_sale                     | bool                        | Product has discounted price                                           |
@@ -89,6 +89,7 @@
             <salla-breadcrumb></salla-breadcrumb>
         </nav>
         <div class="flex flex-col items-start md:flex-row" id="product-{{ product.id }}">
+
             <div class="sidebar md:sticky top-24 w-full md:!w-2/4 rtl:ml-8 ltr:mr-8 pb-8 md:pb-16 overflow-hidden shrink-0">
                 {% set has_many_images = product.images|length > 1 %}
                 <salla-slider
@@ -134,11 +135,13 @@
                             {% else %}
                                 <a data-fslightbox="product_{{ product.id }}"
                                    data-img-id="{{ image.id }}"
-                                   data-slid-index="{{ loop.index-1 }}"{% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
+                                   data-slid-index="{{ loop.index-1 }}"
+                                   data-product-url="{{ product.url }}" {# إضافة سمة لحفظ رابط المنتج #}
+                                   {% if image.video_url %} data-video-src="{{ image.video_url }}"{% endif %}
                                    data-caption="{{ image.alt }}"
                                    data-infinite="false"
                                    data-type="{{ image.video_url?'youtube':'image' }}"
-                                   href="{{ (image.video_url is iterable ? image.video_url|first : image.video_url)|default(image.url) }}"
+                                   href="{{ product.url }}" {# استخدام رابط المنتج بدلاً من رابط الصورة #}
                                    aria-label="{{ product.name }}"
                                    class="swiper-slide magnify-wrapper homeslider__slide {{ image.video_url?'video-entry':'' }}">
                                     {% if loop.first %}
@@ -184,7 +187,7 @@
 
                 {% if product.brand.name %}
                     <div class="product-brand mb-5 w-12">
-                        <a class="brand-logo" href="{{ product.brand.url }}" title="{{ product.brand.name }}">
+                        <a class="brand-logo" href="{{ product.brand.url ?: '#' }}" title="{{ product.brand.name }}">
                             <img width="100%" height="100%" class="max-h-full object-contain"
                                  src="{{ product.brand.logo }}"
                                  title="{{ product.brand.name }}"
@@ -245,9 +248,8 @@
                 {% if product.tags|length and theme.settings.get('show_tags', true) %}
                     <div class="mb-3">
                         {% for tag in product.tags %}
-                            <a href="{{ tag.url }}"
-                               class="rtl:ml-2 ltr:mr-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }}
-                                ,</a>
+                            <a href="{{ tag.url ?: '#' }}"
+                               class="rtl:ml-2 ltr:mr-2 inline-flex  text-gray-500 hover:text-primary underline text-sm mb-1">{{ tag.name }},</a>
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -262,7 +264,7 @@
                             shape="icon"
                             fill="outline"
                             color="light"
-							aria-label="add to wishlist">
+              aria-label="add to wishlist">
                         <i class="sicon-heart"></i>
                     </salla-button>
                 </div>
@@ -421,4 +423,43 @@
     {% if product.has_3d_image %}
         <script type="module" defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     {% endif %}
+    
+    {# سكريبت حل مشكلة الروابط #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // معالجة روابط الصور لمنع الانتقال عند النقر
+            document.querySelectorAll('.magnify-wrapper').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // إذا كان النقر بزر الماوس الأيسر فقط (بدون Ctrl أو Shift)
+                    if (e.button === 0 && !e.ctrlKey && !e.shiftKey && !e.metaKey) {
+                        e.preventDefault();
+                        
+                        // فتح الـ lightbox إذا لم يكن فيديو
+                        if (!this.classList.contains('video-entry')) {
+                            if (window.fslightbox) {
+                                window.fslightbox.open(this.parentElement, this.dataset.slidIndex);
+                            }
+                        } else {
+                            // فتح رابط المنتج إذا كان فيديو
+                            window.location.href = this.getAttribute('data-product-url');
+                        }
+                    }
+                });
+            });
+            
+            // معالجة الروابط الأخرى لضمان عملها بشكل صحيح
+            document.querySelectorAll('a[href*="/product/"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // تجاهل الروابط التي تحتاج سلوكًا خاصًا
+                    if (this.classList.contains('magnify-wrapper') || 
+                        this.classList.contains('video-entry')) {
+                        return;
+                    }
+                    
+                    // تأكيد فتح الرابط
+                    window.location.href = this.href;
+                });
+            });
+        });
+    </script>
 {% endblock %}
