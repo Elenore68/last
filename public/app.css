@@ -535,6 +535,7 @@ select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/
 .mb-6{margin-bottom:1.5rem}
 .mb-8{margin-bottom:2rem}
 .me-2\.5{margin-right:0.625rem}
+.ml-2{margin-left:0.5rem}
 .ml-4{margin-left:1rem}
 .ml-auto{margin-left:auto}
 .mr-1{margin-right:0.25rem}
@@ -550,7 +551,6 @@ select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/
 .mt-5{margin-top:1.25rem}
 .mt-6{margin-top:1.5rem}
 .mt-8{margin-top:2rem}
-.ml-2{margin-left:0.5rem}
 .line-clamp-1{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1}
 .line-clamp-2{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
 .block{display:block}

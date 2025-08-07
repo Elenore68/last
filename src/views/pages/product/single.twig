@@ -84,10 +84,7 @@
 {% extends "layouts.master" %}
 {% block content %}
     {# Top Header with Background Image #}
-    <div 
-        class="w-full text-white py-4 px-6"
-        style="background-image: url('{{ 'images/headerBG.png'|asset }}'); background-size: cover; background-position: center; background-repeat: no-repeat; display: flex; width: 100%; height: 55px; padding: 0px 100px; justify-content: space-between; align-items: center;"
-    >
+    <div class="custom-header">
         <div class="flex items-center gap-4">
             <img 
                 src="{{ 'images/icons/bitcoin-icons_cart-outline.png'|asset }}" 
@@ -100,7 +97,7 @@
             <img 
                 src="{{ 'images/logo.png'|asset }}" 
                 alt="Alcanta Logo" 
-                style="width: 132px; height: 26px; flex-shrink: 0; aspect-ratio: 66/13;"
+                class="logo-custom"
             />
         </div>
         
@@ -114,7 +111,7 @@
     </div>
 
     {# Navigation Breadcrumb #}
-    <div class="w-full flex justify-between items-center px-[70px] py-6">
+    <div class="custom-navigation">
         <div class="flex items-center gap-2">
             <button onclick="history.back()" class="text-lg">{{ user.language.code == 'ar' ? '→' : '←' }}</button>
             <button onclick="history.back()" class="text-gray-600">{{ user.language.code == 'ar' ? 'رجوع' : 'Back' }}</button>
@@ -244,10 +241,7 @@
                 {% endif %}
 
                 {# Product Title with New Styling #}
-                <h1 
-                    class="text-xl md:text-2xl leading-10 font-bold mb-6 text-gray-800"
-                    style="color: #000; font-family: 'SF Pro Display', Arial, sans-serif; font-size: 40px; font-style: normal; font-weight: 400; line-height: 40px; margin-bottom: 10px;"
-                >
+                <h1 class="product-title-custom">
                     {{ product.name }}
                 </h1>
 
@@ -393,28 +387,18 @@
                 {% endif %}
 
                 {# Add to Cart Button with New Styling #}
-                <div 
-                    class="flex items-center cursor-pointer mb-4"
-                    style="border-radius: 8px; border: 1px solid #3C3C3C; background: #3C3C3C; display: flex; height: 45px; width: 400px; padding: 0px 10px 0px 20px; justify-content: space-between; align-items: center; flex: 1 0 0; color: white; margin-top: 10px; margin-bottom: 10px;"
-                >
+                <div class="add-to-cart-custom">
                     <span class="font-medium text-lg">{{ user.language.code == 'ar' ? 'أضف إلى السلة' : 'Add to Cart' }}</span>
                     <img
                         src="{{ 'images/icons/uim_lock (1).png'|asset }}"
                         alt="Lock"
                         class="w-5 h-5"
-                        style="transition: all 0.3s ease;"
                     />
                 </div>
 
                 {# Payment Options #}
-                <div 
-                    class="flex items-center gap-3 text-sm text-gray-500"
-                    style="width: 395px; justify-content: space-between; margin-top: 15px;"
-                >
-                    <span 
-                        class="text-gray-600"
-                        style="font-family: 'SF Pro Display', Arial, sans-serif; padding-left: 17px;"
-                    >
+                <div class="payment-options-custom">
+                    <span class="payment-text-custom">
                         {{ user.language.code == 'ar' ? 'متوفر دفع تيبي' : 'Tabby payments available' }}
                     </span>
                     <img 
@@ -563,3 +547,111 @@
         });
     </script>
 {% endblock %}
+
+<style>
+/* Custom Product Page Styles */
+.custom-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    width: 100%;
+    height: 55px;
+    padding: 0px 100px;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.custom-navigation {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 70px;
+}
+
+.product-title-custom {
+    color: #000;
+    font-family: 'SF Pro Display', Arial, sans-serif;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 40px;
+    margin-bottom: 10px;
+}
+
+.add-to-cart-custom {
+    border-radius: 8px;
+    border: 1px solid #3C3C3C;
+    background: #3C3C3C;
+    display: flex;
+    height: 45px;
+    width: 400px;
+    padding: 0px 10px 0px 20px;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1 0 0;
+    color: white;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-to-cart-custom:hover {
+    background: #2a2a2a;
+    transform: translateY(-2px);
+}
+
+.payment-options-custom {
+    width: 395px;
+    justify-content: space-between;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.payment-text-custom {
+    font-family: 'SF Pro Display', Arial, sans-serif;
+    padding-left: 17px;
+    color: #666;
+}
+
+.logo-custom {
+    width: 132px;
+    height: 26px;
+    flex-shrink: 0;
+    aspect-ratio: 66/13;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .custom-header {
+        padding: 0px 20px;
+    }
+    
+    .custom-navigation {
+        padding: 16px 20px;
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .product-title-custom {
+        font-size: 28px;
+        line-height: 32px;
+    }
+    
+    .add-to-cart-custom {
+        width: 100%;
+        max-width: 400px;
+    }
+    
+    .payment-options-custom {
+        width: 100%;
+        max-width: 395px;
+    }
+}
+</style>
