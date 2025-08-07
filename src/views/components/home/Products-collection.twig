@@ -12,7 +12,7 @@
 #}
 
 <section class="alcantara-picker-section py-16 bg-white">
-  <div class="max-w-[1200px] mx-auto px-4 md:px-[200px] lg:px-[400px]">
+  <div class="max-w-[1200px] mx-auto px-4 md:px-8 lg:px-12 xl:px-0">
     <!-- Main Heading -->
     <h2 class="text-center mb-12">
       <div class="text-center">
@@ -23,14 +23,14 @@
     </h2>
 
     <!-- Product Picker Grid -->
-    <div class="flex flex-row gap-4 justify-center">
-      {% if component.product_collection_select is defined %}
-        {% for item in component.product_collection_select %}
-          <div class="text-center">
+    <div class="flex flex-col md:flex-row gap-8 justify-center items-center">
+      {% if component['product-collection-select'] is defined %}
+        {% for item in component['product-collection-select'] %}
+          <div class="text-center w-full max-w-[320px]">
             <div class="mb-2">
               <span class="product-name">
-                {% if item.product_title is defined %}
-                  {{ item.product_title|raw }}
+                {% if item['product-title'] is defined %}
+                  {{ item['product-title']|raw }}
                 {% else %}
                   Product Title Missing
                 {% endif %}
@@ -38,8 +38,8 @@
             </div>
             <div class="mb-2">
               <span class="compatibility-text">
-                {% if item.description is defined %}
-                  {{ item.description|raw }}
+                {% if item['description'] is defined %}
+                  {{ item['description']|raw }}
                 {% else %}
                   Description Missing
                 {% endif %}
@@ -47,7 +47,7 @@
             </div>
             <div class="mb-4 flex justify-center">
               <a 
-                href="{{ item.url }}"
+                href="https://salla.sa/alcanta.sa/eQQmyzO" 
                 class="view-collection-btn"
                 style="text-decoration: none; border: none; background: none; cursor: pointer; display: inline-flex; align-items: center;"
               >
@@ -55,16 +55,20 @@
                 عرض المجموعة
               </a>
             </div>
-            {% if item.image is defined and item.image %}
-              <img 
-                src="{{ item.image }}" 
-                alt="{{ item.product_title|default('Product') }}" 
-                class="product-image"
-              />
+            {% if item['image'] is defined and item['image'] %}
+              <a href="https://salla.sa/alcanta.sa/eQQmyzO">
+                <img 
+                  src="{{ item['image'] }}" 
+                  alt="{{ item['product-title']|default('Product') }}" 
+                  class="product-image"
+                />
+              </a>
             {% else %}
-              <div class="product-image" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;">
-                Image Missing
-              </div>
+              <a href="https://salla.sa/alcanta.sa/eQQmyzO">
+                <div class="product-image" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;">
+                  Image Missing
+                </div>
+              </a>
             {% endif %}
           </div>
         {% endfor %}
@@ -90,11 +94,13 @@ function showProductModal(productType) {
   const mainImage = document.getElementById('modal-main-image');
   const modelSelector = document.getElementById('modal-model-selector');
   
-  if (!modal) return;
+  if (!modal) {
+    return;
+  }
   
   if (productType === 'iphone') {
     title.textContent = 'غطاء ايفون 16 برو - اسود';
-    mainImage.src = '{{ 'images/product/iphone2.png' | asset }}';
+    mainImage.src = '{{ 'images/product/iphone2.png'|asset }}';
     modelSelector.innerHTML = `
       <option value="iPhone 16 Pro">ايفون 16 برو</option>
       <option value="iPhone 16 Pro Max">ايفون 16 برو ماكس</option>
@@ -102,7 +108,7 @@ function showProductModal(productType) {
     `;
   } else {
     title.textContent = 'غطاء سامسونج S24 - اسود';
-    mainImage.src = '{{ 'images/product/image 27.png' | asset }}';
+    mainImage.src = '{{ 'images/product/image 27.png'|asset }}';
     modelSelector.innerHTML = `
       <option value="Samsung S24">سامسونج S24</option>
       <option value="Samsung S24 Ultra">سامسونج S24 الترا</option>
@@ -123,7 +129,10 @@ function showProductModal(productType) {
 // Function to close product modal
 function closeProductModal() {
   const modal = document.getElementById('product-modal');
-  if (!modal) return;
+  
+  if (!modal) {
+    return;
+  }
   
   modal.classList.add('hidden');
   modal.style.display = 'none';
@@ -134,13 +143,12 @@ function closeProductModal() {
 
 // Function to change modal image
 function changeModalImage(src) {
-  const mainImage = document.getElementById('modal-main-image');
-  if (mainImage) mainImage.src = src;
+  document.getElementById('modal-main-image').src = src;
   
   // Update active thumbnail state
-  const allThumbnails = document.querySelectorAll('.thumbnail-hover');
+  const allThumbnails = document.querySelectorAll('[onclick*="changeModalImage"]');
   allThumbnails.forEach(thumb => {
-    if (thumb.src === src || thumb.getAttribute('src') === src) {
+    if (thumb.onclick.toString().includes(src)) {
       thumb.classList.add('border-gray-900', 'ring-2', 'ring-gray-200');
       thumb.classList.remove('border-gray-300');
     } else {
@@ -153,54 +161,47 @@ function changeModalImage(src) {
 // Function to initialize mobile slider
 function initMobileSlider() {
   const slider = document.getElementById('mobile-slider');
-  if (!slider) return;
-  
-  let isDown = false;
-  let startX;
-  let scrollLeft;
+  if (slider) {
+    // Add touch/swipe functionality for mobile
+    let isDown = false;
+    let startX;
+    let scrollLeft;
 
-  slider.addEventListener('mousedown', (e) => {
-    isDown = true;
-    slider.classList.add('active');
-    startX = e.pageX - slider.offsetLeft;
-    scrollLeft = slider.scrollLeft;
-  });
+    slider.addEventListener('mousedown', (e) => {
+      isDown = true;
+      slider.classList.add('active');
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
 
-  slider.addEventListener('mouseleave', () => {
-    isDown = false;
-    slider.classList.remove('active');
-  });
+    slider.addEventListener('mouseleave', () => {
+      isDown = false;
+      slider.classList.remove('active');
+    });
 
-  slider.addEventListener('mouseup', () => {
-    isDown = false;
-    slider.classList.remove('active');
-  });
+    slider.addEventListener('mouseup', () => {
+      isDown = false;
+      slider.classList.remove('active');
+    });
 
-  slider.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - slider.offsetLeft;
-    const walk = (x - startX) * 2;
-    slider.scrollLeft = scrollLeft - walk;
-  });
+    slider.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 2;
+      slider.scrollLeft = scrollLeft - walk;
+    });
+  }
 }
 
 // Function to select modal color
 function selectModalColor(color) {
   selectedModalColor = color;
   
-  const blackBtn = document.getElementById('modal-color-black');
-  const grayBtn = document.getElementById('modal-color-gray');
-  
-  if (blackBtn && grayBtn) {
-    blackBtn.className = color === 'black' 
-      ? 'w-10 h-10 rounded-full border-2 border-gray-900 ring-2 ring-gray-200' 
-      : 'w-10 h-10 rounded-full border-2 border-gray-300';
-    
-    grayBtn.className = color === 'gray' 
-      ? 'w-10 h-10 rounded-full border-2 border-gray-900 ring-2 ring-gray-200' 
-      : 'w-10 h-10 rounded-full border-2 border-gray-300';
-  }
+  document.getElementById('modal-color-black').className = 
+    color === 'black' ? 'w-10 h-10 rounded-full border-2 border-gray-900 ring-2 ring-gray-200' : 'w-10 h-10 rounded-full border-2 border-gray-300';
+  document.getElementById('modal-color-gray').className = 
+    color === 'gray' ? 'w-10 h-10 rounded-full border-2 border-gray-900 ring-2 ring-gray-200' : 'w-10 h-10 rounded-full border-2 border-gray-300';
 }
 
 // Function to add to cart
@@ -208,30 +209,35 @@ function addToCart() {
   const lockIcon = document.getElementById('modal-lock-icon');
   const model = document.getElementById('modal-model-selector').value;
   
-  if (lockIcon) {
-    lockIcon.style.transition = 'all 0.3s ease';
-    lockIcon.style.transform = 'scale(1.1) rotate(5deg)';
-    
-    setTimeout(() => {
-      lockIcon.style.transform = 'scale(1) rotate(0deg)';
-    }, 300);
-  }
-
+  // Add animation effect
+  lockIcon.style.transition = 'all 0.3s ease';
+  lockIcon.style.transform = 'scale(1.1) rotate(5deg)';
+  
+  setTimeout(() => {
+    lockIcon.style.transform = 'scale(1) rotate(0deg)';
+  }, 300);
+  
   // Here you would typically call Salla's add to cart function
   // salla.cart.addItem(productId, quantity, options);
 }
 
-// Initialize modal event listeners
+// Initialize modal event listeners when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+  // Close modal when clicking outside
   const modal = document.getElementById('product-modal');
   if (modal) {
     modal.addEventListener('click', function(e) {
-      if (e.target === this) closeProductModal();
+      if (e.target === this) {
+        closeProductModal();
+      }
     });
   }
   
+  // Close modal on escape key
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeProductModal();
+    if (e.key === 'Escape') {
+      closeProductModal();
+    }
   });
 });
 </script>
@@ -239,6 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <style>
 .alcantara-picker-section {
   font-family: 'DIN Next LT W23', Arial, sans-serif;
+  background-color: #ffffff;
 }
 
 .arabic-heading {
@@ -284,12 +291,12 @@ document.addEventListener('DOMContentLoaded', function() {
   cursor: pointer;
   padding: 0;
   margin: 0;
-  transition: opacity 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .view-collection-btn:hover {
-  opacity: 0.8;
-  text-decoration: underline;
+  color: #3a3a3a;
+  transform: translateY(-2px);
 }
 
 .arrow-icon {
@@ -313,21 +320,34 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .product-image {
-  width: 160px;
-  height: auto;
-  object-fit: contain;
-  margin-bottom: 0;
+  width: 160px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  position: static !important;
+  margin-bottom: 0 !important;
+  display: block !important;
+  justify-content: unset !important;
+  align-items: unset !important;
+  margin-left: unset !important;
+  margin-right: unset !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+  transition: transform 0.3s ease;
+}
+
+.product-image:hover {
+  transform: scale(1.05);
 }
 
 @media (min-width: 768px) {
   .product-image {
-    width: 256px;
+    width: 256px !important;
   }
 }
 
 @media (min-width: 1024px) {
   .product-image {
-    width: 320px;
+    width: 320px !important;
   }
 }
 
@@ -375,6 +395,31 @@ document.addEventListener('DOMContentLoaded', function() {
     max-height: 95vh;
   }
 }
+
+@media (max-width: 767px) {
+  .alcantara-picker-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  .arabic-heading {
+    font-size: 32px;
+    line-height: 36px;
+  }
+  
+  .flex-col {
+    flex-direction: column;
+  }
+  
+  .gap-8 > div {
+    margin-bottom: 2rem;
+  }
+  
+  .product-image {
+    width: 200px !important;
+    margin: 0 auto;
+  }
+}
 </style>
 
 <!-- Product Modal -->
@@ -385,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="flex justify-between items-center mb-6">
           <h2 id="modal-title" class="text-2xl font-bold">غلاف آيفون 15 برو – أسود</h2>
           <button 
-            onclick="closeProductModal()" 
+            onclick="event.preventDefault(); closeProductModal(); return false;" 
             class="text-gray-500 hover:text-gray-700 text-2xl cursor-pointer p-2 rounded hover:bg-gray-100 transition-colors"
             type="button"
             style="min-width: 40px; min-height: 40px; display: flex; align-items: center; justify-content: center;"
@@ -399,7 +444,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="space-y-4">
             <div class="flex justify-center">
               <img id="modal-main-image"
-                   src="{{ 'images/product/iphone2.png' | asset }}"
+                   src="{{ 'images/product/iphone2.png'|asset }}"
                    alt="Product"
                    class="object-contain"
                    style="height: 400px;" />
@@ -520,7 +565,7 @@ document.addEventListener('DOMContentLoaded', function() {
                  "
                  onclick="addToCart()">
               <span class="font-medium text-lg">أضف إلى السلة</span>
-              <img src="{{ 'images/icons/uim_lock.png' | asset }}"
+              <img src="{{ 'images/icons/uim_lock.png'|asset }}"
                    alt="Lock"
                    class="w-5 h-5"
                    id="modal-lock-icon" />
@@ -537,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     style="padding-right: 17px">
                 متوفر الدفع تابي
               </span>
-              <img src="{{ 'images/payment/tabby.png' | asset }}" 
+              <img src="{{ 'images/payment/tabby.png'|asset }}" 
                    alt="Tabby" 
                    style="
                      width: 86px;
@@ -550,22 +595,22 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="hidden lg:block mt-6">
               <h4 class="text-sm font-medium text-gray-700 mb-3">عرض المنتج:</h4>
               <div class="flex gap-2">
-                <img src="{{ 'images/product/iphone2.png' | asset }}" 
+                <img src="{{ 'images/product/iphone2.png'|asset }}" 
                      alt="View 1" 
-                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors thumbnail-hover"
-                     onclick="changeModalImage('{{ 'images/product/iphone2.png' | asset }}')" />
-                <img src="{{ 'images/product/iphone3.png' | asset }}" 
+                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors"
+                     onclick="changeModalImage('{{ 'images/product/iphone2.png'|asset }}')" />
+                <img src="{{ 'images/product/iphone3.png'|asset }}" 
                      alt="View 2" 
-                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors thumbnail-hover"
-                     onclick="changeModalImage('{{ 'images/product/iphone3.png' | asset }}')" />
-                <img src="{{ 'images/product/iphone4.png' | asset }}" 
+                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors"
+                     onclick="changeModalImage('{{ 'images/product/iphone3.png'|asset }}')" />
+                <img src="{{ 'images/product/iphone4.png'|asset }}" 
                      alt="View 3" 
-                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors thumbnail-hover"
-                     onclick="changeModalImage('{{ 'images/product/iphone4.png' | asset }}')" />
-                <img src="{{ 'images/product/iphone5.png' | asset }}" 
+                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors"
+                     onclick="changeModalImage('{{ 'images/product/iphone4.png'|asset }}')" />
+                <img src="{{ 'images/product/iphone5.png'|asset }}" 
                      alt="View 4" 
-                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors thumbnail-hover"
-                     onclick="changeModalImage('{{ 'images/product/iphone5.png' | asset }}')" />
+                     class="w-16 h-16 object-cover rounded cursor-pointer border-2 border-gray-300 hover:border-gray-400 transition-colors"
+                     onclick="changeModalImage('{{ 'images/product/iphone5.png'|asset }}')" />
               </div>
             </div>
           </div>
@@ -575,22 +620,22 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="lg:hidden mt-6">
           <div class="relative">
             <div id="mobile-slider" class="flex overflow-x-auto gap-4 pb-4 scrollbar-hide">
-              <img src="{{ 'images/product/iphone2.png' | asset }}" 
+              <img src="{{ 'images/product/iphone2.png'|asset }}" 
                    alt="View 1" 
-                   class="w-20 h-20 object-cover rounded flex-shrink-0 cursor-pointer border-2 border-gray-300 thumbnail-hover"
-                   onclick="changeModalImage('{{ 'images/product/iphone2.png' | asset }}')" />
-              <img src="{{ 'images/product/iphone3.png' | asset }}" 
+                   class="w-20 h-20 object-cover rounded flex-shrink-0 cursor-pointer border-2 border-gray-300"
+                   onclick="changeModalImage('{{ 'images/product/iphone2.png'|asset }}')" />
+              <img src="{{ 'images/product/iphone3.png'|asset }}" 
                    alt="View 2" 
-                   class="w-20 h-20 object-cover rounded flex-shrink-0 cursor-pointer border-2 border-gray-300 thumbnail-hover"
-                   onclick="changeModalImage('{{ 'images/product/iphone3.png' | asset }}')" />
-              <img src="{{ 'images/product/iphone4.png' | asset }}" 
+                   class="w-20 h-20 object-cover rounded flex-shrink-0 cursor-pointer border-2 border-gray-300"
+                   onclick="changeModalImage('{{ 'images/product/iphone3.png'|asset }}')" />
+              <img src="{{ 'images/product/iphone4.png'|asset }}" 
                    alt="View 3" 
-                   class="w-20 h-20 object-cover rounded flex-shrink-0 cursor-pointer border-2 border-gray-300 thumbnail-hover"
-                   onclick="changeModalImage('{{ 'images/product/iphone4.png' | asset }}')" />
-              <img src="{{ 'images/product/iphone5.png' | asset }}" 
+                   class="w-20 h-20 object-cover rounded flex-shrink-0 cursor-pointer border-2 border-gray-300"
+                   onclick="changeModalImage('{{ 'images/product/iphone4.png'|asset }}')" />
+              <img src="{{ 'images/product/iphone5.png'|asset }}" 
                    alt="View 4" 
-                   class="w-20 h-20 object-cover rounded flex-shrink-0 cursor-pointer border-2 border-gray-300 thumbnail-hover"
-                   onclick="changeModalImage('{{ 'images/product/iphone5.png' | asset }}')" />
+                   class="w-20 h-20 object-cover rounded flex-shrink-0 cursor-pointer border-2 border-gray-300"
+                   onclick="changeModalImage('{{ 'images/product/iphone5.png'|asset }}')" />
             </div>
           </div>
         </div>
