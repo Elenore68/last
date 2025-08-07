@@ -83,6 +83,53 @@
 #}
 {% extends "layouts.master" %}
 {% block content %}
+    {# Top Header with Background Image #}
+    <div 
+        class="w-full text-white py-4 px-6"
+        style="background-image: url('{{ 'images/headerBG.png'|asset }}'); background-size: cover; background-position: center; background-repeat: no-repeat; display: flex; width: 100%; height: 55px; padding: 0px 100px; justify-content: space-between; align-items: center;"
+    >
+        <div class="flex items-center gap-4">
+            <img 
+                src="{{ 'images/icons/bitcoin-icons_cart-outline.png'|asset }}" 
+                alt="Cart" 
+                class="w-6 h-6"
+            />
+        </div>
+        
+        <div class="flex items-center justify-center">
+            <img 
+                src="{{ 'images/logo.png'|asset }}" 
+                alt="Alcanta Logo" 
+                style="width: 132px; height: 26px; flex-shrink: 0; aspect-ratio: 66/13;"
+            />
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <img 
+                src="{{ 'images/icons/iconamoon_profile-thin.svg'|asset }}" 
+                alt="Profile" 
+                class="w-6 h-6"
+            />
+        </div>
+    </div>
+
+    {# Navigation Breadcrumb #}
+    <div class="w-full flex justify-between items-center px-[70px] py-6">
+        <div class="flex items-center gap-2">
+            <button onclick="history.back()" class="text-lg">{{ user.language.code == 'ar' ? '→' : '←' }}</button>
+            <button onclick="history.back()" class="text-gray-600">{{ user.language.code == 'ar' ? 'رجوع' : 'Back' }}</button>
+        </div>
+        <div class="text-gray-600">
+            {{ user.language.code == 'ar' ? 'المتجر // المجموعة // ' : 'Shop // Collection // ' }}
+            <span class="font-bold">{{ product.name }}</span>
+        </div>
+        <div class="text-gray-600">
+            {% if product.category %}
+                {{ user.language.code == 'ar' ? '← ' : '' }}{{ product.category.name }}{{ user.language.code == 'ar' ? '' : ' →' }}
+            {% endif %}
+        </div>
+    </div>
+
     <div class="container">
         {# add breadcumbs container in pages to make a space in case breadcrumbs is off #}
         <nav class="breadcrumbs w-full py-5">
@@ -196,7 +243,13 @@
                     </div>
                 {% endif %}
 
-                <h1 class="text-xl md:text-2xl leading-10 font-bold mb-6 text-gray-800">{{ product.name }}</h1>
+                {# Product Title with New Styling #}
+                <h1 
+                    class="text-xl md:text-2xl leading-10 font-bold mb-6 text-gray-800"
+                    style="color: #000; font-family: 'SF Pro Display', Arial, sans-serif; font-size: 40px; font-style: normal; font-weight: 400; line-height: 40px; margin-bottom: 10px;"
+                >
+                    {{ product.name }}
+                </h1>
 
                 {% if product.subtitle %}
                     <h2 class="product-entry__sub-title text-sm text-gray-500 leading-6 mb-2.5">
@@ -212,20 +265,8 @@
                 {% if product.is_taxable %}
                     <small class="color-grey">{{ trans('pages.products.tax_included') }}</small>
                 {% endif %}
-                {# Price #}
-                <div class="flex whitespace-nowrap gap-4 items-center">
-                  <div class="{{ product.is_on_sale ? '' : 'hidden' }} space-x-2 rtl:space-x-reverse whitespace-nowrap">
-                      <h4 class="text-red-800 font-bold text-xl inline-block">{{product.sale_price|money}}</h4>
-                      <span class="text-gray-500 line-through">{{product.regular_price|money}}</span>
-                  </div>
-                  <div class="gap-4 {{ product.is_on_sale ? 'hidden' : 'flex' }}">
-                      {% if product.starting_price %} 
-                          <span class="">{{ trans('pages.products.starting_price') }}</span>
-                      {% endif %} 
-                          <h2 class=" font-bold text-xl inline-block"> {{product.starting_price ? product.starting_price|money : product.price|money }}</h2>
-                  </div>
-                </div>
 
+                {# Description with New Styling #}
                 <div class="product__description p-2 px-5 sm:p-1 leading-7 mb-3">
                     {% set product_desc = product.description|replace({"&nbsp;":"\n"}) %}
                     {% if product.has_read_more %}
@@ -244,6 +285,33 @@
                         </article>
                     {% endif %}
                 </div>
+
+                {# Price with New Styling #}
+                <div class="text-3xl font-bold text-gray-900 mb-6">
+                    {% if product.is_on_sale %}
+                        <span class="text-red-800">{{ product.sale_price|money }}</span>
+                        <span class="text-gray-500 line-through ml-2">{{ product.regular_price|money }}</span>
+                    {% else %}
+                        {{ product.starting_price ? product.starting_price|money : product.price|money }}
+                    {% endif %}
+                </div>
+
+                {# Color Selection (if applicable) #}
+                {% if product.has_options %}
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Color</label>
+                        <div class="flex gap-4">
+                            <button
+                                class="w-10 h-10 rounded-full border-2 border-gray-900 ring-2 ring-gray-200"
+                                style="background-color: #1a1a1a;"
+                            ></button>
+                            <button
+                                class="w-10 h-10 rounded-full border-2 border-gray-300"
+                                style="background-color: #6b7280;"
+                            ></button>
+                        </div>
+                    </div>
+                {% endif %}
 
                 {% if product.tags|length and theme.settings.get('show_tags', true) %}
                     <div class="mb-3">
@@ -323,6 +391,38 @@
                         </div>
                     </section>
                 {% endif %}
+
+                {# Add to Cart Button with New Styling #}
+                <div 
+                    class="flex items-center cursor-pointer mb-4"
+                    style="border-radius: 8px; border: 1px solid #3C3C3C; background: #3C3C3C; display: flex; height: 45px; width: 400px; padding: 0px 10px 0px 20px; justify-content: space-between; align-items: center; flex: 1 0 0; color: white; margin-top: 10px; margin-bottom: 10px;"
+                >
+                    <span class="font-medium text-lg">{{ user.language.code == 'ar' ? 'أضف إلى السلة' : 'Add to Cart' }}</span>
+                    <img
+                        src="{{ 'images/icons/uim_lock (1).png'|asset }}"
+                        alt="Lock"
+                        class="w-5 h-5"
+                        style="transition: all 0.3s ease;"
+                    />
+                </div>
+
+                {# Payment Options #}
+                <div 
+                    class="flex items-center gap-3 text-sm text-gray-500"
+                    style="width: 395px; justify-content: space-between; margin-top: 15px;"
+                >
+                    <span 
+                        class="text-gray-600"
+                        style="font-family: 'SF Pro Display', Arial, sans-serif; padding-left: 17px;"
+                    >
+                        {{ user.language.code == 'ar' ? 'متوفر دفع تيبي' : 'Tabby payments available' }}
+                    </span>
+                    <img 
+                        src="{{ 'images/payment/tabby.png'|asset }}" 
+                        alt="Tabby" 
+                        style="width: 86px; height: 34px; aspect-ratio: 43/17;"
+                    />
+                </div>
 
                 <form class="form product-form" enctype="multipart/form-data" method="post"
                       onsubmit="return salla.form.onSubmit('cart.addItem', event)" >
