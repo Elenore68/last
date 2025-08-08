@@ -101,125 +101,71 @@
 
 <script>
 function switchLanguage() {
-    console.log('Header: Language switch initiated');
-    
-    // Get current language from stored preference or fallback
-    let currentLanguage = '{{ user.language.code }}';
-    const storedLanguage = localStorage.getItem('currentLanguage');
-    const urlLanguage = new URLSearchParams(window.location.search).get('lang');
-    
-    // Determine current language
-    currentLanguage = urlLanguage || storedLanguage || currentLanguage || 'en';
-    
-    const newLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
-    
-    console.log('Header: Switching from', currentLanguage, 'to', newLanguage);
-    
-    // Store the new language preference
-    localStorage.setItem('currentLanguage', newLanguage);
-    
-    // Update HTML attributes
-    document.documentElement.lang = newLanguage;
-    document.documentElement.dir = newLanguage === 'ar' ? 'rtl' : 'ltr';
-    
-    // Update language toggle text immediately
-    const languageToggleText = document.getElementById('language-toggle-text');
-    if (languageToggleText) {
-        languageToggleText.textContent = newLanguage === 'ar' ? 'En' : 'Ar';
-    }
-    
-    // Dispatch custom language change event for footer and banner
-    const languageChangeEvent = new CustomEvent('languageChanged', {
-        detail: {
-            from: currentLanguage,
-            to: newLanguage,
-            language: newLanguage
-        }
-    });
-    document.dispatchEvent(languageChangeEvent);
-    console.log('Header: Dispatched languageChanged event:', languageChangeEvent.detail);
-    
-    // Dispatch Salla custom event
-    const sallaLanguageEvent = new CustomEvent('salla:language:changed', {
-        detail: {
-            language: newLanguage,
-            code: newLanguage
-        }
-    });
-    document.dispatchEvent(sallaLanguageEvent);
-    console.log('Header: Dispatched salla:language:changed event:', sallaLanguageEvent.detail);
-    
-    // Use Salla's official language change method for ready-made components
-    if (window.salla && window.salla.language) {
-        console.log('Header: Calling Salla official language change');
-        window.salla.language.change(newLanguage);
-        
-        // Also update Salla's current language property
-        window.salla.language.current = newLanguage;
-        
-        // Dispatch Salla's internal language change event
-        if (window.salla.event) {
-            window.salla.event.dispatch('language::changed', { 
-                language: newLanguage,
-                code: newLanguage 
-            });
-        }
-        
-        console.log('Header: Salla language changed to:', newLanguage);
-    } else {
-        // Fallback to URL parameter method
-        const currentUrl = window.location.href;
-        const baseUrl = currentUrl.split('?')[0];
-        const newUrl = baseUrl + '?lang=' + newLanguage;
-        console.log('Header: Redirecting to:', newUrl);
-        window.location.href = newUrl;
-    }
-}
+  try {
+    const doc = document.documentElement;
+    const current = (doc.lang || localStorage.getItem('currentLanguage') || '{{ user.language.code }}' || 'ar').toLowerCase();
+    const newLang = current === 'ar' ? 'en' : 'ar';
 
-// Function to synchronize Salla components
-function synchronizeSallaComponents(lang) {
-    console.log('Header: Synchronizing Salla components to language:', lang);
-    
-    // Update Salla's language if available
-    if (window.salla && window.salla.language) {
-        window.salla.language.current = lang;
-        console.log('Header: Updated Salla language to:', lang);
+    // Persist + apply immediately
+    localStorage.setItem('currentLanguage', newLang);
+    doc.lang = newLang;
+    doc.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+
+    const toggle = document.getElementById('language-toggle-text');
+    if (toggle) toggle.textContent = newLang === 'ar' ? 'En' : 'Ar';
+
+    // Dispatch both variants of language change events
+    if (window.salla && window.salla.event && typeof window.salla.event.dispatch === 'function') {
+      try { window.salla.event.dispatch('language::changed', newLang); } catch (_) {}
     }
-    
-    // Update any Salla components that might be listening
+    try {
+      const ev = new CustomEvent('languageChanged', { detail: { from: current, to: newLang, language: newLang } });
+      document.dispatchEvent(ev);
+    } catch (_) {}
+
+    // Call Salla official language change if available
+    if (window.salla && window.salla.language && typeof window.salla.language.change === 'function') {
+      try { window.salla.language.change(newLang); } catch (_) {}
+      try { window.salla.language.current = newLang; } catch (_) {}
+    }
+
+    // Refresh custom menu if it exposes refresh()
+    const menuEl = document.querySelector('custom-main-menu');
+    if (menuEl && typeof menuEl.refresh === 'function') {
+      try { menuEl.refresh(); } catch (_) {}
+    }
+
+    // Fallback: if nothing updated after a tick, reload with ?lang=
     setTimeout(() => {
-        const sallaComponents = document.querySelectorAll('salla-*');
-        sallaComponents.forEach(component => {
-            if (component.setLanguage) {
-                component.setLanguage(lang);
-            }
-            if (component.language) {
-                component.language = lang;
-            }
-        });
-        console.log('Header: Updated', sallaComponents.length, 'Salla components');
-    }, 100);
+      if (window.salla && window.salla.language && window.salla.language.current === newLang) return;
+      const url = new URL(window.location.href);
+      url.searchParams.set('lang', newLang);
+      window.location.href = url.toString();
+    }, 200);
+  } catch (e) {
+    // Hard fallback
+    const newLang = (('{{ user.language.code }}' || 'ar').toLowerCase() === 'ar') ? 'en' : 'ar';
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', newLang);
+    window.location.href = url.toString();
+  }
 }
 
-// Update language toggle text when language changes
-document.addEventListener('languageChanged', function(event) {
-    const languageToggleText = document.getElementById('language-toggle-text');
-    if (languageToggleText) {
-        const newLang = event.detail.to || event.detail.language;
-        languageToggleText.textContent = newLang === 'ar' ? 'En' : 'Ar';
-    }
-});
-
-// Initialize language toggle text on page load
+// Keep toggle text in sync on init
 document.addEventListener('DOMContentLoaded', function() {
-    const storedLanguage = localStorage.getItem('currentLanguage');
-    const urlLanguage = new URLSearchParams(window.location.search).get('lang');
-    const currentLanguage = urlLanguage || storedLanguage || '{{ user.language.code }}' || 'en';
-    
-    const languageToggleText = document.getElementById('language-toggle-text');
-    if (languageToggleText) {
-        languageToggleText.textContent = currentLanguage === 'ar' ? 'En' : 'Ar';
-    }
+  const doc = document.documentElement;
+  const current = (new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('currentLanguage') || doc.lang || '{{ user.language.code }}' || 'ar').toLowerCase();
+  const toggle = document.getElementById('language-toggle-text');
+  if (toggle) toggle.textContent = current === 'ar' ? 'En' : 'Ar';
 });
 
+// Optional: when Salla notifies, ensure menu/content refresh
+document.addEventListener('languageChanged', function(evt) {
+  const toggle = document.getElementById('language-toggle-text');
+  if (toggle) toggle.textContent = (evt.detail.to || evt.detail.language) === 'ar' ? 'En' : 'Ar';
+  const menuEl = document.querySelector('custom-main-menu');
+  if (menuEl && typeof menuEl.refresh === 'function') {
+    try { menuEl.refresh(); } catch (_) {}
+  }
+});
 </script>

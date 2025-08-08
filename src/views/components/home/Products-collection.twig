@@ -1,23 +1,15 @@
-{#
-| Variable                        | Type     | Description                                                                  |
-|---------------------------------|----------|------------------------------------------------------------------------------|
-| component                       | object   | Contains merchant settings for fields from twilight.json component section |
-| component.main_title            | object[] | Main title collection                                                        |
-| component.product_collection_select | object[] | Product collection items                                                    |
-| component.product_collection_select[].product_title | string | Product title                                                           |
-| component.product_collection_select[].description | string | Product description                                                    |
-| component.product_collection_select[].url | string | Product URL                                                           |
-| component.product_collection_select[].image | string | Product image URL                                                      |
-| position                        | int      | Sorting number start from zero                                               |
-#}
-
-<section class="alcantara-picker-section py-16 bg-white">
+{% set current_language = user.language.code|default('ar') %}
+<section class="alcantara-picker-section py-16 bg-white" dir="{{ current_language == 'ar' ? 'rtl' : 'ltr' }}">
   <div class="max-w-[1200px] mx-auto px-4 md:px-8 lg:px-12 xl:px-0">
     <!-- Main Heading -->
     <h2 class="text-center mb-12">
       <div class="text-center">
         <span class="arabic-heading">
-          اختار الجوال اللي<br />تستخدمه
+          {% if current_language == 'en' %}
+            Choose the phone<br />you use
+          {% else %}
+            اختار الجوال اللي<br />تستخدمه
+          {% endif %}
         </span>
       </div>
     </h2>
@@ -29,19 +21,23 @@
           <div class="text-center w-full max-w-[320px]">
             <div class="mb-2">
               <span class="product-name">
-                {% if item['product-title'] is defined %}
+                {% if current_language == 'en' and item['product-title_en'] is defined and item['product-title_en'] %}
+                  {{ item['product-title_en']|raw }}
+                {% elseif item['product-title'] is defined %}
                   {{ item['product-title']|raw }}
                 {% else %}
-                  Product Title Missing
+                  {{ current_language == 'en' ? 'Product Title Missing' : 'عنوان المنتج مفقود' }}
                 {% endif %}
               </span>
             </div>
             <div class="mb-2">
               <span class="compatibility-text">
-                {% if item['description'] is defined %}
+                {% if current_language == 'en' and item['description_en'] is defined and item['description_en'] %}
+                  {{ item['description_en']|raw }}
+                {% elseif item['description'] is defined %}
                   {{ item['description']|raw }}
                 {% else %}
-                  Description Missing
+                  {{ current_language == 'en' ? 'Description Missing' : 'الوصف مفقود' }}
                 {% endif %}
               </span>
             </div>
@@ -52,21 +48,29 @@
                 style="text-decoration: none; border: none; background: none; cursor: pointer; display: inline-flex; align-items: center;"
               >
                 <span class="arrow-icon"></span>
-                عرض المجموعة
+                {% if current_language == 'en' %}
+                  View Collection
+                {% else %}
+                  عرض المجموعة
+                {% endif %}
               </a>
             </div>
             {% if item['image'] is defined and item['image'] %}
               <a href="https://salla.sa/alcanta.sa/eQQmyzO">
                 <img 
                   src="{{ item['image'] }}" 
-                  alt="{{ item['product-title']|default('Product') }}" 
+                  alt="{{ item['product-title']|default(current_language == 'en' ? 'Product' : 'منتج') }}" 
                   class="product-image"
                 />
               </a>
             {% else %}
               <a href="https://salla.sa/alcanta.sa/eQQmyzO">
                 <div class="product-image" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;">
-                  Image Missing
+                  {% if current_language == 'en' %}
+                    Image Missing
+                  {% else %}
+                    صورة غير متوفرة
+                  {% endif %}
                 </div>
               </a>
             {% endif %}
@@ -74,20 +78,25 @@
         {% endfor %}
       {% else %}
         <div class="text-center">
-          <p>No product collection data found</p>
+          <p>
+            {% if current_language == 'en' %}
+              No product collection data found
+            {% else %}
+              لا توجد بيانات للمجموعة
+            {% endif %}
+          </p>
         </div>
       {% endif %}
     </div>
   </div>
 </section>
 
-
-
 <style>
 .alcantara-picker-section {
   font-family: 'DIN Next LT W23', Arial, sans-serif;
   background-color: #ffffff;
-} .arabic-heading {
+} 
+.arabic-heading {
   font-family: 'DIN Next LT W23', Arial, sans-serif;
   font-weight: 700;
   font-style: normal;
@@ -190,8 +199,6 @@
   }
 }
 
-
-
 @media (max-width: 767px) {
   .alcantara-picker-section {
     padding-top: 2rem;
@@ -215,5 +222,11 @@
     width: 200px !important;
     margin: 0 auto;
   }
+}
+
+/* Flip arrow direction in RTL */
+.alcantara-picker-section[dir='rtl'] .arrow-icon::before {
+  border-right: none;
+  border-left: 8.5px solid black;
 }
 </style>
