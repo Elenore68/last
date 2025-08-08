@@ -628,12 +628,12 @@ select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/
 .max-w-4xl{max-width:56rem}
 .max-w-7xl{max-width:80rem}
 .max-w-\[1200px\]{max-width:1200px}
+.max-w-\[320px\]{max-width:320px}
 .max-w-\[450px\]{max-width:450px}
 .max-w-\[500px\]{max-width:500px}
 .max-w-full{max-width:100%}
 .max-w-lg{max-width:32rem}
 .max-w-xs{max-width:20rem}
-.max-w-\[320px\]{max-width:320px}
 .flex-1{flex:1 1 0%}
 .flex-none{flex:none}
 .flex-shrink{flex-shrink:1}
@@ -7160,9 +7160,9 @@ lite-youtube.lyt-activated > .lty-playbtn {
 .lg\:bg-white{--tw-bg-opacity:1;background-color:rgba(255, 255, 255, 1);background-color:rgba(255, 255, 255, var(--tw-bg-opacity, 1))}
 .lg\:p-8{padding:2rem}
 .lg\:px-0{padding-left:0px;padding-right:0px}
+.lg\:px-12{padding-left:3rem;padding-right:3rem}
 .lg\:px-16{padding-left:4rem;padding-right:4rem}
 .lg\:px-\[400px\]{padding-left:400px;padding-right:400px}
-.lg\:px-12{padding-left:3rem;padding-right:3rem}
 .lg\:pb-11{padding-bottom:2.75rem}
 .lg\:pb-2{padding-bottom:0.5rem}
 .lg\:pb-20{padding-bottom:5rem}
