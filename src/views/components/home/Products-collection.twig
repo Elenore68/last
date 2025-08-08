@@ -5,83 +5,78 @@
 | component.main_title            | object[] | Main title collection                                                        |
 | component.product_collection_select | object[] | Product collection items                                                    |
 | component.product_collection_select[].product_title | string | Product title                                                           |
-| component.product_collection_select[].description | string | Product description                                                    |
+| component.product_collection_select[].description | string | Product description 
+c                                                   |
 | component.product_collection_select[].url | string | Product URL                                                           |
 | component.product_collection_select[].image | string | Product image URL                                                      |
 | position                        | int      | Sorting number start from zero                                               |
 #}
 
 <section class="alcantara-picker-section py-16 bg-white">
-  <div class="max-w-[1200px] mx-auto px-4 md:px-8 lg:px-12 xl:px-0">
+  <div class="max-w-[1200px] mx-auto px-4 md:px-[200px] lg:px-[400px]">
     <!-- Main Heading -->
     <h2 class="text-center mb-12">
       <div class="text-center">
         <span class="arabic-heading">
-          اختار الجوال اللي<br />تستخدمه
+          {{ t('choose_your_phone') }}
         </span>
       </div>
     </h2>
 
     <!-- Product Picker Grid -->
-    <div class="flex flex-col md:flex-row gap-8 justify-center items-center">
-      {% if component['product-collection-select'] is defined %}
-        {% for item in component['product-collection-select'] %}
-          <div class="text-center w-full max-w-[320px]">
+    <div class="flex flex-row gap-4 justify-center">
+      {% if component.product_collection_select is defined %}
+        {% for item in component.product_collection_select %}
+          <div class="text-center">
             <div class="mb-2">
               <span class="product-name">
-                {% if item['product-title'] is defined %}
-                  {{ item['product-title']|raw }}
+                {% if item.product_title is defined %}
+                  {{ item.product_title|raw }}
                 {% else %}
-                  Product Title Missing
+                  {{ t('product_title_missing') }}
                 {% endif %}
               </span>
             </div>
             <div class="mb-2">
               <span class="compatibility-text">
-                {% if item['description'] is defined %}
-                  {{ item['description']|raw }}
+                {% if item.description is defined %}
+                  {{ item.description|raw }}
                 {% else %}
-                  Description Missing
+                  {{ t('description_missing') }}
                 {% endif %}
               </span>
             </div>
             <div class="mb-4 flex justify-center">
               <a 
-                href="https://salla.sa/alcanta.sa/eQQmyzO" 
+                href="{{ item.url }}"
                 class="view-collection-btn"
                 style="text-decoration: none; border: none; background: none; cursor: pointer; display: inline-flex; align-items: center;"
               >
                 <span class="arrow-icon"></span>
-                عرض المجموعة
+                {{ t('view_collection') }}
               </a>
             </div>
-            {% if item['image'] is defined and item['image'] %}
-              <a href="https://salla.sa/alcanta.sa/eQQmyzO">
-                <img 
-                  src="{{ item['image'] }}" 
-                  alt="{{ item['product-title']|default('Product') }}" 
-                  class="product-image"
-                />
-              </a>
+            {% if item.image is defined and item.image %}
+              <img 
+                src="{{ item.image }}" 
+                alt="{{ item.product_title|default(t('product')) }}" 
+                class="product-image"
+              />
             {% else %}
-              <a href="https://salla.sa/alcanta.sa/eQQmyzO">
-                <div class="product-image" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;">
-                  Image Missing
-                </div>
-              </a>
+              <div class="product-image" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;">
+                {{ t('image_missing') }}
+              </div>
             {% endif %}
           </div>
         {% endfor %}
       {% else %}
         <div class="text-center">
-          <p>No product collection data found</p>
+          <p>{{ t('no_product_collection_data') }}</p>
         </div>
       {% endif %}
     </div>
   </div>
 </section>
-
-
 
 <style>
 .alcantara-picker-section {
@@ -191,8 +186,6 @@
     width: 320px !important;
   }
 }
-
-
 
 @media (max-width: 767px) {
   .alcantara-picker-section {

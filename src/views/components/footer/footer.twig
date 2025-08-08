@@ -142,7 +142,14 @@
   
   // Function to update footer text based on language
   window.updateFooterTexts = function(lang = null) {
-    
+    // Debug all language sources
+    console.log('Footer: Debug - Language sources:');
+    console.log('  - lang parameter:', lang);
+    console.log('  - URL lang parameter:', new URLSearchParams(window.location.search).get('lang'));
+    console.log('  - DOM language:', document.documentElement.lang || document.querySelector('html').getAttribute('lang'));
+    console.log('  - localStorage currentLanguage:', localStorage.getItem('currentLanguage'));
+    console.log('  - localStorage language:', localStorage.getItem('language'));
+    console.log('  - user.language.code:', '{{ user.language.code }}');
     
     // Detect current language - prioritize URL parameter and user language over localStorage
     const urlLang = new URLSearchParams(window.location.search).get('lang');
@@ -150,7 +157,11 @@
     const domLang = document.documentElement.lang || document.querySelector('html').getAttribute('lang');
     const userLang = '{{ user.language.code }}';
     
-   
+    console.log('Footer: Language detection details:');
+    console.log('  - urlLang:', urlLang);
+    console.log('  - storedLang:', storedLang);
+    console.log('  - domLang:', domLang);
+    console.log('  - userLang:', userLang);
     
     // Priority order: explicit lang parameter > URL parameter > user language > DOM language > stored language > fallback
     const currentLang = lang || 
@@ -159,7 +170,13 @@
                        domLang ||
                        storedLang ||
                        'en';
-
+    
+    console.log('Footer: Final language detected:', currentLang);
+    console.log('Footer: Language detection priority used:', lang ? 'explicit parameter' : 
+                                                           urlLang ? 'URL parameter' :
+                                                           userLang ? 'user language' :
+                                                           domLang ? 'DOM language' :
+                                                           storedLang ? 'stored language' : 'fallback');
     
     // Update localStorage to match the detected language
     if (currentLang && currentLang !== storedLang) {
@@ -180,7 +197,11 @@
         } else {
           footerTitle.style.fontFamily = "'SF Pro Display', system-ui, sans-serif";
         }
-       
+        console.log('Footer: Title updated to:', text);
+      }
+    } else {
+      console.log('Footer: ERROR - footer-title-text element not found');
+    }
     
     // Update copyright text
     const copyrightText = document.querySelector('.footer-copyright-text');
@@ -244,9 +265,17 @@
       footerSection.style.backgroundPosition = 'center';
       footerSection.style.backgroundRepeat = 'no-repeat';
       
+      console.log('Footer: Background image updated to:', currentLang, backgroundImage);
       
-      
-    
+      // Add debugging for background image
+      console.log('Footer: Background image URL:', backgroundImage);
+      console.log('Footer: Footer section found:', !!footerSection);
+      console.log('Footer: Current language:', currentLang);
+      console.log('Footer: Available images:', FOOTER_IMAGES);
+      console.log('Footer: Applied background styles:', footerSection.style.backgroundImage);
+    } else {
+      console.log('Footer: ERROR - footer section element not found or no image for language:', currentLang);
+    }
     
     // Update content alignment based on language
     const footerContent = document.querySelector('.footer-content');
@@ -266,7 +295,8 @@
   // Listen for language change events from header
   document.addEventListener('languageChanged', function(event) {
     const newLang = event.detail.to || event.detail.language;
-  
+    console.log('Footer: Language change event received:', newLang);
+    console.log('Footer: Event details:', event.detail);
     updateFooterTexts(newLang);
   });
   
@@ -274,6 +304,7 @@
   let currentUrl = window.location.href;
   setInterval(() => {
     if (window.location.href !== currentUrl) {
+      console.log('Footer: URL changed, updating language');
       currentUrl = window.location.href;
       updateFooterTexts();
     }
@@ -283,6 +314,7 @@
   if (window.salla && window.salla.event) {
     window.salla.event.on('language::changed', function(data) {
       const lang = data.language || data.code || data;
+      console.log('Footer: Salla language change event received:', lang);
       updateFooterTexts(lang);
     });
   }
@@ -290,13 +322,13 @@
   // Listen for custom language change events
   document.addEventListener('salla:language:changed', function(event) {
     const lang = event.detail.language || event.detail.code;
-
+    console.log('Footer: Salla custom language change event received:', lang);
     updateFooterTexts(lang);
   });
   
   // Initialize footer on DOM load
   document.addEventListener('DOMContentLoaded', function() {
-   
+    console.log('Footer: DOMContentLoaded event fired');
     updateFooterTexts();
   });
   

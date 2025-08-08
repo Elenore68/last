@@ -6,14 +6,15 @@
 | cart.total       | string  | Formatted total ex: "١٠٠ ر.س"   |
 #}
 {% set important_links = theme.settings.get('important_links') %}
-<header class="store-header" style="height: auto; min-height: auto;">
-  {# Top Nav - Only 4 Elements #}
-  <div class="top-navbar text-white" style="background-color: #000000; height: auto; padding: 8px 0;">
-    <div class="container flex justify-between items-center" style="height: auto;">
-      
+<header class="store-header">
+  {# Top Nav #}
+  <div class="top-navbar text-white" style="background-color: #000000;">
+    <div class="container flex justify-between items-center py-2">
+     
+
       {# Left side - Cart and Profile #}
       <div class="flex items-center gap-3">
-          {# 1. Cart Icon #}
+          {# Cart icon #}
           <a href="{{ store.url }}/cart" 
              class="cart-icon text-white hover:opacity-80 transition-opacity" 
              style="
@@ -37,7 +38,7 @@
                  " />
           </a>
           
-          {# 2. Profile Icon #}
+          {# Profile icon #}
           {% if user.type=='user' %}
             <salla-user-menu avatar-only show-header class="text-white"></salla-user-menu>
           {% else %}
@@ -64,8 +65,7 @@
               </button>
           {% endif %}
       </div>
-      
-      {# 3. Logo #}
+      {# Center - Logo #}
       <div class="flex-1 flex justify-center">
           <a class="navbar-brand" href="{{ store.url }}">
               <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ 'images/logo.png'|asset }}" alt="{{ store.name }} logo" class="max-h-8">
@@ -76,23 +76,41 @@
               {% endif %}
           </a>
       </div>
-      
-      {# 4. Language Icon #}
-      {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
-        <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchLanguage()">
-            <span class="text-white font-comfortaa text-[12px] font-normal leading-[25px]" id="language-toggle-text">
-              {{ user.language.code == 'ar' ? 'En' : 'Ar' }}
-            </span>
-            <img 
-              src="{{ 'images/icons/material-symbols-light_language.png'|asset }}" 
-              alt="Language" 
-              class="w-5 h-5"
-              data-translate-alt="header.language"
-            />
-        </div>
-      {% endif %}
-      
+       {# Right side - Language #}
+      <div class="flex items-center">
+              {% if store.settings.is_multilingual or store.settings.currencies_enabled %}
+              <div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchLanguage()">
+                  <span class="text-white font-comfortaa text-[12px] font-normal leading-[25px]" id="language-toggle-text">
+                    {{ user.language.code == 'ar' ? 'En' : 'Ar' }}
+                  </span>
+                  <img 
+                    src="{{ 'images/icons/material-symbols-light_language.png'|asset }}" 
+                    alt="Language" 
+                    class="w-5 h-5"
+                    data-translate-alt="header.language"
+                  />
+              </div>
+          {% endif %}
+      </div>
     </div>
+  </div>
+
+  {# Main Nav #}
+  <div id="mainnav" class="main-nav-container shadow-default bg-black">
+      <div class="inner bg-inherit">
+          <div class="container">
+              <div class="flex items-stretch justify-center relative">
+                  <div class="flex items-center">
+                      <a class="lg:hidden mburger mburger--collapse leading-none rtl:ml-4 ltr:mr-4" href="#mobile-menu" aria-label="Open-menu">
+                        <i class="sicon-menu text-primary text-2xl"></i>
+                      </a>
+                     
+                      <custom-main-menu></custom-main-menu>
+                  </div>
+                  
+              </div>
+          </div>
+      </div>
   </div>
 </header>
 {% if store.scope %}
@@ -100,126 +118,32 @@
 {% endif %}
 
 <script>
+// دالة محسنة لتبديل اللغة
 function switchLanguage() {
-    console.log('Header: Language switch initiated');
+  const newLang = salla.config.get('user.language.code') === 'ar' ? 'en' : 'ar';
+  
+  // تحديث اللغة دون إعادة تحميل الصفحة
+  salla.lang.change(newLang).then(() => {
+    // إعادة تحميل المكونات الديناميكية
+    salla.event.dispatch('language::changed', newLang);
     
-    // Get current language from stored preference or fallback
-    let currentLanguage = '{{ user.language.code }}';
-    const storedLanguage = localStorage.getItem('currentLanguage');
-    const urlLanguage = new URLSearchParams(window.location.search).get('lang');
-    
-    // Determine current language
-    currentLanguage = urlLanguage || storedLanguage || currentLanguage || 'en';
-    
-    const newLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
-    
-    console.log('Header: Switching from', currentLanguage, 'to', newLanguage);
-    
-    // Store the new language preference
-    localStorage.setItem('currentLanguage', newLanguage);
-    
-    // Update HTML attributes
-    document.documentElement.lang = newLanguage;
-    document.documentElement.dir = newLanguage === 'ar' ? 'rtl' : 'ltr';
-    
-    // Update language toggle text immediately
+    // تحديث نص تبديل اللغة
     const languageToggleText = document.getElementById('language-toggle-text');
     if (languageToggleText) {
-        languageToggleText.textContent = newLanguage === 'ar' ? 'En' : 'Ar';
+      languageToggleText.textContent = newLang === 'ar' ? 'En' : 'Ar';
     }
-    
-    // Dispatch custom language change event for footer and banner
-    const languageChangeEvent = new CustomEvent('languageChanged', {
-        detail: {
-            from: currentLanguage,
-            to: newLanguage,
-            language: newLanguage
-        }
-    });
-    document.dispatchEvent(languageChangeEvent);
-    console.log('Header: Dispatched languageChanged event:', languageChangeEvent.detail);
-    
-    // Dispatch Salla custom event
-    const sallaLanguageEvent = new CustomEvent('salla:language:changed', {
-        detail: {
-            language: newLanguage,
-            code: newLanguage
-        }
-    });
-    document.dispatchEvent(sallaLanguageEvent);
-    console.log('Header: Dispatched salla:language:changed event:', sallaLanguageEvent.detail);
-    
-    // Use Salla's official language change method for ready-made components
-    if (window.salla && window.salla.language) {
-        console.log('Header: Calling Salla official language change');
-        window.salla.language.change(newLanguage);
-        
-        // Also update Salla's current language property
-        window.salla.language.current = newLanguage;
-        
-        // Dispatch Salla's internal language change event
-        if (window.salla.event) {
-            window.salla.event.dispatch('language::changed', { 
-                language: newLanguage,
-                code: newLanguage 
-            });
-        }
-        
-        console.log('Header: Salla language changed to:', newLanguage);
-    } else {
-        // Fallback to URL parameter method
-        const currentUrl = window.location.href;
-        const baseUrl = currentUrl.split('?')[0];
-        const newUrl = baseUrl + '?lang=' + newLanguage;
-        console.log('Header: Redirecting to:', newUrl);
-        window.location.href = newUrl;
-    }
+  });
 }
 
-// Function to synchronize Salla components
-function synchronizeSallaComponents(lang) {
-    console.log('Header: Synchronizing Salla components to language:', lang);
-    
-    // Update Salla's language if available
-    if (window.salla && window.salla.language) {
-        window.salla.language.current = lang;
-        console.log('Header: Updated Salla language to:', lang);
-    }
-    
-    // Update any Salla components that might be listening
-    setTimeout(() => {
-        const sallaComponents = document.querySelectorAll('salla-*');
-        sallaComponents.forEach(component => {
-            if (component.setLanguage) {
-                component.setLanguage(lang);
-            }
-            if (component.language) {
-                component.language = lang;
-            }
-        });
-        console.log('Header: Updated', sallaComponents.length, 'Salla components');
-    }, 100);
-}
-
-// Update language toggle text when language changes
-document.addEventListener('languageChanged', function(event) {
-    const languageToggleText = document.getElementById('language-toggle-text');
-    if (languageToggleText) {
-        const newLang = event.detail.to || event.detail.language;
-        languageToggleText.textContent = newLang === 'ar' ? 'En' : 'Ar';
-    }
+// تحديث النصوص عند تغيير اللغة
+document.addEventListener('language::changed', function(event) {
+  // إعادة تحميل مكون القائمة
+  const menuElement = document.querySelector('custom-main-menu');
+  if (menuElement) {
+    menuElement.refresh();
+  }
+  
+  // تحديث محتوى الصفحة
+  salla.helpers.updateContent();
 });
-
-// Initialize language toggle text on page load
-document.addEventListener('DOMContentLoaded', function() {
-    const storedLanguage = localStorage.getItem('currentLanguage');
-    const urlLanguage = new URLSearchParams(window.location.search).get('lang');
-    const currentLanguage = urlLanguage || storedLanguage || '{{ user.language.code }}' || 'en';
-    
-    const languageToggleText = document.getElementById('language-toggle-text');
-    if (languageToggleText) {
-        languageToggleText.textContent = currentLanguage === 'ar' ? 'En' : 'Ar';
-    }
-});
-
 </script>
