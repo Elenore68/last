@@ -137,6 +137,8 @@
   };
   
   // Test if the English background image exists
+  console.log('Footer: English background path:', FOOTER_IMAGES.en.background);
+  console.log('Footer: Arabic background path:', FOOTER_IMAGES.ar.background);
   
   // Function to update footer text based on language
   window.updateFooterTexts = function(lang = null) {
@@ -162,12 +164,14 @@
     // Update localStorage to match the detected language
     if (currentLang && currentLang !== storedLang) {
       localStorage.setItem('currentLanguage', currentLang);
+      console.log('Footer: Updated localStorage to:', currentLang);
     }
     
     // Update footer title
     const footerTitle = document.querySelector('.footer-title-text');
     if (footerTitle) {
       const text = currentLang === 'ar' ? footerTitle.getAttribute('data-ar') : footerTitle.getAttribute('data-en');
+      console.log('Footer: Title update - currentLang:', currentLang, 'text:', text);
       if (text) {
         footerTitle.textContent = text;
         // Apply DIN Display font for Arabic text
@@ -298,18 +302,22 @@
   
   // Initialize footer after a short delay
   setTimeout(() => {
+    console.log('Footer: Delayed initialization');
     updateFooterTexts();
   }, 200);
   
   // Also initialize immediately
+  console.log('Footer: Immediate initialization');
   updateFooterTexts();
   
   // Make the function globally available for manual triggering
   window.updateFooterLanguage = function(lang) {
+    console.log('Footer: Manual language update called with:', lang);
     updateFooterTexts(lang);
   };
   
   // Add test buttons to manually switch languages
+  console.log('Footer: Adding test buttons for manual language switching');
   setTimeout(() => {
     const testDiv = document.createElement('div');
     testDiv.style.position = 'fixed';
