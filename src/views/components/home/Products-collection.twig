@@ -1,182 +1,185 @@
-{% set current_language = app.locale|default('ar') %} {# استخدام app.locale بدلاً من user.language.code #}
+{#
+| Variable                        | Type     | Description                                                                  |
+|---------------------------------|----------|------------------------------------------------------------------------------|
+| component                       | object   | Contains merchant settings for fields from twilight.json `component` section |
+| component.main_title            | object[] | Main title collection                                                        |
+| component.product_collection_select | object[] | Product collection items                                                    |
+| component.product_collection_select[].product_title | string | Product title                                                           |
+| component.product_collection_select[].description | string | Product description                                                    |
+| component.product_collection_select[].url | string | Product URL                                                           |
+| component.product_collection_select[].image | string | Product image URL                                                      |
+| position                        | int      | Sorting number start from zero                                               |
+#}
 
-<section class="alcantara-picker-section py-16 bg-white" dir="{{ current_language == 'ar' ? 'rtl' : 'ltr' }}">
-  <div class="max-w-[1200px] mx-auto px-4 md:px-8 lg:px-12 xl:px-0">
+<section class="bg-white" style="padding-top: 60px;">
+  <div class="max-w-[1200px] mx-auto px-4 md:px-[200px] lg:px-[400px]">
     <!-- Main Heading -->
-    <h2 class="text-center mb-12">
+    <h2 class="text-center mb-8 md:mb-12">
       <div class="text-center">
-        <span class="arabic-heading">
-          {% if current_language == 'en' %}
-            Choose the phone<br />you use
-          {% else %}
-            اختار الجوال اللي<br />تستخدمه
-          {% endif %}
+        <span 
+          class="font-bold arabic-gradient-text"
+          style="
+            font-family: 'DIN Next LT W23', Arial, sans-serif;
+            font-weight: 700;
+            font-style: normal;
+            letter-spacing: 0px;
+            text-align: center;
+            background: linear-gradient(75deg, #161616 35.9%, #565050 70.56%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          "
+        >
+          اختار الجوال اللي<br />تستخدمه
         </span>
       </div>
     </h2>
 
     <!-- Product Picker Grid -->
-    <div class="flex flex-col md:flex-row gap-8 justify-center items-center">
-      {% if component['product-collection-select'] is defined and component['product-collection-select']|length > 0 %}
+    <div class="grid grid-cols-2 gap-6 justify-items-center md:flex md:flex-row md:gap-4 md:justify-center">
+      {% if component['product-collection-select'] is defined %}
         {% for item in component['product-collection-select'] %}
-          <div class="text-center w-full max-w-[320px]">
+          <div class="text-center w-full">
             <div class="mb-2">
-              <span class="product-name">
-                {% if current_language == 'en' and item['product-title_en'] is defined and item['product-title_en'] %}
-                  {{ item['product-title_en']|raw }}
-                {% elseif item['product-title'] is defined %}
+              <span 
+                class="text-center font-din-bold text-[16px] leading-[20px] md:text-[20px] md:leading-[24px]"
+                style="
+                  color: #3C3C3C;
+                  display: inline-block;
+                "
+              >
+                {% if item['product-title'] is defined %}
                   {{ item['product-title']|raw }}
                 {% else %}
-                  {{ current_language == 'en' ? 'Product Title Missing' : 'عنوان المنتج مفقود' }}
+                  Product Title Missing
                 {% endif %}
               </span>
             </div>
-            <div class="mb-2">
-              <span class="compatibility-text">
-                {% if current_language == 'en' and item['description_en'] is defined and item['description_en'] %}
-                  {{ item['description_en']|raw }}
-                {% elseif item['description'] is defined %}
+            <div class="mb-1 md:mb-2">
+              <span 
+                class="text-[10px] md:text-[12px] font-normal leading-[12px] md:leading-[14px] text-[rgba(45,73,158,0.61)]"
+                style="font-family: 'DIN Next LT W23', Arial, sans-serif;"
+              >
+                {% if item['description'] is defined %}
                   {{ item['description']|raw }}
                 {% else %}
-                  {{ current_language == 'en' ? 'Description Missing' : 'الوصف مفقود' }}
+                  Description Missing
                 {% endif %}
               </span>
             </div>
-            <div class="mb-4 flex justify-center">
-              <a 
-                href="{{ item['url']|default('https://salla.sa/alcanta.sa/eQQmyzO') }}" 
-                class="view-collection-btn"
-                style="text-decoration: none; border: none; background: none; cursor: pointer; display: inline-flex; align-items: center;"
+            <div class="mb-3 md:mb-4 flex justify-center">
+              <button 
+                class="collection-btn text-black text-[12px] md:text-[14px] font-normal leading-[15.628px] hover:underline cursor-pointer"
+                data-url="{{ item['url']|default('') }}"
+                data-type="{{ item['product-type']|default('iphone') }}"
+                style="
+                  font-family: 'DIN Next LT W23', Arial, sans-serif;
+                  font-size: 14px;
+                  line-height: 130%;
+                  vertical-align: bottom;
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                "
+                type="button"
               >
-                {% if current_language == 'ar' %}
-                  عرض المجموعة
-                  <span class="arrow-icon ar"></span>
-                {% else %}
-                  <span class="arrow-icon en"></span>
-                  View Collection
-                {% endif %}
-              </a>
+                عرض المجموعة
+                <img 
+                  src="{{ 'images/icons/mynaui_arrow-up.png'|asset }}" 
+                  alt="Arrow" 
+                  style="
+                    width: 16px;
+                    height: 16px;
+                    object-fit: contain;
+                    transform: rotate(180deg);
+                  "
+                />
+              </button>
             </div>
             {% if item['image'] is defined and item['image'] %}
-              <a href="{{ item['url']|default('https://salla.sa/alcanta.sa/eQQmyzO') }}">
-                <img 
-                  src="{{ item['image'] }}" 
-                  alt="{{ item['product-title']|default(current_language == 'en' ? 'Product' : 'منتج') }}" 
-                  class="product-image"
-                />
-              </a>
+              <img 
+                src="{{ item['image'] }}" 
+                alt="{{ item['product-title']|default('Product') }}" 
+                class="w-32 sm:w-36 md:w-64 lg:w-80 h-auto object-contain mx-auto"
+              />
             {% else %}
-              <a href="{{ item['url']|default('https://salla.sa/alcanta.sa/eQQmyzO') }}">
-                <div class="product-image" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;">
-                  {% if current_language == 'en' %}
-                    Image Missing
-                  {% else %}
-                    صورة غير متوفرة
-                  {% endif %}
-                </div>
-              </a>
+              <div class="product-image mx-auto" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;">
+                Image Missing
+              </div>
             {% endif %}
           </div>
         {% endfor %}
       {% else %}
         <div class="text-center">
-          <p>
-            {% if current_language == 'en' %}
-              No product collection data found
-            {% else %}
-              لا توجد بيانات للمجموعة
-            {% endif %}
-          </p>
+          <p>No product collection data found</p>
         </div>
       {% endif %}
     </div>
   </div>
 </section>
 
+<script>
+// Function to navigate to product page using dynamic URL
+function navigateToProductPage(customUrl, productType) {
+  // Check if custom URL is provided and not empty
+  if (customUrl && customUrl.trim() !== '') {
+    // Use the custom URL configured in the component
+    window.location.href = customUrl;
+  } else {
+    // Fallback to default behavior if no custom URL is set
+    if (productType === 'iphone') {
+      // Navigate to iPhone case page
+      window.location.href = '{{ store.url }}/product/iphone-case';
+    } else if (productType === 'samsung') {
+      // Navigate to Samsung case page
+      window.location.href = '{{ store.url }}/product/samsung-case';
+    } else {
+      // Fallback to general products page
+      window.location.href = '{{ store.url }}/products?type=' + productType;
+    }
+  }
+}
+</script>
+<script>
+// Delegate clicks from product collection buttons to avoid inline JS
+document.addEventListener('click', function(ev) {
+  const btn = ev.target.closest('.collection-btn');
+  if (!btn) return;
+  ev.preventDefault();
+  const url = btn.getAttribute('data-url') || '';
+  const type = btn.getAttribute('data-type') || 'iphone';
+  navigateToProductPage(url, type);
+});
+</script>
+
 <style>
 .alcantara-picker-section {
   font-family: 'DIN Next LT W23', Arial, sans-serif;
-  background-color: #ffffff;
-} 
-.arabic-heading {
+}
+
+.arabic-gradient-text {
+  background: linear-gradient(75deg, #161616 35.9%, #565050 70.56%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.font-din-bold {
   font-family: 'DIN Next LT W23', Arial, sans-serif;
   font-weight: 700;
-  font-style: normal;
-  font-size: 40px;
-  line-height: 42px;
-  letter-spacing: 0px;
-  text-align: center;
-  color: #161616;
 }
 
-.product-name {
-  text-align: center;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 24px;
-  color: #3C3C3C;
-  display: inline-block;
+.font-din-light {
+  font-family: 'DIN Next LT W23', Arial, sans-serif;
+  font-weight: 300;
 }
 
-.compatibility-text {
-  font-family: 'SF Pro', Arial, sans-serif;
-  font-size: 10px;
-  font-weight: normal;
-  line-height: 12px;
-  color: rgba(45, 73, 158, 0.61);
-}
-
-.view-collection-btn {
-  color: black;
+.font-comfortaa {
   font-family: 'Comfortaa', Arial, sans-serif;
-  font-size: 16px;
-  font-weight: normal;
-  line-height: 130%;
-  vertical-align: bottom;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  transition: all 0.3s ease;
 }
 
-.view-collection-btn:hover {
-  color: #3a3a3a;
-  transform: translateY(-2px);
-}
-
-.arrow-icon {
-  width: 8.5px;
-  height: 10.625px;
-  display: inline-block;
-  position: relative;
-}
-
-.arrow-icon::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  width: 0;
-  height: 0;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  transform: translateY(-50%);
-}
-
-/* English arrow (right-pointing) */
-.arrow-icon.en::before {
-  left: 0;
-  border-right: 8.5px solid black;
-}
-
-/* Arabic arrow (left-pointing) */
-.arrow-icon.ar::before {
-  right: 0;
-  border-left: 8.5px solid black;
+.font-sf-pro {
+  font-family: 'SF Pro', Arial, sans-serif;
 }
 
 .product-image {
@@ -185,6 +188,7 @@
   object-fit: contain !important;
   position: static !important;
   margin-bottom: 0 !important;
+  margin-top: 0 !important;
   display: block !important;
   justify-content: unset !important;
   align-items: unset !important;
@@ -192,15 +196,23 @@
   margin-right: unset !important;
   overflow: visible !important;
   border-radius: 0 !important;
-  transition: transform 0.3s ease;
 }
 
-.product-image:hover {
-  transform: scale(1.05);
+.product-image img {
+  width: 160px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  transition: none !important;
+  transform: none !important;
+  transform-origin: unset !important;
 }
 
 @media (min-width: 768px) {
   .product-image {
+    width: 256px !important;
+  }
+  .product-image img {
     width: 256px !important;
   }
 }
@@ -209,30 +221,53 @@
   .product-image {
     width: 320px !important;
   }
+  .product-image img {
+    width: 320px !important;
+  }
 }
 
-@media (max-width: 767px) {
-  .alcantara-picker-section {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+/* Modal Styles */
+#product-modal {
+  font-family: 'DIN Next LT W23', Arial, sans-serif;
+}
+
+.font-sf-pro {
+  font-family: 'SF Pro Display', Arial, sans-serif;
+}
+
+#modal-lock-icon {
+  transition: all 0.3s ease;
+}
+
+#modal-lock-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Mobile Slider Styles */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Thumbnail hover effects */
+.thumbnail-hover:hover {
+  border-color: #9ca3af;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 1023px) {
+  #modal-main-image {
+    height: 300px !important;
   }
   
-  .arabic-heading {
-    font-size: 32px;
-    line-height: 36px;
-  }
-  
-  .flex-col {
-    flex-direction: column;
-  }
-  
-  .gap-8 > div {
-    margin-bottom: 2rem;
-  }
-  
-  .product-image {
-    width: 200px !important;
-    margin: 0 auto;
+  .modal-content {
+    max-height: 95vh;
   }
 }
 </style>
