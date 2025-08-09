@@ -1,4 +1,5 @@
-{% set current_language = user.language.code|default('ar') %}
+{% set current_language = app.locale|default('ar') %} {# استخدام app.locale بدلاً من user.language.code #}
+
 <section class="alcantara-picker-section py-16 bg-white" dir="{{ current_language == 'ar' ? 'rtl' : 'ltr' }}">
   <div class="max-w-[1200px] mx-auto px-4 md:px-8 lg:px-12 xl:px-0">
     <!-- Main Heading -->
@@ -16,7 +17,7 @@
 
     <!-- Product Picker Grid -->
     <div class="flex flex-col md:flex-row gap-8 justify-center items-center">
-      {% if component['product-collection-select'] is defined %}
+      {% if component['product-collection-select'] is defined and component['product-collection-select']|length > 0 %}
         {% for item in component['product-collection-select'] %}
           <div class="text-center w-full max-w-[320px]">
             <div class="mb-2">
@@ -43,20 +44,21 @@
             </div>
             <div class="mb-4 flex justify-center">
               <a 
-                href="https://salla.sa/alcanta.sa/eQQmyzO" 
+                href="{{ item['url']|default('https://salla.sa/alcanta.sa/eQQmyzO') }}" 
                 class="view-collection-btn"
                 style="text-decoration: none; border: none; background: none; cursor: pointer; display: inline-flex; align-items: center;"
               >
-                <span class="arrow-icon"></span>
-                {% if current_language == 'en' %}
-                  View Collection
-                {% else %}
+                {% if current_language == 'ar' %}
                   عرض المجموعة
+                  <span class="arrow-icon ar"></span>
+                {% else %}
+                  <span class="arrow-icon en"></span>
+                  View Collection
                 {% endif %}
               </a>
             </div>
             {% if item['image'] is defined and item['image'] %}
-              <a href="https://salla.sa/alcanta.sa/eQQmyzO">
+              <a href="{{ item['url']|default('https://salla.sa/alcanta.sa/eQQmyzO') }}">
                 <img 
                   src="{{ item['image'] }}" 
                   alt="{{ item['product-title']|default(current_language == 'en' ? 'Product' : 'منتج') }}" 
@@ -64,7 +66,7 @@
                 />
               </a>
             {% else %}
-              <a href="https://salla.sa/alcanta.sa/eQQmyzO">
+              <a href="{{ item['url']|default('https://salla.sa/alcanta.sa/eQQmyzO') }}">
                 <div class="product-image" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;">
                   {% if current_language == 'en' %}
                     Image Missing
@@ -158,13 +160,23 @@
   content: '';
   position: absolute;
   top: 50%;
-  left: 0;
   width: 0;
   height: 0;
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
-  border-right: 8.5px solid black;
   transform: translateY(-50%);
+}
+
+/* English arrow (right-pointing) */
+.arrow-icon.en::before {
+  left: 0;
+  border-right: 8.5px solid black;
+}
+
+/* Arabic arrow (left-pointing) */
+.arrow-icon.ar::before {
+  right: 0;
+  border-left: 8.5px solid black;
 }
 
 .product-image {
@@ -222,11 +234,5 @@
     width: 200px !important;
     margin: 0 auto;
   }
-}
-
-/* Flip arrow direction in RTL */
-.alcantara-picker-section[dir='rtl'] .arrow-icon::before {
-  border-right: none;
-  border-left: 8.5px solid black;
 }
 </style>
